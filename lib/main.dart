@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import 'injection.dart' as di;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -11,28 +9,20 @@ import 'package:printing/printing.dart';
 import 'package:rapor_lc/rapor_print_layout/pages/root.dart';
 
 void main() {
-  di.init();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-
-      ],
-      child: MaterialApp(
-        title: 'Rapor LC SI',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(),
+    return MaterialApp(
+      title: 'Rapor LC SI',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const MyHomePage(),
     );
   }
 }
