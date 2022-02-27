@@ -2,17 +2,21 @@
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/splash/splash_presenter.dart';
 import 'package:flutter/material.dart';
+import 'package:rapor_lc/app/pages/splash/splash_view.dart';
 
 class SplashController extends Controller {
   bool isLoading = false;
   final SplashPresenter _splashPresenter;
 
   SplashController(authRepo)
-      : _splashPresenter = SplashPresenter(authRepo) {
-    getAuthStatus();
+      : _splashPresenter = SplashPresenter(authRepo), super();
+
+  @override
+  void onInitState() {
+    //getAuthStatus();
   }
 
-  /// Initializes [animation] for the view using a given [controller]
+  /// Initializes [_animation] for the view using a given [controller]
   void initAnimation(AnimationController controller, Animation animation) {
     animation.addStatusListener((status) {
       if (!isLoading) {

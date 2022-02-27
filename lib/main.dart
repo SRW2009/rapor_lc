@@ -5,15 +5,18 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-
+import 'package:rapor_lc/app/pages/splash/splash_view.dart';
 import 'package:rapor_lc/rapor_print_layout/pages/root.dart';
+import 'package:rapor_lc/app/utils/router.dart' as r;
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final r.Router _router;
+
+  MyApp({Key? key}) : _router = r.Router(), super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: SplashPage(),
+      onGenerateRoute: _router.getRoute,
+      navigatorObservers: [_router.routeObserver],
     );
   }
 }

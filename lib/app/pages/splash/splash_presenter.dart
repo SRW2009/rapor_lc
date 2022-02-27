@@ -1,21 +1,22 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/domain/usecases/auth/get_auth_status.dart';
+import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 class SplashPresenter extends Presenter {
   late Function getAuthStatusOnNext;
   late Function getAuthStatusOnComplete;
 
-  GetAuthStatusUseCase _getAuthStatusUseCase;
-
-  SplashPresenter(authRepo) {
-    _getAuthStatusUseCase = GetAuthStatusUseCase(authRepo);
-  }
+  final GetAuthStatusUseCase _getAuthStatusUseCase;
+  SplashPresenter(authRepo) : _getAuthStatusUseCase = GetAuthStatusUseCase(authRepo);
 
   void getAuthStatus() => _getAuthStatusUseCase.execute(_SplashObserver(this));
+
+  @override
   void dispose() => _getAuthStatusUseCase.dispose();
 }
 
-class _SplashObserver implements Observer<bool> {
+class _SplashObserver implements Observer<UseCaseResponse<bool>> {
   final SplashPresenter _splashPresenter;
 
   _SplashObserver(this._splashPresenter);
