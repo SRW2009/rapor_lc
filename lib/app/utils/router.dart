@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_view.dart';
+import 'package:rapor_lc/app/pages/login/login_view.dart';
 
 class Router {
   final RouteObserver<PageRoute> routeObserver;
@@ -12,6 +13,8 @@ class Router {
     switch (settings.name) {
       case Pages.splash:
         return _buildRoute(settings, SplashPage());
+      case Pages.login:
+        return _buildRoute(settings, LoginPage());
       case Pages.home:
         //return _buildRoute(settings, HomePage());
       default:

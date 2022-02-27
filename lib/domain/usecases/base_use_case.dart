@@ -32,7 +32,9 @@ class UseCaseResponse<T> {
 }
 
 class UseCaseParams<T> {
-  late T params;
+  final T params;
+
+  UseCaseParams(this.params);
 }
 
 abstract class Repository {}

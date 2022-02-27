@@ -10,20 +10,20 @@ class SplashPresenter extends Presenter {
   final GetAuthStatusUseCase _getAuthStatusUseCase;
   SplashPresenter(authRepo) : _getAuthStatusUseCase = GetAuthStatusUseCase(authRepo);
 
-  void getAuthStatus() => _getAuthStatusUseCase.execute(_SplashObserver(this));
+  void getAuthStatus() => _getAuthStatusUseCase.execute(_GetAuthStatusObserver(this));
 
   @override
   void dispose() => _getAuthStatusUseCase.dispose();
 }
 
-class _SplashObserver implements Observer<UseCaseResponse<bool>> {
+class _GetAuthStatusObserver implements Observer<UseCaseResponse<bool>> {
   final SplashPresenter _splashPresenter;
 
-  _SplashObserver(this._splashPresenter);
+  _GetAuthStatusObserver(this._splashPresenter);
 
   @override
   void onNext(isAuth) {
-    _splashPresenter.getAuthStatusOnNext(isAuth);
+    _splashPresenter.getAuthStatusOnNext(isAuth?.response);
   }
 
   @override

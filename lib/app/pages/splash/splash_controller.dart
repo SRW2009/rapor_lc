@@ -9,11 +9,12 @@ class SplashController extends Controller {
   final SplashPresenter _splashPresenter;
 
   SplashController(authRepo)
-      : _splashPresenter = SplashPresenter(authRepo), super();
+      : _splashPresenter = SplashPresenter(authRepo),
+        super();
 
   @override
   void onInitState() {
-    //getAuthStatus();
+    getAuthStatus();
   }
 
   /// Initializes [_animation] for the view using a given [controller]
