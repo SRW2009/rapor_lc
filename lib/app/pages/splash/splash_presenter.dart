@@ -4,7 +4,7 @@ import 'package:rapor_lc/domain/usecases/auth/get_auth_status.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 class SplashPresenter extends Presenter {
-  late Function getAuthStatusOnNext;
+  late Function(bool) getAuthStatusOnNext;
   late Function getAuthStatusOnComplete;
 
   final GetAuthStatusUseCase _getAuthStatusUseCase;
@@ -23,7 +23,7 @@ class _GetAuthStatusObserver implements Observer<UseCaseResponse<bool>> {
 
   @override
   void onNext(isAuth) {
-    _splashPresenter.getAuthStatusOnNext(isAuth?.response);
+    _splashPresenter.getAuthStatusOnNext(isAuth!.response);
   }
 
   @override

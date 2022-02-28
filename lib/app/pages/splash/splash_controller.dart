@@ -17,20 +17,6 @@ class SplashController extends Controller {
     getAuthStatus();
   }
 
-  /// Initializes [_animation] for the view using a given [controller]
-  void initAnimation(AnimationController controller, Animation animation) {
-    animation.addStatusListener((status) {
-      if (!isLoading) {
-        controller.stop(canceled: true);
-      } else if (status == AnimationStatus.completed) {
-        controller.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });
-    controller.forward();
-  }
-
   void authStatusOnNext(bool isAuth) {
     String page = isAuth ? '/home' : '/login';
     Navigator.of(getContext()).pushReplacementNamed(page);
@@ -49,8 +35,8 @@ class SplashController extends Controller {
   }
 
   @override
-  void dispose() {
+  void onDisposed() {
     _splashPresenter.dispose();
-    super.dispose();
+    super.onDisposed();
   }
 }

@@ -14,8 +14,8 @@ abstract class AuthenticationRepository extends Repository {
   Future<User> getCurrentUser();
 
   /// Resets the password of a [User]
-  Future<void> forgotPassword(String email);
+  Future<bool> forgotPassword(String email);
 
   /// Logs out the [User]
-  Future<void> logout();
+  Future<bool> logout();
 }

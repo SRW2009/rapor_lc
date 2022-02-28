@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/splash/splash_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 
@@ -19,7 +18,8 @@ class _SplashLogoState extends State<SplashLogo> with SingleTickerProviderStateM
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..forward();
     _animation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
     super.initState();
@@ -33,11 +33,6 @@ class _SplashLogoState extends State<SplashLogo> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    if (controller == null) {
-      final controller = FlutterCleanArchitecture.getController<SplashController>(context);
-      controller.initAnimation(_animationController, _animation);
-    }
-
     return FadeTransition(
       opacity: _animation,
       child: const Image(

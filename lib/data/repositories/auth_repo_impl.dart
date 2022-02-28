@@ -1,24 +1,33 @@
 
+import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/domain/repositories/auth_repo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
+  final SharedPrefsRepository _sharedPrefsRepository;
 
   //singleton
   static final AuthenticationRepositoryImpl _instance = AuthenticationRepositoryImpl._internal();
-  AuthenticationRepositoryImpl._internal();
+  AuthenticationRepositoryImpl._internal()
+      : _sharedPrefsRepository = SharedPrefsRepository();
   factory AuthenticationRepositoryImpl() => _instance;
 
   @override
-  Future<bool> authenticate({required String email, required String password}) {
-    // TODO: implement authenticate
-    throw UnimplementedError();
+  Future<bool> authenticate({required String email, required String password}) async {
+    // TODO: implement forgotPassword
+    await Future.delayed(const Duration(seconds: 3));
+    await _sharedPrefsRepository.setCurrentUser(
+      User.admin(email, password)
+    );
+    return true;
   }
 
   @override
-  Future<void> forgotPassword(String email) {
+  Future<bool> forgotPassword(String email) async {
     // TODO: implement forgotPassword
-    throw UnimplementedError();
+    await Future.delayed(const Duration(seconds: 3));
+    return false;
   }
 
   @override
@@ -34,7 +43,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<void> logout() {
+  Future<bool> logout() {
     // TODO: implement logout
     throw UnimplementedError();
   }
