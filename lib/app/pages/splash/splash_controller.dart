@@ -49,5 +49,8 @@ class SplashController extends Controller {
   }
 
   @override
-  void dispose() => _splashPresenter.dispose();
+  void dispose() {
+    _splashPresenter.dispose();
+    super.dispose();
+  }
 }

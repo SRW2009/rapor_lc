@@ -1,10 +1,10 @@
 
-import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/login/login_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:flutter/material.dart';
 
 class LoginController extends Controller {
   RequestState state = RequestState.idle;

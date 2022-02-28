@@ -1,15 +1,16 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/domain/usecases/auth/forgot_password.dart';
 import 'package:rapor_lc/domain/usecases/auth/login.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 class LoginPresenter extends Presenter {
-  late Function(bool) authOnNext;
-  late Function(dynamic e) authOnError;
+  late Function(RequestState) authOnNext;
+  late Function(dynamic) authOnError;
 
-  late Function forgotPasswordOnNext;
+  late Function(RequestState) forgotPasswordOnNext;
   late Function(dynamic e) forgotPasswordOnError;
 
   final LoginUseCase _loginUseCase;
@@ -28,7 +29,7 @@ class LoginPresenter extends Presenter {
   }
 }
 
-class _DoLoginObserver extends Observer<UseCaseResponse<bool>> {
+class _DoLoginObserver extends Observer<UseCaseResponse<RequestState>> {
   LoginPresenter presenter;
 
   _DoLoginObserver(this.presenter);
@@ -42,12 +43,12 @@ class _DoLoginObserver extends Observer<UseCaseResponse<bool>> {
   }
 
   @override
-  void onNext(UseCaseResponse<bool>? response) {
+  void onNext(response) {
     presenter.authOnNext(response!.response);
   }
 }
 
-class _DoForgetPasswordObserver extends Observer<UseCaseResponse<void>> {
+class _DoForgetPasswordObserver extends Observer<UseCaseResponse<RequestState>> {
   LoginPresenter presenter;
 
   _DoForgetPasswordObserver(this.presenter);
@@ -61,7 +62,7 @@ class _DoForgetPasswordObserver extends Observer<UseCaseResponse<void>> {
   }
 
   @override
-  void onNext(UseCaseResponse<void>? response) {
-    presenter.forgotPasswordOnNext();
+  void onNext(response) {
+    presenter.forgotPasswordOnNext(response!.response);
   }
 }

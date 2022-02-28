@@ -10,7 +10,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   factory AuthenticationRepositoryImpl() => _instance;
 
   @override
-  Future<void> authenticate({required String email, required String password}) {
+  Future<bool> authenticate({required String email, required String password}) {
     // TODO: implement authenticate
     throw UnimplementedError();
   }
