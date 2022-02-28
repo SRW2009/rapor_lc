@@ -6,7 +6,7 @@ import 'package:rapor_lc/domain/usecases/auth/login.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 class LoginPresenter extends Presenter {
-  late Function authOnNext;
+  late Function(bool e) authOnNext;
   late Function(dynamic e) authOnError;
 
   late Function forgotPasswordOnNext;
@@ -28,7 +28,7 @@ class LoginPresenter extends Presenter {
   }
 }
 
-class _DoLoginObserver extends Observer<UseCaseResponse<void>> {
+class _DoLoginObserver extends Observer<UseCaseResponse<bool>> {
   LoginPresenter presenter;
 
   _DoLoginObserver(this.presenter);
@@ -42,8 +42,8 @@ class _DoLoginObserver extends Observer<UseCaseResponse<void>> {
   }
 
   @override
-  void onNext(UseCaseResponse<void>? response) {
-    presenter.authOnNext();
+  void onNext(UseCaseResponse<bool>? response) {
+    presenter.authOnNext(response!.response);
   }
 }
 

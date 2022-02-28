@@ -1,5 +1,4 @@
 
-import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/login/login_presenter.dart';
 
@@ -12,7 +11,9 @@ class LoginController extends Controller {
 
   @override
   void initListeners() {
-    // TODO: implement initListeners
+    _loginPresenter.authOnNext = (isAuth) {
+
+    };
   }
 
 }
