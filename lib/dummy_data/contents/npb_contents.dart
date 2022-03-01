@@ -4,7 +4,7 @@ import 'package:rapor_lc/domain/entities/npbpo.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import '../mata_pelajaran.dart';
 
-const _santri = Santri('12345678', 'John Doe');
+final _santri = Santri('12345678', 'John Doe');
 
 final contents = <NPBPO>[
   NPBPO(0, _santri, 2, '2021/2022', pelajaranList[0], '70%'),

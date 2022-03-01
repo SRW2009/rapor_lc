@@ -4,8 +4,8 @@ import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 import 'package:rapor_lc/domain/repositories/santri_repo.dart';
 
-class GetSantriListUseCase extends BaseUseCase<List<Santri>, User, SantriRepository> {
+class GetSantriListAdminUseCase extends BaseUseCase<List<Santri>, void, SantriRepository> {
   SantriRepository repository;
 
-  GetSantriListUseCase(this.repository) : super(repository, (repo, param) => repo.getSantriList(param));
+  GetSantriListAdminUseCase(this.repository) : super(repository, (repo, param) => repo.getSantriListAdmin());
 }

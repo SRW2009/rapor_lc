@@ -2,7 +2,6 @@
 import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/domain/repositories/auth_repo.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
   final SharedPrefsRepository _sharedPrefsRepository;
@@ -14,13 +13,14 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   factory AuthenticationRepositoryImpl() => _instance;
 
   @override
-  Future<bool> authenticate({required String email, required String password}) async {
-    // TODO: implement forgotPassword
+  Future<int> authenticate({required String email, required String password}) async {
+    // TODO: implement authenticate
     await Future.delayed(const Duration(seconds: 3));
-    await _sharedPrefsRepository.setCurrentUser(
-      User.admin(email, password)
-    );
-    return true;
+
+    final user = User.admin(email, password);
+    await _sharedPrefsRepository.setCurrentUser(user);
+
+    return user.status;
   }
 
   @override
@@ -31,20 +31,17 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<User> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<User> getCurrentUser() async {
+    final user = await _sharedPrefsRepository.getCurrentUser;
+    if (user == null) throw Exception();
+    return user;
   }
 
   @override
-  Future<bool> isAuthenticated() {
-    // TODO: implement isAuthenticated
-    throw UnimplementedError();
-  }
+  Future<bool> isAuthenticated() async =>
+      await _sharedPrefsRepository.getIsLoggedIn;
 
   @override
-  Future<bool> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
-  }
+  Future<bool> logout() async =>
+      await _sharedPrefsRepository.logout();
 }

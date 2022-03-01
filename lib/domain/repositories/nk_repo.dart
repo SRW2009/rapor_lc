@@ -5,6 +5,7 @@ import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 abstract class NKRepository extends Repository {
+  Future<List<NK>> getNKListAdmin();
   Future<List<NK>> getNKList(String santriNis);
   Future<NK> getNK(int id);
   Future<RequestStatus> createNK(NK nk);

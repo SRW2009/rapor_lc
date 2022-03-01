@@ -16,9 +16,10 @@ class SharedPrefsRepository {
   factory SharedPrefsRepository() => _instance;
 
   User? _currentUser;
+  bool? _isLoggedIn;
 
   Future<User?> get getCurrentUser async {
-    if (_currentUser != null) return _currentUser;
+    if (_currentUser != null) return _currentUser!;
 
     final pref = await _sharedPreferences;
     final email = pref.getString(_USER_EMAIL);
@@ -43,13 +44,45 @@ class SharedPrefsRepository {
     final pref = await _sharedPreferences;
     final email = await pref.setString(_USER_EMAIL, user.email);
     final status = await pref.setInt(_USER_STATUS, user.status);
-    final loggedIn = await pref.setBool(_USER_IS_LOGGED_IN, true);
 
-    if (email && status && loggedIn) {
+    if (email && status) {
       _currentUser = user;
       return true;
     }
 
     return false;
+  }
+
+  Future<bool> get getIsLoggedIn async {
+    if (_isLoggedIn != null) return _isLoggedIn!;
+
+    final pref = await _sharedPreferences;
+    final isLoggedIn = pref.getBool(_USER_IS_LOGGED_IN);
+
+    return isLoggedIn ?? false;
+  }
+
+  Future<bool> setIsLoggedIn(bool val) async {
+    final pref = await _sharedPreferences;
+    final loggedIn = await pref.setBool(_USER_IS_LOGGED_IN, val);
+
+    if (loggedIn) {
+      _isLoggedIn = val;
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<bool> logout() async {
+    final pref = await _sharedPreferences;
+    final success = await pref.clear();
+
+    if (success) {
+      _currentUser = null;
+      _isLoggedIn = false;
+    }
+
+    return success;
   }
 }

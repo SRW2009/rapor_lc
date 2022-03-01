@@ -67,54 +67,7 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
                                   child: AnimatedOpacity(
                                     opacity: controller.formState == LoginFormState.login ? 1 : 0,
                                     duration: _duration,
-                                    child: Form(
-                                      key: _loginFormKey,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          FormInputField(
-                                            label: 'Email',
-                                            controller: _emailCon,
-                                          ),
-                                          FormInputField(
-                                            label: 'Password',
-                                            controller: _passwordCon,
-                                            isObscured: _hidePass,
-                                            isPassword: true,
-                                            onTap: () {
-                                              setState(() {
-                                                _hidePass = !_hidePass;
-                                              });
-                                            },
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              const Text('Forgot Password?'),
-                                              TextButton(
-                                                onPressed: controller.toForgotPassword,
-                                                child: Text(
-                                                  'Press here',
-                                                  style: TextStyle(
-                                                    color: Colors.blue.shade800,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(),
-                                          ElevatedButton(
-                                            onPressed: () => controller.doLogin(
-                                              _loginFormKey, User(_emailCon.text, _passwordCon.text),
-                                            ),
-                                            child: const Text('Login'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    child: _loginForm(controller),
                                   ),
                                 ),
                                 IgnorePointer(
@@ -122,35 +75,7 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
                                   child: AnimatedOpacity(
                                     opacity: controller.formState == LoginFormState.forgotPass ? 1 : 0,
                                     duration: _duration,
-                                    child: Form(
-                                      key: _forgotPassFormKey,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: BackButton(
-                                              onPressed: controller.toLogin,
-                                            ),
-                                          ),
-                                          FormInputField(
-                                            label: 'Email',
-                                            controller: _forgotPassEmailCon,
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () => controller.doForgotPassword(
-                                              _forgotPassFormKey, _forgotPassEmailCon.text,
-                                            ),
-                                            child: const Text('Reset Password'),
-                                          ),
-                                          const SizedBox(height: 0.0),
-                                          const Center(child: Text('New password will be send to your email.')),
-                                          const SizedBox(height: 30.0),
-                                        ],
-                                      ),
-                                    ),
+                                    child: _forgotPasswordForm(controller),
                                   ),
                                 ),
                               ],
@@ -161,15 +86,7 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
                     ),
                     IgnorePointer(
                       ignoring: !controller.isLoading,
-                      child: AnimatedOpacity(
-                        opacity: controller.isLoading ? 1 : 0,
-                        duration: _duration,
-                        child: Container(
-                          color: Colors.white.withOpacity(.7),
-                          alignment: Alignment.center,
-                          child: const CircularProgressIndicator(),
-                        ),
-                      ),
+                      child: _loadingView(controller),
                     ),
                   ],
                 ),
@@ -178,6 +95,95 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
           ),
         ),
       ),
+    ),
+  );
+
+  Form _loginForm(LoginController controller) => Form(
+    key: _loginFormKey,
+    child: Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        FormInputField(
+          label: 'Email',
+          controller: _emailCon,
+        ),
+        FormInputField(
+          label: 'Password',
+          controller: _passwordCon,
+          isObscured: _hidePass,
+          isPassword: true,
+          onTap: () {
+            setState(() {
+              _hidePass = !_hidePass;
+            });
+          },
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Forgot Password?'),
+            TextButton(
+              onPressed: controller.toForgotPassword,
+              child: Text(
+                'Press here',
+                style: TextStyle(
+                  color: Colors.blue.shade800,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(),
+        ElevatedButton(
+          onPressed: () => controller.doLogin(
+            _loginFormKey, User(_emailCon.text, _passwordCon.text),
+          ),
+          child: const Text('Login'),
+        ),
+      ],
+    ),
+  );
+
+  Form _forgotPasswordForm(LoginController controller) => Form(
+    key: _forgotPassFormKey,
+    child: Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: BackButton(
+            onPressed: controller.toLogin,
+          ),
+        ),
+        FormInputField(
+          label: 'Email',
+          controller: _forgotPassEmailCon,
+        ),
+        ElevatedButton(
+          onPressed: () => controller.doForgotPassword(
+            _forgotPassFormKey, _forgotPassEmailCon.text,
+          ),
+          child: const Text('Reset Password'),
+        ),
+        const SizedBox(height: 0.0),
+        const Center(child: Text('New password will be send to your email.')),
+        const SizedBox(height: 30.0),
+      ],
+    ),
+  );
+
+  Widget _loadingView(LoginController controller) => AnimatedOpacity(
+    opacity: controller.isLoading ? 1 : 0,
+    duration: _duration,
+    child: Container(
+      color: Colors.white.withOpacity(.7),
+      alignment: Alignment.center,
+      child: const CircularProgressIndicator(),
     ),
   );
 }

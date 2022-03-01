@@ -4,7 +4,7 @@ import '../usecases/base_use_case.dart';
 
 abstract class AuthenticationRepository extends Repository {
   /// Authenticates a user using his [email] and [password]
-  Future<bool> authenticate(
+  Future<int> authenticate(
       {required String email, required String password});
 
   /// Returns whether the [User] is authenticated.

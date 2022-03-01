@@ -12,24 +12,30 @@ class LoginController extends Controller {
   LoginFormState formState = LoginFormState.login;
 
   final LoginPresenter _loginPresenter;
-
   LoginController(authRepo)
       : _loginPresenter = LoginPresenter(authRepo),
         super();
 
-  void authOnNext(bool e) {
+  void _authOnNext(int e) {
     isLoading = false;
     refreshUI();
 
-    if (e) {
-      Navigator.of(getContext()).pushReplacementNamed(Pages.home);
-    } else {
-      ScaffoldMessenger.of(getContext())
-          .showSnackBar(const SnackBar(content: Text('Email atau Password salah.')));
+    // if user logged in as admin
+    if (e == 2) {
+      Navigator.of(getContext()).pushReplacementNamed(Pages.admin_home);
+      return;
     }
+    // if user logged in as teacher
+    if (e == 1) {
+      Navigator.of(getContext()).pushReplacementNamed(Pages.home);
+      return;
+    }
+
+    ScaffoldMessenger.of(getContext())
+        .showSnackBar(const SnackBar(content: Text('Email atau Password salah.')));
   }
 
-  void authOnError(e) {
+  void _authOnError(e) {
     isLoading = false;
     refreshUI();
 
@@ -37,20 +43,21 @@ class LoginController extends Controller {
         .showSnackBar(const SnackBar(content: Text('Terjadi Masalah.')));
   }
 
-  void forgotPasswordOnNext(bool e) {
+  void _forgotPasswordOnNext(bool e) {
     isLoading = false;
     refreshUI();
 
     if (e) {
       ScaffoldMessenger.of(getContext())
           .showSnackBar(const SnackBar(content: Text('Berhasil reset password!')));
-    } else {
-      ScaffoldMessenger.of(getContext())
-          .showSnackBar(const SnackBar(content: Text('Email tidak ditemukan.')));
+      return;
     }
+
+    ScaffoldMessenger.of(getContext())
+        .showSnackBar(const SnackBar(content: Text('Email tidak ditemukan.')));
   }
 
-  void forgotPasswordOnError(e) {
+  void _forgotPasswordOnError(e) {
     isLoading = false;
     refreshUI();
 
@@ -60,10 +67,10 @@ class LoginController extends Controller {
 
   @override
   void initListeners() {
-    _loginPresenter.authOnNext = authOnNext;
-    _loginPresenter.authOnError = authOnError;
-    _loginPresenter.forgotPasswordOnNext = forgotPasswordOnNext;
-    _loginPresenter.forgotPasswordOnError = forgotPasswordOnError;
+    _loginPresenter.authOnNext = _authOnNext;
+    _loginPresenter.authOnError = _authOnError;
+    _loginPresenter.forgotPasswordOnNext = _forgotPasswordOnNext;
+    _loginPresenter.forgotPasswordOnError = _forgotPasswordOnError;
   }
 
   void doLogin(GlobalKey<FormState> key, User user) {

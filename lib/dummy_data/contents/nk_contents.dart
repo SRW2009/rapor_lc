@@ -2,7 +2,7 @@
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
-const _santri = Santri('12345678', 'John Doe');
+final _santri = Santri('12345678', 'John Doe');
 final _variables = [
   'Inisiatif',
   'Kontrol Diri',
