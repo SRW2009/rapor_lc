@@ -12,10 +12,9 @@ class AdminHomeDashboardUI extends View {
 
   @override
   State<StatefulWidget> createState() => AdminHomeDashboardUIView();
-
 }
 
-class AdminHomeDashboardUIView extends ViewState {
+class AdminHomeDashboardUIView extends ViewState<AdminHomeDashboardUI, AdminHomeDashboardController> {
   AdminHomeDashboardUIView()
       : super(AdminHomeDashboardController(
       SantriRepositoryImpl(),
@@ -25,24 +24,43 @@ class AdminHomeDashboardUIView extends ViewState {
   );
 
   @override
-  Widget get view => GridView.count(
-    physics: const NeverScrollableScrollPhysics(),
-    shrinkWrap: true,
-    crossAxisCount: 2,
-    children: const [
-      Card(
-        child: Text('Santri'),
+  Widget get view => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: Card(
+                color: Colors.blue,
+              ),
+            ),
+            Expanded(
+              child: Card(
+                color: Colors.blue,
+              ),
+            ),
+          ],
+        ),
       ),
-      Card(
-        child: Text('NHB'),
-      ),
-      Card(
-        child: Text('NK'),
-      ),
-      Card(
-        child: Text('NPB'),
+      Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: Card(
+                color: Colors.blue,
+              ),
+            ),
+            Expanded(
+              child: Card(
+                color: Colors.blue,
+              ),
+            ),
+          ],
+        ),
       ),
     ],
   );
-
 }

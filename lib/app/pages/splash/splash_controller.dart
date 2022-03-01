@@ -1,5 +1,6 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/pages/splash/splash_view.dart';
@@ -17,8 +18,16 @@ class SplashController extends Controller {
     getAuthStatus();
   }
 
-  void authStatusOnNext(bool isAuth) {
-    String page = isAuth ? '/home' : '/login';
+  void authStatusOnNext(int authStatus) {
+    String page;
+    if (authStatus == 2) {
+      page = Pages.admin_home;
+    } else if (authStatus == 1) {
+      page = Pages.home;
+    } else {
+      page = Pages.login;
+    }
+
     Navigator.of(getContext()).pushReplacementNamed(page);
   }
 

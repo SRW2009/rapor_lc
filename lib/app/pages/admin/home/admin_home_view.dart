@@ -12,13 +12,16 @@ class AdminHomePage extends View {
   State<StatefulWidget> createState() => AdminHomePageView();
 }
 
-class AdminHomePageView extends ViewState {
+class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
   AdminHomePageView()
       : super(AdminHomeController(AuthenticationRepositoryImpl()));
 
   @override
   Widget get view => Scaffold(
     key: globalKey,
+    appBar: AppBar(
+      title: const Text('Admin'),
+    ),
     drawer: Drawer(
       child: ControlledWidgetBuilder<AdminHomeController>(
         builder: (context, controller) => Column(
@@ -37,8 +40,13 @@ class AdminHomePageView extends ViewState {
         ),
       ),
     ),
-    body: ControlledWidgetBuilder<AdminHomeController>(
-      builder: (context, controller) => _uiView(controller.state),
+    body: SizedBox.expand(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ControlledWidgetBuilder<AdminHomeController>(
+          builder: (context, controller) => _uiView(controller.state),
+        ),
+      ),
     ),
   );
 

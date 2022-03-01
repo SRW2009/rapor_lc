@@ -38,8 +38,8 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<bool> isAuthenticated() async =>
-      await _sharedPrefsRepository.getIsLoggedIn;
+  Future<int> isAuthenticated() async =>
+      await _sharedPrefsRepository.getLoginPrivilege;
 
   @override
   Future<bool> logout() async =>

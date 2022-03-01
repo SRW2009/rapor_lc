@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:rapor_lc/app/pages/admin/home/admin_home_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_view.dart';
 import 'package:rapor_lc/app/pages/login/login_view.dart';
@@ -17,6 +18,8 @@ class Router {
         return _buildRoute(settings, LoginPage());
       case Pages.home:
         //return _buildRoute(settings, HomePage());
+      case Pages.admin_home:
+        return _buildRoute(settings, AdminHomePage());
       default:
         return null;
     }

@@ -15,7 +15,7 @@ class BaseUseCase<Res, Par, Rep extends Repository>
   Future<Stream<UseCaseResponse<Res>?>> buildUseCaseStream(UseCaseParams? params) async {
     final controller = StreamController<UseCaseResponse<Res>>();
     try {
-      final response = await whichFunction(repo, params!.params);
+      final response = await whichFunction(repo, params?.params);
       res.response = response;
       controller.add(res);
       controller.close();

@@ -8,7 +8,7 @@ abstract class AuthenticationRepository extends Repository {
       {required String email, required String password});
 
   /// Returns whether the [User] is authenticated.
-  Future<bool> isAuthenticated();
+  Future<int> isAuthenticated();
 
   /// Returns the current authenticated [User].
   Future<User> getCurrentUser();

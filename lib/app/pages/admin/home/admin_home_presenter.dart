@@ -16,7 +16,7 @@ class AdminHomePresenter extends Presenter {
   late Function(User) getCurrentUserOnNext;
   late Function(dynamic) getCurrentUserOnError;
 
-  GetCurrentUserUseCase _getCurrentUserUseCase;
+  final GetCurrentUserUseCase _getCurrentUserUseCase;
   AdminHomePresenter(authRepository)
       : _getCurrentUserUseCase = GetCurrentUserUseCase(authRepository);
 

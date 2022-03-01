@@ -5,7 +5,6 @@ import 'package:rapor_lc/domain/entities/user.dart';
 class SharedPrefsRepository {
   static const _USER_EMAIL = 'user:email';
   static const _USER_STATUS = 'user:status';
-  static const _USER_IS_LOGGED_IN = 'user:logged_in';
 
   final Future<SharedPreferences> _sharedPreferences;
 
@@ -16,7 +15,7 @@ class SharedPrefsRepository {
   factory SharedPrefsRepository() => _instance;
 
   User? _currentUser;
-  bool? _isLoggedIn;
+  int? _loginPrivilege;
 
   Future<User?> get getCurrentUser async {
     if (_currentUser != null) return _currentUser!;
@@ -53,25 +52,13 @@ class SharedPrefsRepository {
     return false;
   }
 
-  Future<bool> get getIsLoggedIn async {
-    if (_isLoggedIn != null) return _isLoggedIn!;
+  Future<int> get getLoginPrivilege async {
+    if (_loginPrivilege != null) return _loginPrivilege!;
 
     final pref = await _sharedPreferences;
-    final isLoggedIn = pref.getBool(_USER_IS_LOGGED_IN);
-
-    return isLoggedIn ?? false;
-  }
-
-  Future<bool> setIsLoggedIn(bool val) async {
-    final pref = await _sharedPreferences;
-    final loggedIn = await pref.setBool(_USER_IS_LOGGED_IN, val);
-
-    if (loggedIn) {
-      _isLoggedIn = val;
-      return true;
-    }
-
-    return false;
+    final isLoggedIn = pref.getInt(_USER_STATUS);
+    _loginPrivilege = isLoggedIn ?? 0;
+    return _loginPrivilege!;
   }
 
   Future<bool> logout() async {
@@ -80,7 +67,7 @@ class SharedPrefsRepository {
 
     if (success) {
       _currentUser = null;
-      _isLoggedIn = false;
+      _loginPrivilege = 0;
     }
 
     return success;
