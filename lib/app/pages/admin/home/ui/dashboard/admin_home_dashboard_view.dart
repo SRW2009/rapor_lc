@@ -30,7 +30,7 @@ class AdminHomeDashboardUIView extends ViewState<AdminHomeDashboardUI, AdminHome
       Expanded(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: const [
             Expanded(
               child: Card(
                 color: Colors.blue,
@@ -47,7 +47,7 @@ class AdminHomeDashboardUIView extends ViewState<AdminHomeDashboardUI, AdminHome
       Expanded(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: const [
             Expanded(
               child: Card(
                 color: Colors.blue,
