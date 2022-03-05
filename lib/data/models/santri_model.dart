@@ -52,7 +52,7 @@ class SantriModel extends Equatable {
       daftar_nhb: daftar_nhb?.map<NHB>((e) => e.toEntity()).toList(),
       daftar_nk: daftar_nk?.map<NK>((e) => e.toEntity()).toList(),
       npbmo: npbmo?.toEntity(),
-      daftar_npbpo: daftar_npbpo?.map<NPBPO>((e) => e.toEntity()).toList()
+      daftar_npb: daftar_npbpo?.map<NPBPO>((e) => e.toEntity()).toList()
   );
 
   @override

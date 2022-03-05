@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Rapor LC SI',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Raleway',
       ),
       home: SplashPage(),
       onGenerateRoute: _router.getRoute,

@@ -5,17 +5,18 @@ import 'package:rapor_lc/domain/entities/npbmo.dart';
 import 'package:rapor_lc/domain/entities/npbpo.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
 
+import 'abstract/npb.dart';
+
 class Santri {
   final String nis;
   final String nama;
   final List<NHB>? daftar_nhb;
   final List<NK>? daftar_nk;
-  final NPBMO? npbmo;
-  final List<NPBPO>? daftar_npbpo;
-  User? guru;
+  final List<NPB>? daftar_npb;
+  final User? guru;
 
   Santri(this.nis, this.nama, {
     this.daftar_nhb, this.daftar_nk,
-    this.npbmo, this.daftar_npbpo, this.guru,
+    this.daftar_npb, this.guru,
   });
 }

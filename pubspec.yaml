@@ -41,6 +41,7 @@ dependencies:
   printing: ^5.6.6
   path_provider: ^2.0.9
   shared_preferences: ^2.0.13
+  dropdown_search: ^2.0.1
 
 dev_dependencies:
   flutter_test:
@@ -82,12 +83,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: fonts/Raleway-Medium.ttf
+        - asset: fonts/Raleway-SemiBold.ttf
+        - asset: fonts/Raleway-Regular.ttf
+        - asset: fonts/Raleway-Light.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

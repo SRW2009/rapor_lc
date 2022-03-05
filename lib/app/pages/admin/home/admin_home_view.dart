@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin/home/admin_home_controller.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_view.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/santri/admin_home_santri_view.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
 
 class AdminHomePage extends View {
@@ -52,7 +53,10 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
 
   ListTile _drawerItem(String title,
       AdminHomeState state, AdminHomeController controller) => ListTile(
-    onTap: () => controller.changeState(state),
+    onTap: () {
+      Navigator.pop(context);
+      controller.changeState(state);
+    },
     selected: controller.state == state,
     title: Text(title),
   );
@@ -61,6 +65,8 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
     switch (state) {
       case AdminHomeState.dashboard:
         return AdminHomeDashboardUI();
+      case AdminHomeState.santri:
+        return AdminHomeSantriUI();
       default:
         return Container();
     }

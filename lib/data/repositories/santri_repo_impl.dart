@@ -12,7 +12,7 @@ class SantriRepositoryImpl extends SantriRepository {
   }
 
   @override
-  Future<RequestStatus> deleteSantri(String santriNis) {
+  Future<RequestStatus> deleteSantri(List<String> santriNis) {
     // TODO: implement deleteSantri
     throw UnimplementedError();
   }
@@ -30,9 +30,15 @@ class SantriRepositoryImpl extends SantriRepository {
   }
 
   @override
-  Future<List<Santri>> getSantriListAdmin() {
+  Future<List<Santri>> getSantriListAdmin() async {
     // TODO: implement getSantriListAdmin
-    throw UnimplementedError();
+    await Future.delayed(const Duration(seconds: 3));
+    return List<Santri>.generate(
+      10, (index) => Santri(
+      '$index',
+      'Widi',
+      guru: User.teacher('WeedTeach@gmail.com', ''),
+    ));
   }
 
   @override

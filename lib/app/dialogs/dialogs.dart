@@ -10,12 +10,7 @@ class DeleteDialog extends StatelessWidget {
   const DeleteDialog({Key? key, required this.showDeleted, required this.onSave}) : super(key: key);
 
   String get _getContents {
-    String content = showDeleted().first;
-    for (var i = 1; i < showDeleted().length; ++i) {
-      var o = showDeleted()[i];
-      content += ', $o';
-    }
-    return content;
+    return showDeleted().join(', ');
   }
 
   @override

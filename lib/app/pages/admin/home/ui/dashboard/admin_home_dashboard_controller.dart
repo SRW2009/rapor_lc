@@ -9,16 +9,16 @@ import 'package:rapor_lc/domain/entities/santri.dart';
 
 class AdminHomeDashboardController extends Controller {
   List<Santri>? santriList;
-  RequestState santriState = RequestState.idle;
+  RequestState santriState = RequestState.none;
 
   List<NHB>? nhbList;
-  RequestState nhbState = RequestState.idle;
+  RequestState nhbState = RequestState.none;
 
   List<NK>? nkList;
-  RequestState nkState = RequestState.idle;
+  RequestState nkState = RequestState.none;
 
   List<NPB>? npbList;
-  RequestState npbState = RequestState.idle;
+  RequestState npbState = RequestState.none;
 
   final AdminHomeDashboardPresenter _presenter;
   AdminHomeDashboardController(santriRepository, nhbRepository, nkRepository, npbRepository)
