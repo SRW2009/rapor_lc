@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/dialogs/admin/santri_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/santri_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
@@ -9,79 +8,18 @@ import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
 
-class AdminHomeSantriController extends Controller {
-  List<Santri> santriList = [];
+class AdminHomeSantriController extends DataTableController<Santri> {
   RequestState santriState = RequestState.none;
-  List<bool> santriSelected = [];
-
-  Future<List<User>>? teacherList;
 
   final AdminHomeSantriPresenter _presenter;
   AdminHomeSantriController(authRepo, userRepo)
       : _presenter = AdminHomeSantriPresenter(authRepo, userRepo),
         super();
 
-  int sortedColumnIndex = 0;
-  bool sortedIsAsc = true;
-  void onSort(int columnI, bool _) {
-    if (columnI == sortedColumnIndex) {
-      sortedIsAsc = !sortedIsAsc;
-      sa
-      refreshUI();
-      return;
-    }
-
-    sortedIsAsc = true;
-
-  }
-
-  void tableOnSelectChanged(int i, bool val) {
-    santriSelected[i] = val;
-    refreshUI();
-  }
-
-  void tableOnAdd() {
-    showDialog(
-      context: getContext(),
-      builder: (context) => SantriCreateDialog(
-        controller: this,
-        onSave: (Santri santri) => doCreateSantri(santri),
-      ),
-    );
-  }
-
-  void tableOnEdit(Santri santri) {
-    showDialog(
-      context: getContext(),
-      builder: (context) =>
-        SantriUpdateDialog(
-          santri: santri,
-          controller: this,
-          onSave: (Santri santri) => doUpdateSantri(santri),
-        ),
-    );
-  }
-
-  void tableOnDelete() {
-    List<String> selectedSantri = [];
-    for (var i = 0; i < santriSelected.length; ++i) {
-      var isSelected = santriSelected[i];
-      if (isSelected) {
-        selectedSantri.add(santriList[i].nis);
-      }
-    }
-
-    showDialog(
-      context: getContext(),
-      builder: (context) => DeleteDialog(
-        showDeleted: () => selectedSantri,
-        onSave: () => doDeleteSantri(selectedSantri),
-      ),
-    );
-  }
-
-  Future<List<User>> dialogOnFind(String? query) async {
+  Future<List<User>>? teacherList;
+  Future<List<User>> dialogOnFindTeacher(String? query) async {
     teacherList ??= _presenter.futureGetTeacherList(1);
     if (query == null || query == '') return teacherList!;
 
@@ -91,8 +29,10 @@ class AdminHomeSantriController extends Controller {
   }
 
   void _getSantriList(List<Santri> list) {
-    santriList = list;
-    santriSelected = List<bool>.generate(list.length, (index) => false);
+    normalList = list;
+    filteredList = list;
+    selectedMap.addEntries(list.map<MapEntry<String, bool>>
+      ((e) => MapEntry(getSelectedKey(e), false)));
   }
 
   void _getSantriListState(RequestState state) {
@@ -162,5 +102,35 @@ class AdminHomeSantriController extends Controller {
   void onDisposed() {
     _presenter.dispose();
     super.onDisposed();
+  }
+
+  @override
+  Widget createDialog() => SantriCreateDialog(
+    controller: this,
+    onSave: (Santri santri) => doCreateSantri(santri),
+  );
+
+  @override
+  Widget updateDialog(Santri e) => SantriUpdateDialog(
+    santri: e,
+    controller: this,
+    onSave: (Santri santri) => doUpdateSantri(santri),
+  );
+
+  @override
+  Widget deleteDialog(List<String> selected) => DeleteDialog(
+    showDeleted: () => selected,
+    onSave: () => doDeleteSantri(selected),
+  );
+
+  @override
+  String getSelectedKey(Santri e) => e.nis;
+
+  @override
+  bool searchWhereClause(Santri e) {
+    if (e.nis.toLowerCase().contains(currentQuery)) return true;
+    if (e.nama.toLowerCase().contains(currentQuery)) return true;
+    if (e.guru?.email.toLowerCase().contains(currentQuery) ?? false) return true;
+    return false;
   }
 }

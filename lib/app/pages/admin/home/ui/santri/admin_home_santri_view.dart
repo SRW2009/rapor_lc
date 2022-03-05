@@ -5,6 +5,7 @@ import 'package:rapor_lc/app/pages/admin/home/ui/santri/admin_home_santri_contro
 import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/data/repositories/user_repo_impl.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_decoration.dart';
 
 class AdminHomeSantriUI extends View {
   AdminHomeSantriUI({Key? key}) : super(key: key);
@@ -42,12 +43,24 @@ class AdminHomeSantriUIView extends ViewState<AdminHomeSantriUI, AdminHomeSantri
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Container(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        width: 220.0,
+                        child: TextField(
+                          decoration: inputDecoration
+                              .copyWith(
+                            hintText: 'Search...',
+                            prefixIcon: const Icon(Icons.search),
+                          ),
+                          onSubmitted: controller.tableSearch,
+                        ),
+                      ),
                       IconButton(
                         onPressed: controller.tableOnAdd,
                         icon: const Icon(Icons.add),
                       ),
                       IconButton(
-                        onPressed: controller.santriSelected.any((element) => element)
+                        onPressed: controller.selectedMap.values.any((element) => element)
                             ? controller.tableOnDelete : null,
                         icon: const Icon(Icons.delete),
                       ),
@@ -62,28 +75,25 @@ class AdminHomeSantriUIView extends ViewState<AdminHomeSantriUI, AdminHomeSantri
           child: ControlledWidgetBuilder<AdminHomeSantriController>(
             builder: (context, controller) {
               if (controller.santriState == RequestState.loaded) {
-                final santriListLength = controller.santriList.length;
+                final santriListLength = controller.filteredList.length;
 
                 return SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: DataTable(
-                    columns: [
-                      DataColumn(
-                        label: const Text('NIS'),
-                        onSort: controller.onSort,
-                      ),
+                    columns: const [
+                      DataColumn(label: Text('NIS')),
                       DataColumn(label: Text('Nama')),
                       DataColumn(label: Text('Guru')),
                       DataColumn(label: Text('Action')),
                     ],
                     rows: List<DataRow>.generate(santriListLength, (index) {
-                      final santri = controller.santriList[index];
-                      final selected = controller.santriSelected[index];
+                      final santri = controller.filteredList[index];
+                      final selected = controller.selectedMap[santri.nis]!;
 
                       return DataRow(
                         selected: selected,
                         onSelectChanged: (val) =>
-                            controller.tableOnSelectChanged(index, val!),
+                            controller.tableOnSelectChanged(santri.nis, val!),
                         cells: [
                           DataCell(Text(santri.nis)),
                           DataCell(Text(santri.nama)),

@@ -66,7 +66,7 @@ class _SantriUpdateDialogState extends State<SantriUpdateDialog> {
                 FormDropdownSearch<User>(
                   label: 'Guru',
                   compareFn: (o1, o2) => o1?.email.toLowerCase() == o2?.email.toLowerCase(),
-                  onFind: widget.controller.dialogOnFind,
+                  onFind: widget.controller.dialogOnFindTeacher,
                   showItem: (e) => e.email,
                   onPick: (val) => _teacherCon = val,
                   selectedItem: () => widget.santri.guru,
