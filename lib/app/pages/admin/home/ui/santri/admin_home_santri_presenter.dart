@@ -9,7 +9,7 @@ import 'package:rapor_lc/domain/usecases/santri/delete_santri.dart';
 import 'package:rapor_lc/domain/usecases/santri/get_santri_list_admin.dart';
 import 'package:rapor_lc/domain/usecases/santri/update_santri.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
-import 'package:rapor_lc/domain/usecases/user/get_user_list_admin.dart';
+import 'package:rapor_lc/domain/usecases/user/get_user_list.dart';
 
 class AdminHomeSantriPresenter extends Presenter {
   late Function(List<Santri>) getSantriList;
@@ -22,13 +22,13 @@ class AdminHomeSantriPresenter extends Presenter {
   final CreateSantriUseCase _createSantriUseCase;
   final UpdateSantriUseCase _updateSantriUseCase;
   final DeleteSantriUseCase _deleteSantriUseCase;
-  final GetUserListAdminUseCase _getUserListAdminUseCase;
+  final GetUserListUseCase _getUserListUseCase;
   AdminHomeSantriPresenter(authRepo, userRepo)
       : _getSantriListAdminUseCase = GetSantriListAdminUseCase(authRepo),
         _createSantriUseCase = CreateSantriUseCase(authRepo),
         _updateSantriUseCase = UpdateSantriUseCase(authRepo),
         _deleteSantriUseCase = DeleteSantriUseCase(authRepo),
-        _getUserListAdminUseCase = GetUserListAdminUseCase(userRepo);
+        _getUserListUseCase = GetUserListUseCase(userRepo);
 
   void doGetSantriList() {
     getSantriListState(RequestState.loading);
@@ -47,7 +47,7 @@ class AdminHomeSantriPresenter extends Presenter {
     _deleteSantriUseCase.execute(_DeleteSantriObserver(this), UseCaseParams<List<String>>(nis));
   }
   Future<List<User>> futureGetTeacherList(int status) {
-    return _getUserListAdminUseCase.repository.getUserListAdmin(status);
+    return _getUserListUseCase.repository.getUserListAdmin(status);
   }
 
   @override
@@ -56,7 +56,7 @@ class AdminHomeSantriPresenter extends Presenter {
     _createSantriUseCase.dispose();
     _updateSantriUseCase.dispose();
     _deleteSantriUseCase.dispose();
-    _getUserListAdminUseCase.dispose();
+    _getUserListUseCase.dispose();
   }
 }
 

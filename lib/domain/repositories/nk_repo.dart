@@ -10,5 +10,5 @@ abstract class NKRepository extends Repository {
   Future<NK> getNK(int id);
   Future<RequestStatus> createNK(NK nk);
   Future<RequestStatus> updateNK(NK newNK);
-  Future<RequestStatus> deleteNK(int id);
+  Future<RequestStatus> deleteNK(List<String> ids);
 }

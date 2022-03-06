@@ -4,7 +4,7 @@ class User {
   final String password;
   final int status;
 
-  User(this.email, this.password) : status = 0;
+  User(this.email, this.password, {this.status=0});
 
   User.teacher(this.email, this.password) : status = 1;
 

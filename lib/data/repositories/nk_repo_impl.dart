@@ -2,6 +2,7 @@
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/repositories/nk_repo.dart';
+import 'package:rapor_lc/domain/entities/santri.dart';
 
 class NKRepositoryImpl extends NKRepository {
   @override
@@ -11,7 +12,7 @@ class NKRepositoryImpl extends NKRepository {
   }
 
   @override
-  Future<RequestStatus> deleteNK(int id) {
+  Future<RequestStatus> deleteNK(List<String> ids) {
     // TODO: implement deleteNK
     throw UnimplementedError();
   }
@@ -29,9 +30,12 @@ class NKRepositoryImpl extends NKRepository {
   }
 
   @override
-  Future<List<NK>> getNKListAdmin() {
+  Future<List<NK>> getNKListAdmin() async {
     // TODO: implement getNKListAdmin
-    throw UnimplementedError();
+    await Future.delayed(const Duration(seconds: 3));
+    return List<NK>.generate(
+        10, (index) => NK(index, Santri('12345678', 'SantriBoy'),
+        1, 1, '2020/2021', 'Inisiatif', 76, 74, 78, 75, 'B'));
   }
 
   @override

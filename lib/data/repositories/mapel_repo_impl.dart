@@ -23,14 +23,8 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   }
 
   @override
-  Future<List<MataPelajaran>> getMataPelajaranList(String santriNis) {
+  Future<List<MataPelajaran>> getMataPelajaranList() {
     // TODO: implement getMataPelajaranList
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<MataPelajaran>> getMataPelajaranListAdmin() {
-    // TODO: implement getMataPelajaranListAdmin
     throw UnimplementedError();
   }
 

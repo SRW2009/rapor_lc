@@ -1,7 +1,12 @@
 
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/abstract/npb.dart';
+import 'package:rapor_lc/domain/entities/npbmo.dart';
+import 'package:rapor_lc/domain/entities/npbpo.dart';
 import 'package:rapor_lc/domain/repositories/npb_repo.dart';
+import 'package:rapor_lc/domain/entities/divisi.dart';
+import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
+import 'package:rapor_lc/domain/entities/santri.dart';
 
 class NPBRepositoryImpl extends NPBRepository {
   @override
@@ -11,7 +16,7 @@ class NPBRepositoryImpl extends NPBRepository {
   }
 
   @override
-  Future<RequestStatus> deleteNPB(int id) {
+  Future<RequestStatus> deleteNPB(List<String> ids) {
     // TODO: implement deleteNPB
     throw UnimplementedError();
   }
@@ -29,9 +34,19 @@ class NPBRepositoryImpl extends NPBRepository {
   }
 
   @override
-  Future<List<NPB>> getNPBListAdmin() {
+  Future<List<NPB>> getNPBListAdmin() async {
     // TODO: implement getNPBListAdmin
-    throw UnimplementedError();
+    await Future.delayed(const Duration(seconds: 3));
+    return List<NPB>.generate(
+        10, (index) => (index % 1 == 0)
+        ? NPBMO(index,
+        Santri('12345678', 'SantriBoy'), 1, '2020/2021',
+        MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
+        '70%', 1)
+        : NPBPO(index,
+        Santri('12345678', 'SantriBoy'), 1, '2020/2021',
+        MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
+        '70%'));
   }
 
   @override

@@ -6,7 +6,7 @@ import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
-import 'package:rapor_lc/domain/usecases/mapel/get_mapel_list_admin.dart';
+import 'package:rapor_lc/domain/usecases/mapel/get_mapel_list.dart';
 import 'package:rapor_lc/domain/usecases/nhb/create_nhb.dart';
 import 'package:rapor_lc/domain/usecases/nhb/delete_nhb.dart';
 import 'package:rapor_lc/domain/usecases/nhb/get_nhb_list_admin.dart';
@@ -25,14 +25,14 @@ class AdminHomeNHBPresenter extends Presenter {
   final UpdateNHBUseCase _updateNHBUseCase;
   final DeleteNHBUseCase _deleteNHBUseCase;
   final GetSantriListAdminUseCase _getSantriListAdminUseCase;
-  final GetMataPelajaranListAdminUseCase _getMataPelajaranListAdminUseCase;
+  final GetMataPelajaranListUseCase _getMataPelajaranListAdminUseCase;
   AdminHomeNHBPresenter(nhbRepo, santriRepo, mapelRepo)
       : _getNHBListAdminUseCase = GetNHBListAdminUseCase(nhbRepo),
         _createNHBUseCase = CreateNHBUseCase(nhbRepo),
         _updateNHBUseCase = UpdateNHBUseCase(nhbRepo),
         _deleteNHBUseCase = DeleteNHBUseCase(nhbRepo),
         _getSantriListAdminUseCase = GetSantriListAdminUseCase(santriRepo),
-        _getMataPelajaranListAdminUseCase = GetMataPelajaranListAdminUseCase(mapelRepo);
+        _getMataPelajaranListAdminUseCase = GetMataPelajaranListUseCase(mapelRepo);
 
   void doGetNHBList() {
     getNHBListState(RequestState.loading);
@@ -54,7 +54,7 @@ class AdminHomeNHBPresenter extends Presenter {
     return _getSantriListAdminUseCase.repository.getSantriListAdmin();
   }
   Future<List<MataPelajaran>> futureGetMapelList() {
-    return _getMataPelajaranListAdminUseCase.repository.getMataPelajaranListAdmin();
+    return _getMataPelajaranListAdminUseCase.repository.getMataPelajaranList();
   }
 
   @override

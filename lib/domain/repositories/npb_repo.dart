@@ -10,5 +10,5 @@ abstract class NPBRepository extends Repository {
   Future<NPB> getNPB(int id);
   Future<RequestStatus> createNPB(NPB npb);
   Future<RequestStatus> updateNPB(NPB newNPB);
-  Future<RequestStatus> deleteNPB(int id);
+  Future<RequestStatus> deleteNPB(List<String> ids);
 }

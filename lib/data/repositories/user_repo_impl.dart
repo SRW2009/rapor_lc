@@ -11,7 +11,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<RequestStatus> deleteUserAdmin(String email) {
+  Future<RequestStatus> deleteUserAdmin(List<String> email) {
     // TODO: implement deleteUserAdmin
     throw UnimplementedError();
   }
@@ -23,7 +23,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<List<User>> getUserListAdmin([int status=-1]) async {
+  Future<List<User>> getUserListAdmin([int? status=-1]) async {
     // TODO: implement getUserListAdmin
     await Future.delayed(const Duration(seconds: 2));
     if (status == 1) {
