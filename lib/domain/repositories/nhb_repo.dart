@@ -10,5 +10,5 @@ abstract class NHBRepository extends Repository {
   Future<NHB> getNHB(int id);
   Future<RequestStatus> createNHB(NHB nhb);
   Future<RequestStatus> updateNHB(NHB newNHB);
-  Future<RequestStatus> deleteNHB(int id);
+  Future<RequestStatus> deleteNHB(List<String> ids);
 }

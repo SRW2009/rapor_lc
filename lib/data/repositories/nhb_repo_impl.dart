@@ -1,6 +1,9 @@
 
 import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/domain/entities/divisi.dart';
+import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/repositories/nhb_repo.dart';
 
 class NHBRepositoryImpl extends NHBRepository {
@@ -11,7 +14,7 @@ class NHBRepositoryImpl extends NHBRepository {
   }
 
   @override
-  Future<RequestStatus> deleteNHB(int id) {
+  Future<RequestStatus> deleteNHB(List<String> ids) {
     // TODO: implement deleteNHB
     throw UnimplementedError();
   }
@@ -29,9 +32,13 @@ class NHBRepositoryImpl extends NHBRepository {
   }
 
   @override
-  Future<List<NHB>> getNHBListAdmin() {
+  Future<List<NHB>> getNHBListAdmin() async {
     // TODO: implement getNHBListAdmin
-    throw UnimplementedError();
+    await Future.delayed(const Duration(seconds: 3));
+    return List<NHB>.generate(
+        10, (index) => NHB(index, Santri('12345678', 'SantriBoy'),
+        MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
+        1, '2020/2021', 80, 76, 74, 78, 75, 'B'));
   }
 
   @override
