@@ -75,6 +75,9 @@ class AdminHomeUserController extends DataTableController<User> {
     _presenter.deleteUserStatus = _deleteUserStatus;
   }
 
+  @override
+  void refresh() => doGetUserList();
+
   void doGetUserList() => _presenter.doGetUserList();
   void doCreateUser(User item) => _presenter.doCreateUser(item);
   void doUpdateUser(User item) => _presenter.doUpdateUser(item);

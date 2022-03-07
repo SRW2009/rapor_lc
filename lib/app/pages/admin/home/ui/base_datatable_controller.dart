@@ -1,12 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/app/utils/request_state.dart';
 
 abstract class DataTableController<Entity> extends Controller {
   List<Entity> normalList = [];
   List<Entity> filteredList = [];
   Map<String, bool> selectedMap = {};
+  RequestState dataTableState = RequestState.none;
 
+  void refresh();
   Widget createDialog();
   Widget updateDialog(Entity e);
   Widget deleteDialog(List<String> selected);

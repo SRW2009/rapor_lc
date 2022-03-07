@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:rapor_lc/app/dialogs/admin/npb_create_dialog.dart';
+import 'package:rapor_lc/app/dialogs/admin/npb_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
@@ -97,6 +99,9 @@ class AdminHomeNPBController extends DataTableController<NPB> {
     _presenter.deleteNPBStatus = _deleteNPBStatus;
   }
 
+  @override
+  void refresh() => doGetNPBList();
+
   void doGetNPBList() => _presenter.doGetNPBList();
   void doCreateNPB(NPB item) => _presenter.doCreateNPB(item);
   void doUpdateNPB(NPB item) => _presenter.doUpdateNPB(item);
@@ -114,17 +119,17 @@ class AdminHomeNPBController extends DataTableController<NPB> {
   }
 
   @override
-  Widget createDialog() => Container();/*NPBCreateDialog(
+  Widget createDialog() => NPBCreateDialog(
     controller: this,
     onSave: (NPB item) => doCreateNPB(item),
-  );*/
+  );
 
   @override
-  Widget updateDialog(NPB e) => Container();/*NPBUpdateDialog(
+  Widget updateDialog(NPB e) => NPBUpdateDialog(
     npb: e,
     controller: this,
     onSave: (NPB item) => doUpdateNPB(item),
-  );*/
+  );
 
   @override
   Widget deleteDialog(List<String> selected) => DeleteDialog(

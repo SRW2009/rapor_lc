@@ -11,8 +11,6 @@ import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
 
 class AdminHomeSantriController extends DataTableController<Santri> {
-  RequestState santriState = RequestState.none;
-
   final AdminHomeSantriPresenter _presenter;
   AdminHomeSantriController(authRepo, userRepo)
       : _presenter = AdminHomeSantriPresenter(authRepo, userRepo),
@@ -36,7 +34,7 @@ class AdminHomeSantriController extends DataTableController<Santri> {
   }
 
   void _getSantriListState(RequestState state) {
-    santriState = state;
+    dataTableState = state;
     refreshUI();
   }
 
@@ -87,6 +85,9 @@ class AdminHomeSantriController extends DataTableController<Santri> {
     _presenter.updateSantriStatus = _updateSantriStatus;
     _presenter.deleteSantriStatus = _deleteSantriStatus;
   }
+
+  @override
+  void refresh() => doGetSantriList();
 
   void doGetSantriList() => _presenter.doGetSantriList();
   void doCreateSantri(Santri santri) => _presenter.doCreateSantri(santri);

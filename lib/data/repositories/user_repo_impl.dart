@@ -36,7 +36,7 @@ class UserRepositoryImpl extends UserRepository {
     }
 
     return List<User>
-        .generate(5, (index) => (index % 1) == 0
+        .generate(5, (index) => (index % 2) == 0
         ? User.teacher('email$index@mail.com','')
         : User.admin('email$index@mail.com','')).toList();
   }

@@ -1,60 +1,65 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/nhb/admin_home_nhb_controller.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/npb/admin_home_npb_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_number.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field_radios.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/domain/entities/abstract/npb.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
+import 'package:rapor_lc/domain/entities/npbmo.dart';
+import 'package:rapor_lc/domain/entities/npbpo.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
-class NHBUpdateDialog extends StatefulWidget {
-  final NHB nhb;
-  final Function(NHB) onSave;
-  final AdminHomeNHBController controller;
+class NPBUpdateDialog extends StatefulWidget {
+  final NPB npb;
+  final Function(NPB) onSave;
+  final AdminHomeNPBController controller;
 
-  const NHBUpdateDialog({Key? key, required this.nhb, required this.onSave, required this.controller,
+  const NPBUpdateDialog({Key? key, required this.npb, required this.onSave, required this.controller,
   }) : super(key: key);
 
   @override
-  State<NHBUpdateDialog> createState() => _NHBUpdateDialogState();
+  State<NPBUpdateDialog> createState() => _NPBUpdateDialogState();
 }
 
-class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
+class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
   final _key = GlobalKey<FormState>();
-  late final TextEditingController _idCon;
+  /// 0 is Masa Observasi, 1 is Paska Observasi
+  int _npbTypeCon = 0;
   Santri? _santriCon;
   MataPelajaran? _mapelCon;
   late final TextEditingController _semesterCon;
   late final TextEditingController _tahunAjaranCon;
-  late final TextEditingController _nilaiHarianCon;
-  late final TextEditingController _nilaiBulananCon;
-  late final TextEditingController _nilaiProjectCon;
-  late final TextEditingController _nilaiAkhirCon;
-  late final TextEditingController _akumulasiCon;
-  late final TextEditingController _predikatCon;
+  late final TextEditingController _presensiCon;
+  late final TextEditingController _nCon;
+  late final TextEditingController _noteCon;
 
   @override
   void initState() {
-    _idCon = TextEditingController(text: widget.nhb.id.toString());
-    _santriCon = widget.nhb.santri;
-    _mapelCon = widget.nhb.mataPelajaran;
-    _semesterCon = TextEditingController(text: widget.nhb.semester.toString());
-    _tahunAjaranCon = TextEditingController(text: widget.nhb.tahunAjaran);
-    _nilaiHarianCon = TextEditingController(text: widget.nhb.nilaiHarian.toString());
-    _nilaiBulananCon = TextEditingController(text: widget.nhb.nilaiBulanan.toString());
-    _nilaiProjectCon = TextEditingController(text: widget.nhb.nilaiProject.toString());
-    _nilaiAkhirCon = TextEditingController(text: widget.nhb.nilaiAkhir.toString());
-    _akumulasiCon = TextEditingController(text: widget.nhb.akumulasi.toString());
-    _predikatCon = TextEditingController(text: widget.nhb.predikat);
+    final npb = widget.npb;
+    if (npb is NPBMO) {
+      _nCon = TextEditingController(text: npb.n.toString());
+    }
+    else {
+      _npbTypeCon = 1;
+      _nCon = TextEditingController();
+    }
+
+    _santriCon = npb.santri;
+    _mapelCon = npb.pelajaran;
+    _semesterCon = TextEditingController(text: npb.semester.toString());
+    _tahunAjaranCon = TextEditingController(text: npb.tahunAjaran);
+    _presensiCon = TextEditingController(text: npb.presensi);
+    _noteCon = TextEditingController(text: npb.note);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: 'Ubah NHB',
+      title: 'Tambah NPB',
       contents: [
         SingleChildScrollView(
           child: Form(
@@ -63,10 +68,15 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FormInputField(
-                  label: 'ID',
-                  controller: _idCon,
-                  isDisabled: true,
+                FormInputFieldRadios(
+                  label: 'Tipe',
+                  value: _npbTypeCon,
+                  onChanged: (val) {
+                    setState(() {
+                      _npbTypeCon = val;
+                    });
+                  },
+                  contents: const ['NPBMO', 'NPBPO'],
                 ),
                 FormDropdownSearch<Santri>(
                   label: 'Santri',
@@ -97,12 +107,17 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
                     return null;
                   },
                 ),
-                FormInputFieldNumber('Nilai Harian', _nilaiHarianCon),
-                FormInputFieldNumber('Nilai Bulanan', _nilaiBulananCon),
-                FormInputFieldNumber('Nilai Projek', _nilaiProjectCon),
-                FormInputFieldNumber('Nilai Akhir', _nilaiAkhirCon),
-                FormInputFieldNumber('Akumulasi', _akumulasiCon),
-                FormInputField(label: 'Predikat', controller: _predikatCon),
+                FormInputField(label: 'Presensi', controller: _presensiCon),
+                if (_npbTypeCon == 0) FormInputField(
+                  label: 'n',
+                  controller: _nCon,
+                ),
+                FormInputField(
+                  label: 'Catatan',
+                  controller: _noteCon,
+                  inputType: TextInputType.multiline,
+                  maxLines: 3,
+                ),
               ],
             ),
           ),
@@ -110,11 +125,11 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            NHB(widget.nhb.id, _santriCon!, _mapelCon!, int.tryParse(_semesterCon.text)!,
-                _tahunAjaranCon.text, int.tryParse(_nilaiHarianCon.text)!,
-                int.tryParse(_nilaiBulananCon.text)!, int.tryParse(_nilaiProjectCon.text)!,
-                int.tryParse(_nilaiAkhirCon.text)!, int.tryParse(_akumulasiCon.text)!,
-                _predikatCon.text)
+            (_npbTypeCon == 0)
+                ? NPBMO(0, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
+                _mapelCon!, _presensiCon.text, int.tryParse(_nCon.text)!, note: _noteCon.text)
+                : NPBPO(0, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
+                _mapelCon!, _presensiCon.text, note: _noteCon.text)
           ),
         ),
       ],

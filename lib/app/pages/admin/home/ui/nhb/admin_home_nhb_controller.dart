@@ -12,8 +12,6 @@ import 'package:rapor_lc/app/dialogs/admin/nhb_update_dialog.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/nhb/admin_home_nhb_presenter.dart';
 
 class AdminHomeNHBController extends DataTableController<NHB> {
-  RequestState dataState = RequestState.none;
-
   final AdminHomeNHBPresenter _presenter;
   AdminHomeNHBController(nhbRepo, santriRepo, mapelRepo)
       : _presenter = AdminHomeNHBPresenter(nhbRepo, santriRepo, mapelRepo),
@@ -47,7 +45,7 @@ class AdminHomeNHBController extends DataTableController<NHB> {
   }
 
   void _getNHBListState(RequestState state) {
-    dataState = state;
+    dataTableState = state;
     refreshUI();
   }
 
@@ -98,6 +96,9 @@ class AdminHomeNHBController extends DataTableController<NHB> {
     _presenter.updateNHBStatus = _updateNHBStatus;
     _presenter.deleteNHBStatus = _deleteNHBStatus;
   }
+
+  @override
+  void refresh() => doGetNHBList();
 
   void doGetNHBList() => _presenter.doGetNHBList();
   void doCreateNHB(NHB item) => _presenter.doCreateNHB(item);

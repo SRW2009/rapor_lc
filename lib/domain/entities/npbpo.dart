@@ -29,9 +29,10 @@ class NPBPO extends NPB {
       this.semester,
       this.tahunAjaran,
       this.pelajaran,
-      this.presensi
+      this.presensi,
+      {this.note=''}
   );
 
   @override
-  String note = '';
+  String note;
 }

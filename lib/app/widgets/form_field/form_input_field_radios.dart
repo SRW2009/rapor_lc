@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 class FormInputFieldRadios extends StatelessWidget {
   final String label;
   final int value;
-  final void Function(int i) setState;
+  final void Function(int i) onChanged;
   final List<String> contents;
 
-  const FormInputFieldRadios({required this.label, required this.value, required this.setState, required this.contents, Key? key}) : super(key: key);
+  const FormInputFieldRadios({required this.label, required this.value, required this.onChanged, required this.contents, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class FormInputFieldRadios extends StatelessWidget {
                           onChanged: (i) {
                             if (i != null) {
                               state.setValue(i);
-                              setState(i);
+                              onChanged(i);
                             }
                           },
                         ),

@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:rapor_lc/app/dialogs/admin/nk_create_dialog.dart';
+import 'package:rapor_lc/app/dialogs/admin/nk_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
@@ -86,6 +88,9 @@ class AdminHomeNKController extends DataTableController<NK> {
     _presenter.deleteNKStatus = _deleteNKStatus;
   }
 
+  @override
+  void refresh() => doGetNKList();
+
   void doGetNKList() => _presenter.doGetNKList();
   void doCreateNK(NK item) => _presenter.doCreateNK(item);
   void doUpdateNK(NK item) => _presenter.doUpdateNK(item);
@@ -103,17 +108,17 @@ class AdminHomeNKController extends DataTableController<NK> {
   }
 
   @override
-  Widget createDialog() => Container();/*NKCreateDialog(
+  Widget createDialog() => NKCreateDialog(
     controller: this,
     onSave: (NK item) => doCreateNK(item),
-  );*/
+  );
 
   @override
-  Widget updateDialog(NK e) => Container();/*NKUpdateDialog(
+  Widget updateDialog(NK e) => NKUpdateDialog(
     nk: e,
     controller: this,
     onSave: (NK item) => doUpdateNK(item),
-  );*/
+  );
 
   @override
   Widget deleteDialog(List<String> selected) => DeleteDialog(

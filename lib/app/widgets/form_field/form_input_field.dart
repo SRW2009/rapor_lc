@@ -9,7 +9,7 @@ class FormInputField extends StatefulWidget {
     this.icon, this.onTap, this.validator, this.maxLength,
     this.isPassword=false, this.isObscured=false, this.isDisabled=false, this.textColor=Colors.black,
     this.fillColor=Colors.white, this.iconColor=Colors.black, this.inputType=TextInputType.text,
-    this.hint='', this.withoutPadding=false,
+    this.hint='', this.withoutPadding=false, this.maxLines=1,
   }) : super(key: key);
 
   final TextInputType inputType;
@@ -24,6 +24,7 @@ class FormInputField extends StatefulWidget {
   final String? Function(String?)? validator;
   final String hint;
   final int? maxLength;
+  final int maxLines;
 
   @override
   FormInputFieldState createState() => FormInputFieldState();
@@ -89,8 +90,8 @@ class FormInputFieldState extends State<FormInputField> {
               ? Colors.grey.shade200
               : widget.fillColor,
           labelText: widget.label,
-          //hintText: ,
         ),
+        maxLines: widget.maxLines,
       ),
     );
   }

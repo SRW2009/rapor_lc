@@ -32,8 +32,9 @@ class NPBMO extends NPB {
       this.pelajaran,
       this.presensi,
       this.n,
+      {this.note=''}
   );
 
   @override
-  String note = '';
+  String note;
 }

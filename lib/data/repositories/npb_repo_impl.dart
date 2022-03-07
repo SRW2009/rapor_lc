@@ -38,7 +38,7 @@ class NPBRepositoryImpl extends NPBRepository {
     // TODO: implement getNPBListAdmin
     await Future.delayed(const Duration(seconds: 3));
     return List<NPB>.generate(
-        10, (index) => (index % 1 == 0)
+        10, (index) => (index % 2 == 0)
         ? NPBMO(index,
         Santri('12345678', 'SantriBoy'), 1, '2020/2021',
         MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
