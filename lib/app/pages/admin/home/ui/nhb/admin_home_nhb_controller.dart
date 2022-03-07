@@ -7,8 +7,9 @@ import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
-
-import 'admin_home_nhb_presenter.dart';
+import 'package:rapor_lc/app/dialogs/admin/nhb_create_dialog.dart';
+import 'package:rapor_lc/app/dialogs/admin/nhb_update_dialog.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/nhb/admin_home_nhb_presenter.dart';
 
 class AdminHomeNHBController extends DataTableController<NHB> {
   RequestState dataState = RequestState.none;
@@ -115,17 +116,17 @@ class AdminHomeNHBController extends DataTableController<NHB> {
   }
 
   @override
-  Widget createDialog() => Container();/*NHBCreateDialog(
+  Widget createDialog() => NHBCreateDialog(
     controller: this,
     onSave: (NHB item) => doCreateNHB(item),
-  );*/
+  );
 
   @override
-  Widget updateDialog(NHB e) => Container();/*NHBUpdateDialog(
+  Widget updateDialog(NHB e) => NHBUpdateDialog(
     nhb: e,
     controller: this,
     onSave: (NHB item) => doUpdateNHB(item),
-  );*/
+  );
 
   @override
   Widget deleteDialog(List<String> selected) => DeleteDialog(
