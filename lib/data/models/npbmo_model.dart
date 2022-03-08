@@ -13,6 +13,7 @@ class NPBMOModel extends NPBModel {
     required this.pelajaran,
     required this.presensi,
     required this.n,
+    this.note='',
   });
 
   @override
@@ -27,9 +28,9 @@ class NPBMOModel extends NPBModel {
   final MataPelajaranModel pelajaran;
   @override
   final String presensi;
-  @override
-  String note = '';
   final int n;
+  @override
+  String note;
 
   factory NPBMOModel.fromJson(Map<String, dynamic> json) => NPBMOModel(
     id: json['id'],
@@ -39,7 +40,8 @@ class NPBMOModel extends NPBModel {
     pelajaran: MataPelajaranModel.fromJson(json['pelajaran']),
     presensi: json['presensi'],
     n: json['n'],
-  )..note=json['note'];
+    note: json['note'],
+  );
 
   @override
   Map<String, dynamic> toJson() => {
@@ -60,9 +62,10 @@ class NPBMOModel extends NPBModel {
     semester,
     tahunAjaran,
     pelajaran.toEntity(),
-    presensi,
     n,
-  )..note=note;
+    presensi,
+    note: note,
+  );
 
   @override
   List<Object?> get props => [

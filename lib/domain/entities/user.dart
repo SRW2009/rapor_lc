@@ -12,10 +12,10 @@ class User {
 
   String get getStatusName {
     switch (status) {
-      case 2:
-        return 'Admin';
       case 1:
         return 'Teacher';
+      case 2:
+        return 'Admin';
       default:
         return '';
     }

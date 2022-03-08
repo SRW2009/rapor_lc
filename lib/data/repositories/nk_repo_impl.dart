@@ -35,7 +35,7 @@ class NKRepositoryImpl extends NKRepository {
     await Future.delayed(const Duration(seconds: 3));
     return List<NK>.generate(
         10, (index) => NK(index, Santri('12345678', 'SantriBoy'),
-        1, 1, '2020/2021', 'Inisiatif', 76, 74, 78, 75, 'B'));
+        1, '2020/2021', 1, 'Inisiatif', 76, 74, 78, 75, 'B'));
   }
 
   @override

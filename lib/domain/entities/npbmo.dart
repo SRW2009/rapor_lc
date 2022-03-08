@@ -30,8 +30,8 @@ class NPBMO extends NPB {
       this.semester,
       this.tahunAjaran,
       this.pelajaran,
-      this.presensi,
       this.n,
+      this.presensi,
       {this.note=''}
   );
 

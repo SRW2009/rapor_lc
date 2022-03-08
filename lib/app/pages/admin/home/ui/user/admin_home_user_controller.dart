@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:rapor_lc/app/dialogs/admin/user_create_dialog.dart';
+import 'package:rapor_lc/app/dialogs/admin/user_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
@@ -95,17 +97,17 @@ class AdminHomeUserController extends DataTableController<User> {
   }
 
   @override
-  Widget createDialog() => Container();/*UserCreateDialog(
+  Widget createDialog() => UserCreateDialog(
     controller: this,
     onSave: (User item) => doCreateUser(item),
-  );*/
+  );
 
   @override
-  Widget updateDialog(User e) => Container();/*UserUpdateDialog(
-    nk: e,
+  Widget updateDialog(User e) => UserUpdateDialog(
+    user: e,
     controller: this,
     onSave: (User item) => doUpdateUser(item),
-  );*/
+  );
 
   @override
   Widget deleteDialog(List<String> selected) => DeleteDialog(

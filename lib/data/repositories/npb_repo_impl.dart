@@ -42,7 +42,7 @@ class NPBRepositoryImpl extends NPBRepository {
         ? NPBMO(index,
         Santri('12345678', 'SantriBoy'), 1, '2020/2021',
         MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
-        '70%', 1)
+        1, '70%')
         : NPBPO(index,
         Santri('12345678', 'SantriBoy'), 1, '2020/2021',
         MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),

@@ -37,8 +37,8 @@ class NHBRepositoryImpl extends NHBRepository {
     await Future.delayed(const Duration(seconds: 3));
     return List<NHB>.generate(
         10, (index) => NHB(index, Santri('12345678', 'SantriBoy'),
-        MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
-        1, '2020/2021', 80, 76, 74, 78, 75, 'B'));
+        1, '2020/2021', MataPelajaran(1, Divisi(1, 'MPP', 'KarateGuy'), 'Karate'),
+        80, 76, 74, 78, 75, 'B'));
   }
 
   @override

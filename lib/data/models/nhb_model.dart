@@ -62,9 +62,9 @@ class NHBModel extends Equatable {
   NHB toEntity() => NHB(
     id,
     santriModel.toEntity(),
-    mataPelajaranModel.toEntity(),
     semester,
     tahunAjaran,
+    mataPelajaranModel.toEntity(),
     nilaiHarian,
     nilaiBulanan,
     nilaiProject,

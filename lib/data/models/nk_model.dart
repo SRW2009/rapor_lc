@@ -61,9 +61,9 @@ class NKModel extends Equatable {
   NK toEntity() => NK(
     id,
     santri.toEntity(),
-    bulan,
     semester,
     tahunAjaran,
+    bulan,
     variable,
     nilaiMesjid,
     nilaiKelas,
