@@ -19,5 +19,5 @@ final contents = <NPBPO>[
 
 final contents_observation = <NPBMO>[
   for (var e in pelajaranList_observation)
-    NPBMO(0, _santri, 1, '2021/2022', e, '70%', 1),
+    NPBMO(0, _santri, 1, '2021/2022', e, 1, '70%'),
 ];

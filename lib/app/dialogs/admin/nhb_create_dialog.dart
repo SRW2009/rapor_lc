@@ -100,8 +100,8 @@ class _NHBCreateDialogState extends State<NHBCreateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            NHB(0, _santriCon!, _mapelCon!, int.tryParse(_semesterCon.text)!,
-                _tahunAjaranCon.text, int.tryParse(_nilaiHarianCon.text)!,
+            NHB(0, _santriCon!, int.tryParse(_semesterCon.text)!,
+                _tahunAjaranCon.text, _mapelCon!, int.tryParse(_nilaiHarianCon.text)!,
                 int.tryParse(_nilaiBulananCon.text)!, int.tryParse(_nilaiProjectCon.text)!,
                 int.tryParse(_nilaiAkhirCon.text)!, int.tryParse(_akumulasiCon.text)!,
                 _predikatCon.text)

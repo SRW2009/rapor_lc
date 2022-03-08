@@ -12,8 +12,6 @@ import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/npb/admin_home_npb_presenter.dart';
 
 class AdminHomeNPBController extends DataTableController<NPB> {
-  RequestState dataState = RequestState.none;
-
   final AdminHomeNPBPresenter _presenter;
   AdminHomeNPBController(npbRepo, santriRepo, mapelRepo)
       : _presenter = AdminHomeNPBPresenter(npbRepo, santriRepo, mapelRepo),
@@ -47,7 +45,7 @@ class AdminHomeNPBController extends DataTableController<NPB> {
   }
 
   void _getNPBListState(RequestState state) {
-    dataState = state;
+    dataTableState = state;
     refreshUI();
   }
 

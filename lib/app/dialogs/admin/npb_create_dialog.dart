@@ -116,7 +116,7 @@ class _NPBCreateDialogState extends State<NPBCreateDialog> {
           onSave: () => widget.onSave(
             (_npbTypeCon == 0)
                 ? NPBMO(0, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
-                _mapelCon!, _presensiCon.text, int.tryParse(_nCon.text)!, note: _noteCon.text)
+                _mapelCon!, int.tryParse(_nCon.text)!, _presensiCon.text, note: _noteCon.text)
                 : NPBPO(0, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
                 _mapelCon!, _presensiCon.text, note: _noteCon.text)
           ),

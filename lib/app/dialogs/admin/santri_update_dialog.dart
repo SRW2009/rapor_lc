@@ -48,20 +48,11 @@ class _SantriUpdateDialogState extends State<SantriUpdateDialog> {
                 FormInputField(
                   label: 'NIS',
                   controller: _nisCon,
-                  inputType: TextInputType.text,
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    return null;
-                  },
+                  isDisabled: true,
                 ),
                 FormInputField(
                   label: 'Nama',
                   controller: _nameCon,
-                  inputType: TextInputType.text,
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    return null;
-                  },
                 ),
                 FormDropdownSearch<User>(
                   label: 'Guru',
@@ -69,7 +60,7 @@ class _SantriUpdateDialogState extends State<SantriUpdateDialog> {
                   onFind: widget.controller.dialogOnFindTeacher,
                   showItem: (e) => e.email,
                   onPick: (val) => _teacherCon = val,
-                  selectedItem: () => widget.santri.guru,
+                  selectedItem: () => _teacherCon,
                 ),
               ],
             ),

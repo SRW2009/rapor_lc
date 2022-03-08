@@ -2,6 +2,7 @@
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/repositories/mapel_repo.dart';
+import 'package:rapor_lc/dummy_data/mata_pelajaran.dart';
 
 class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   @override
@@ -23,9 +24,10 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   }
 
   @override
-  Future<List<MataPelajaran>> getMataPelajaranList() {
+  Future<List<MataPelajaran>> getMataPelajaranList() async {
     // TODO: implement getMataPelajaranList
-    throw UnimplementedError();
+    await Future.delayed(const Duration(seconds: 3));
+    return pelajaranList;
   }
 
   @override

@@ -10,7 +10,7 @@ final _variables = [
   'Menghargai Karya'
 ];
 final contents = List<NK>.generate(_variables.length,
-        (i) => NK(i, _santri, 1, 1, '2021/2022', _variables[i], 89, 77, 65, 80, 'BB')).toList();
+        (i) => NK(i, _santri, 1, '2021/2022', 1, _variables[i], 89, 77, 65, 80, 'BB')).toList();
 
 
 const adviceTitle = 'NASEHAT DEWAN GURU';

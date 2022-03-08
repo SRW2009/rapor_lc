@@ -30,6 +30,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
   int _npbTypeCon = 0;
   Santri? _santriCon;
   MataPelajaran? _mapelCon;
+  late final TextEditingController _idCon;
   late final TextEditingController _semesterCon;
   late final TextEditingController _tahunAjaranCon;
   late final TextEditingController _presensiCon;
@@ -49,6 +50,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
 
     _santriCon = npb.santri;
     _mapelCon = npb.pelajaran;
+    _idCon = TextEditingController(text: npb.id.toString());
     _semesterCon = TextEditingController(text: npb.semester.toString());
     _tahunAjaranCon = TextEditingController(text: npb.tahunAjaran);
     _presensiCon = TextEditingController(text: npb.presensi);
@@ -59,7 +61,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: 'Tambah NPB',
+      title: 'Ubah NPB',
       contents: [
         SingleChildScrollView(
           child: Form(
@@ -68,6 +70,11 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                FormInputField(
+                  label: 'ID',
+                  controller: _idCon,
+                  isDisabled: true,
+                ),
                 FormInputFieldRadios(
                   label: 'Tipe',
                   value: _npbTypeCon,
@@ -84,6 +91,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
                   onFind: widget.controller.dialogOnFindSantri,
                   showItem: (e) => '${e.nis} - ${e.nama}',
                   onPick: (val) => _santriCon = val,
+                  selectedItem: () => _santriCon,
                 ),
                 FormDropdownSearch<MataPelajaran>(
                   label: 'Mata Pelajaran',
@@ -91,6 +99,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
                   onFind: widget.controller.dialogOnFindMapel,
                   showItem: (e) => '${e.id} - ${e.namaMapel}',
                   onPick: (val) => _mapelCon = val,
+                  selectedItem: () => _mapelCon,
                 ),
                 FormInputFieldNumber('Semester', _semesterCon),
                 FormInputField(
@@ -126,9 +135,9 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
           formKey: _key,
           onSave: () => widget.onSave(
             (_npbTypeCon == 0)
-                ? NPBMO(0, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
-                _mapelCon!, _presensiCon.text, int.tryParse(_nCon.text)!, note: _noteCon.text)
-                : NPBPO(0, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
+                ? NPBMO(widget.npb.id, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
+                _mapelCon!, int.tryParse(_nCon.text)!, _presensiCon.text, note: _noteCon.text)
+                : NPBPO(widget.npb.id, _santriCon!, int.tryParse(_semesterCon.text)!, _tahunAjaranCon.text,
                 _mapelCon!, _presensiCon.text, note: _noteCon.text)
           ),
         ),

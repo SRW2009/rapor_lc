@@ -10,8 +10,6 @@ import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/user/admin_home_user_presenter.dart';
 
 class AdminHomeUserController extends DataTableController<User> {
-  RequestState dataState = RequestState.none;
-
   final AdminHomeUserPresenter _presenter;
   AdminHomeUserController(userRepo)
       : _presenter = AdminHomeUserPresenter(userRepo),
@@ -25,7 +23,7 @@ class AdminHomeUserController extends DataTableController<User> {
   }
 
   void _getUserListState(RequestState state) {
-    dataState = state;
+    dataTableState = state;
     refreshUI();
   }
 

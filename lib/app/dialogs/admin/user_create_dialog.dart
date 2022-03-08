@@ -45,20 +45,10 @@ class _UserCreateDialogState extends State<UserCreateDialog> {
                 FormInputField(
                   label: 'Email',
                   controller: _emailCon,
-                  inputType: TextInputType.text,
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    return null;
-                  },
                 ),
                 FormInputField(
                   label: 'Password',
                   controller: _passwordCon,
-                  inputType: TextInputType.text,
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    return null;
-                  },
                 ),
                 FormInputFieldRadios(
                   label: 'Status',

@@ -11,8 +11,6 @@ import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/nk/admin_home_nk_presenter.dart';
 
 class AdminHomeNKController extends DataTableController<NK> {
-  RequestState dataState = RequestState.none;
-
   final AdminHomeNKPresenter _presenter;
   AdminHomeNKController(nkRepo, santriRepo)
       : _presenter = AdminHomeNKPresenter(nkRepo, santriRepo),
@@ -36,7 +34,7 @@ class AdminHomeNKController extends DataTableController<NK> {
   }
 
   void _getNKListState(RequestState state) {
-    dataState = state;
+    dataTableState = state;
     refreshUI();
   }
 

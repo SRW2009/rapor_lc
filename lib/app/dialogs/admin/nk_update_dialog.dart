@@ -73,6 +73,7 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
                   onFind: widget.controller.dialogOnFindSantri,
                   showItem: (e) => '${e.nis} - ${e.nama}',
                   onPick: (val) => _santriCon = val,
+                  selectedItem: () => _santriCon,
                 ),
                 FormInputFieldNumber('Bulan', _bulanCon),
                 FormInputFieldNumber('Semester', _semesterCon),
@@ -103,8 +104,8 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            NK(widget.nk.id, _santriCon!, int.tryParse(_bulanCon.text)!, int.tryParse(_semesterCon.text)!,
-                _tahunAjaranCon.text, _variabelCon.text,
+            NK(widget.nk.id, _santriCon!, int.tryParse(_semesterCon.text)!,
+                _tahunAjaranCon.text, int.tryParse(_bulanCon.text)!, _variabelCon.text,
                 int.tryParse(_nilaiMesjidCon.text)!, int.tryParse(_nilaiKelasCon.text)!,
                 int.tryParse(_nilaiAsramaCon.text)!, int.tryParse(_akumulatifCon.text)!,
                 _predikatCon.text)

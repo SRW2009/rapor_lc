@@ -35,7 +35,7 @@ class _UserUpdateDialogState extends State<UserUpdateDialog> {
   @override
   Widget build(BuildContext context) {
     return BaseDialog(
-      title: 'Tambah User',
+      title: 'Ubah User',
       contents: [
         SingleChildScrollView(
           child: Form(
@@ -47,20 +47,11 @@ class _UserUpdateDialogState extends State<UserUpdateDialog> {
                 FormInputField(
                   label: 'Email',
                   controller: _emailCon,
-                  inputType: TextInputType.text,
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    return null;
-                  },
+                  isDisabled: true,
                 ),
                 FormInputField(
                   label: 'Password',
                   controller: _passwordCon,
-                  inputType: TextInputType.text,
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    return null;
-                  },
                 ),
                 FormInputFieldRadios(
                   label: 'Status',

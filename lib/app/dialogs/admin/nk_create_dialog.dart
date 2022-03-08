@@ -94,8 +94,8 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            NK(0, _santriCon!, int.tryParse(_bulanCon.text)!, int.tryParse(_semesterCon.text)!,
-                _tahunAjaranCon.text, _variabelCon.text,
+            NK(0, _santriCon!, int.tryParse(_semesterCon.text)!,
+                _tahunAjaranCon.text, int.tryParse(_bulanCon.text)!, _variabelCon.text,
                 int.tryParse(_nilaiMesjidCon.text)!, int.tryParse(_nilaiKelasCon.text)!,
                 int.tryParse(_nilaiAsramaCon.text)!, int.tryParse(_akumulatifCon.text)!,
                 _predikatCon.text)

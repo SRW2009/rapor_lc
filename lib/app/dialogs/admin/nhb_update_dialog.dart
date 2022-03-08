@@ -74,6 +74,7 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
                   onFind: widget.controller.dialogOnFindSantri,
                   showItem: (e) => '${e.nis} - ${e.nama}',
                   onPick: (val) => _santriCon = val,
+                  selectedItem: () => _santriCon,
                 ),
                 FormDropdownSearch<MataPelajaran>(
                   label: 'Mata Pelajaran',
@@ -81,6 +82,7 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
                   onFind: widget.controller.dialogOnFindMapel,
                   showItem: (e) => '${e.id} - ${e.namaMapel}',
                   onPick: (val) => _mapelCon = val,
+                  selectedItem: () => _mapelCon,
                 ),
                 FormInputFieldNumber('Semester', _semesterCon),
                 FormInputField(
@@ -110,8 +112,8 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            NHB(widget.nhb.id, _santriCon!, _mapelCon!, int.tryParse(_semesterCon.text)!,
-                _tahunAjaranCon.text, int.tryParse(_nilaiHarianCon.text)!,
+            NHB(widget.nhb.id, _santriCon!, int.tryParse(_semesterCon.text)!,
+                _tahunAjaranCon.text, _mapelCon!, int.tryParse(_nilaiHarianCon.text)!,
                 int.tryParse(_nilaiBulananCon.text)!, int.tryParse(_nilaiProjectCon.text)!,
                 int.tryParse(_nilaiAkhirCon.text)!, int.tryParse(_akumulasiCon.text)!,
                 _predikatCon.text)
