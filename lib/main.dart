@@ -6,7 +6,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:rapor_lc/app/pages/splash/splash_view.dart';
-import 'package:rapor_lc/rapor_print_layout/pages/root.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pages/root.dart';
 import 'package:rapor_lc/app/utils/router.dart' as r;
 
 void main() {

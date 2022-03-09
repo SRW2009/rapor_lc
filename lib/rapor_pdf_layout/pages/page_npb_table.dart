@@ -4,7 +4,7 @@ import 'package:rapor_lc/domain/entities/abstract/npb.dart';
 import 'package:rapor_lc/domain/entities/semester.dart';
 
 import 'package:rapor_lc/dummy_data/contents/npb_contents.dart' as npb_;
-import 'package:rapor_lc/rapor_print_layout/pdf_common.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
 import '../pdf_table.dart';
 
 Page page_npb_table({int semester=1}) {

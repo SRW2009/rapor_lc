@@ -6,7 +6,7 @@ import 'package:rapor_lc/domain/entities/semester.dart';
 
 import 'package:rapor_lc/dummy_data/datasets/nhb_datasets.dart' as nhb;
 import 'package:rapor_lc/dummy_data/contents/nhb_contents.dart' as nhb_;
-import 'package:rapor_lc/rapor_print_layout/pdf_common.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
 import '../pdf_chart.dart';
 import '../pdf_table.dart';
 

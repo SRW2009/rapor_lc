@@ -8,7 +8,7 @@ import 'package:rapor_lc/domain/entities/npbmo.dart';
 import 'package:rapor_lc/domain/entities/npbpo.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/entities/semester.dart';
-import 'package:rapor_lc/rapor_print_layout/pdf_common.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
 
 class MyPDFTable {
   static TableRow _buildHeaderRow(List<String> titles) {
