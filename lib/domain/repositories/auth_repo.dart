@@ -13,6 +13,9 @@ abstract class AuthenticationRepository extends Repository {
   /// Returns the current authenticated [User].
   Future<User> getCurrentUser();
 
+  /// Returns the current authenticated [User]'s token.
+  Future<String?> getCurrentToken();
+
   /// Resets the password of a [User]
   Future<bool> forgotPassword(String email);
 
