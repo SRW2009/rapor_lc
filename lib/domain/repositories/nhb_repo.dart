@@ -1,8 +1,7 @@
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
-import 'package:rapor_lc/domain/usecases/base_use_case.dart';
+import 'package:rapor_lc/common/repository.dart';
 
 abstract class NHBRepository extends Repository {
   Future<List<NHB>> getNHBListAdmin();

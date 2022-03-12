@@ -22,7 +22,7 @@ Page page_nk({int semester=1}) {
         children: [
           buildPageTitle('NILAI KEMANDIRIAN'),
           SizedBox(height: 12.0),
-          MyPDFTable.buildIdentityTable(nk__.santri, Semester(semester), nk__.tahunAjaran),
+          MyPDFTable.buildIdentityTable(nk__.santri, Semester(semester), nk__.tahun_ajaran),
           SizedBox(height: 12.0),
           Expanded(
             child: Center(

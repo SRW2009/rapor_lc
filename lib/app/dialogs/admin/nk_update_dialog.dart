@@ -40,11 +40,11 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
     _santriCon = widget.nk.santri;
     _bulanCon = TextEditingController(text: widget.nk.bulan.toString());
     _semesterCon = TextEditingController(text: widget.nk.semester.toString());
-    _tahunAjaranCon = TextEditingController(text: widget.nk.tahunAjaran);
-    _variabelCon = TextEditingController(text: widget.nk.variable);
-    _nilaiMesjidCon = TextEditingController(text: widget.nk.nilaiMesjid.toString());
-    _nilaiKelasCon = TextEditingController(text: widget.nk.nilaiKelas.toString());
-    _nilaiAsramaCon = TextEditingController(text: widget.nk.nilaiAsrama.toString());
+    _tahunAjaranCon = TextEditingController(text: widget.nk.tahun_ajaran);
+    _variabelCon = TextEditingController(text: widget.nk.nama_variabel);
+    _nilaiMesjidCon = TextEditingController(text: widget.nk.nilai_mesjid.toString());
+    _nilaiKelasCon = TextEditingController(text: widget.nk.nilai_kelas.toString());
+    _nilaiAsramaCon = TextEditingController(text: widget.nk.nilai_asrama.toString());
     _akumulatifCon = TextEditingController(text: widget.nk.akumulatif.toString());
     _predikatCon = TextEditingController(text: widget.nk.predikat);
     super.initState();

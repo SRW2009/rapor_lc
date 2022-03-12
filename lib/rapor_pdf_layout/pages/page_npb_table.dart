@@ -25,7 +25,7 @@ Page page_npb_table({int semester=1}) {
         children: [
           buildPageTitle('NILAI PROSES BELAJAR'),
           SizedBox(height: 12.0),
-          MyPDFTable.buildIdentityTable(npb__.santri, Semester(npb__.semester), npb__.tahunAjaran),
+          MyPDFTable.buildIdentityTable(npb__.santri, Semester(npb__.semester), npb__.tahun_ajaran),
           SizedBox(height: 24.0),
           Expanded(
             child: Align(

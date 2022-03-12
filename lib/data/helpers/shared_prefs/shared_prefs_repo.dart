@@ -5,6 +5,7 @@ import 'package:rapor_lc/domain/entities/user.dart';
 class SharedPrefsRepository {
   static const _USER_EMAIL = 'user:email';
   static const _USER_STATUS = 'user:status';
+  static const _USER_TOKEN = 'user:token';
 
   final Future<SharedPreferences> _sharedPreferences;
 
@@ -16,6 +17,7 @@ class SharedPrefsRepository {
 
   User? _currentUser;
   int? _loginPrivilege;
+  String? _token;
 
   Future<User?> get getCurrentUser async {
     if (_currentUser != null) return _currentUser!;
@@ -59,6 +61,28 @@ class SharedPrefsRepository {
     final isLoggedIn = pref.getInt(_USER_STATUS);
     _loginPrivilege = isLoggedIn ?? 0;
     return _loginPrivilege!;
+  }
+
+  Future<String?> get getToken async {
+    if (_token != null) return _token!;
+
+    final pref = await _sharedPreferences;
+    final token = pref.getString(_USER_TOKEN);
+
+    _token = token;
+    return token;
+  }
+
+  Future<bool> setToken(String token) async {
+    final pref = await _sharedPreferences;
+    final setSuccess = await pref.setString(_USER_TOKEN, token);
+
+    if (setSuccess) {
+      _token = token;
+      return true;
+    }
+
+    return false;
   }
 
   Future<bool> logout() async {

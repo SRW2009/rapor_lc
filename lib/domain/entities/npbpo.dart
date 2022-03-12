@@ -3,8 +3,14 @@ import 'package:rapor_lc/domain/entities/abstract/npb.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
-class NPBPO extends NPB {
+import 'package:json_annotation/json_annotation.dart';
 
+part 'npbpo.g.dart';
+
+@JsonSerializable()
+@SantriConverter()
+@MataPelajaranConverter()
+class NPBPO extends NPB {
   @override
   final int id;
 
@@ -21,18 +27,22 @@ class NPBPO extends NPB {
   final int semester;
 
   @override
-  final String tahunAjaran;
+  final String tahun_ajaran;
+
+  @override
+  String note;
 
   NPBPO(
       this.id,
       this.santri,
       this.semester,
-      this.tahunAjaran,
+      this.tahun_ajaran,
       this.pelajaran,
       this.presensi,
       {this.note=''}
   );
 
+  factory NPBPO.fromJson(Map<String, dynamic> json) => _$NPBPOFromJson(json);
   @override
-  String note;
+  Map<String, dynamic> toJson() => _$NPBPOToJson(this);
 }

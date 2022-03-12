@@ -39,13 +39,13 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
   void initState() {
     _idCon = TextEditingController(text: widget.nhb.id.toString());
     _santriCon = widget.nhb.santri;
-    _mapelCon = widget.nhb.mataPelajaran;
+    _mapelCon = widget.nhb.pelajaran;
     _semesterCon = TextEditingController(text: widget.nhb.semester.toString());
-    _tahunAjaranCon = TextEditingController(text: widget.nhb.tahunAjaran);
-    _nilaiHarianCon = TextEditingController(text: widget.nhb.nilaiHarian.toString());
-    _nilaiBulananCon = TextEditingController(text: widget.nhb.nilaiBulanan.toString());
-    _nilaiProjectCon = TextEditingController(text: widget.nhb.nilaiProject.toString());
-    _nilaiAkhirCon = TextEditingController(text: widget.nhb.nilaiAkhir.toString());
+    _tahunAjaranCon = TextEditingController(text: widget.nhb.tahun_ajaran);
+    _nilaiHarianCon = TextEditingController(text: widget.nhb.nilai_harian.toString());
+    _nilaiBulananCon = TextEditingController(text: widget.nhb.nilai_bulanan.toString());
+    _nilaiProjectCon = TextEditingController(text: widget.nhb.nilai_project.toString());
+    _nilaiAkhirCon = TextEditingController(text: widget.nhb.nilai_akhir.toString());
     _akumulasiCon = TextEditingController(text: widget.nhb.akumulasi.toString());
     _predikatCon = TextEditingController(text: widget.nhb.predikat);
     super.initState();
@@ -80,7 +80,7 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
                   label: 'Mata Pelajaran',
                   compareFn: (o1, o2) => o1?.id == o2?.id,
                   onFind: widget.controller.dialogOnFindMapel,
-                  showItem: (e) => '${e.id} - ${e.namaMapel}',
+                  showItem: (e) => '${e.id} - ${e.nama_mapel}',
                   onPick: (val) => _mapelCon = val,
                   selectedItem: () => _mapelCon,
                 ),

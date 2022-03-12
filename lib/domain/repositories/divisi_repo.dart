@@ -1,7 +1,7 @@
 
+import 'package:rapor_lc/common/repository.dart';
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
-import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 abstract class DivisiRepository extends Repository {
   Future<List<Divisi>> getDivisiList();

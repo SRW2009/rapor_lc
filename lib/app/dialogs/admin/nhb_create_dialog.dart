@@ -69,7 +69,7 @@ class _NHBCreateDialogState extends State<NHBCreateDialog> {
                   label: 'Mata Pelajaran',
                   compareFn: (o1, o2) => o1?.id == o2?.id,
                   onFind: widget.controller.dialogOnFindMapel,
-                  showItem: (e) => '${e.id} - ${e.namaMapel}',
+                  showItem: (e) => '${e.id} - ${e.nama_mapel}',
                   onPick: (val) => _mapelCon = val,
                 ),
                 FormInputFieldNumber('Semester', _semesterCon),

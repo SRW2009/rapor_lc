@@ -1,7 +1,7 @@
 
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
-import 'package:rapor_lc/domain/usecases/base_use_case.dart';
+import 'package:rapor_lc/common/repository.dart';
 
 abstract class MataPelajaranRepository extends Repository {
   Future<List<MataPelajaran>> getMataPelajaranList();

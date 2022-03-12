@@ -35,7 +35,7 @@ class AdminHomeMataPelajaranUIView extends ViewState<AdminHomeMataPelajaranUI, A
             ],
             tableContentBuilder: (item) => [
               DataCell(Text(item.id.toString())),
-              DataCell(Text(item.namaMapel)),
+              DataCell(Text(item.nama_mapel)),
               DataCell(Text(item.divisi.nama)),
               DataCell(IconButton(
                 onPressed: () => controller.tableOnEdit(item),

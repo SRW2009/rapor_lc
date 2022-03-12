@@ -1,6 +1,6 @@
 
 import 'package:rapor_lc/domain/entities/user.dart';
-import '../usecases/base_use_case.dart';
+import 'package:rapor_lc/common/repository.dart';
 
 abstract class AuthenticationRepository extends Repository {
   /// Authenticates a user using his [email] and [password]

@@ -29,7 +29,7 @@ class _MataPelajaranUpdateDialogState extends State<MataPelajaranUpdateDialog> {
   @override
   void initState() {
     _idCon = TextEditingController(text: widget.mataPelajaran.id.toString());
-    _namaMapelCon = TextEditingController(text: widget.mataPelajaran.namaMapel);
+    _namaMapelCon = TextEditingController(text: widget.mataPelajaran.nama_mapel);
     _divisiCon = widget.mataPelajaran.divisi;
     super.initState();
   }

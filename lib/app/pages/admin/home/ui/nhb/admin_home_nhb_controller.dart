@@ -33,7 +33,7 @@ class AdminHomeNHBController extends DataTableController<NHB> {
     if (query == null || query == '') return mapelList!;
 
     return (await mapelList!)
-        .where((element) => element.namaMapel.toLowerCase().contains(query))
+        .where((element) => element.nama_mapel.toLowerCase().contains(query))
         .toList();
   }
 
@@ -143,12 +143,12 @@ class AdminHomeNHBController extends DataTableController<NHB> {
     if (e.id.toString().contains(currentQuery)) return true;
     if (e.santri.nama.toLowerCase().contains(currentQuery)) return true;
     if (e.semester.toString().contains(currentQuery)) return true;
-    if (e.tahunAjaran.toLowerCase().contains(currentQuery)) return true;
-    if (e.mataPelajaran.namaMapel.toLowerCase().contains(currentQuery)) return true;
-    if (e.nilaiHarian.toString().contains(currentQuery)) return true;
-    if (e.nilaiBulanan.toString().contains(currentQuery)) return true;
-    if (e.nilaiProject.toString().contains(currentQuery)) return true;
-    if (e.nilaiAkhir.toString().contains(currentQuery)) return true;
+    if (e.tahun_ajaran.toLowerCase().contains(currentQuery)) return true;
+    if (e.pelajaran.nama_mapel.toLowerCase().contains(currentQuery)) return true;
+    if (e.nilai_harian.toString().contains(currentQuery)) return true;
+    if (e.nilai_bulanan.toString().contains(currentQuery)) return true;
+    if (e.nilai_project.toString().contains(currentQuery)) return true;
+    if (e.nilai_akhir.toString().contains(currentQuery)) return true;
     if (e.akumulasi.toString().contains(currentQuery)) return true;
     if (e.predikat.toLowerCase().contains(currentQuery)) return true;
     return false;

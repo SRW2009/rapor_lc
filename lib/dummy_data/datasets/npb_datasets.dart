@@ -5,8 +5,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:rapor_lc/dummy_data/mata_pelajaran.dart';
 
-final plpsName = pelajaranList.map<String>((e) => e.namaMapel).toList();
-final plpsName_observation = pelajaranList_observation.map<String>((e) => e.namaMapel).toList();
+final plpsName = pelajaranList.map<String>((e) => e.nama_mapel).toList();
+final plpsName_observation = pelajaranList_observation.map<String>((e) => e.nama_mapel).toList();
 
 final Random random = Random();
 List<pw.BarDataSet> getDatasets({isObservation=false}) => <pw.BarDataSet>[

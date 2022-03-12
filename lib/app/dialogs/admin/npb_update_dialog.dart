@@ -52,7 +52,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
     _mapelCon = npb.pelajaran;
     _idCon = TextEditingController(text: npb.id.toString());
     _semesterCon = TextEditingController(text: npb.semester.toString());
-    _tahunAjaranCon = TextEditingController(text: npb.tahunAjaran);
+    _tahunAjaranCon = TextEditingController(text: npb.tahun_ajaran);
     _presensiCon = TextEditingController(text: npb.presensi);
     _noteCon = TextEditingController(text: npb.note);
     super.initState();
@@ -97,7 +97,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
                   label: 'Mata Pelajaran',
                   compareFn: (o1, o2) => o1?.id == o2?.id,
                   onFind: widget.controller.dialogOnFindMapel,
-                  showItem: (e) => '${e.id} - ${e.namaMapel}',
+                  showItem: (e) => '${e.id} - ${e.nama_mapel}',
                   onPick: (val) => _mapelCon = val,
                   selectedItem: () => _mapelCon,
                 ),

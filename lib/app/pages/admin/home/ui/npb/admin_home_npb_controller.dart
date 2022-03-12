@@ -33,7 +33,7 @@ class AdminHomeNPBController extends DataTableController<NPB> {
     if (query == null || query == '') return mapelList!;
 
     return (await mapelList!)
-        .where((element) => element.namaMapel.toLowerCase().contains(query))
+        .where((element) => element.nama_mapel.toLowerCase().contains(query))
         .toList();
   }
 
@@ -143,8 +143,8 @@ class AdminHomeNPBController extends DataTableController<NPB> {
     if (e.id.toString().contains(currentQuery)) return true;
     if (e.santri.nama.toLowerCase().contains(currentQuery)) return true;
     if (e.semester.toString().contains(currentQuery)) return true;
-    if (e.tahunAjaran.toLowerCase().contains(currentQuery)) return true;
-    if (e.pelajaran.namaMapel.toLowerCase().contains(currentQuery)) return true;
+    if (e.tahun_ajaran.toLowerCase().contains(currentQuery)) return true;
+    if (e.pelajaran.nama_mapel.toLowerCase().contains(currentQuery)) return true;
     if (e.presensi.toLowerCase().contains(currentQuery)) return true;
     return false;
   }

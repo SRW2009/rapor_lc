@@ -131,7 +131,7 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
   bool searchWhereClause(MataPelajaran e) {
     if (e.id.toString().contains(currentQuery)) return true;
     if (e.divisi.nama.toLowerCase().contains(currentQuery)) return true;
-    if (e.namaMapel.toLowerCase().contains(currentQuery)) return true;
+    if (e.nama_mapel.toLowerCase().contains(currentQuery)) return true;
     return false;
   }
 }

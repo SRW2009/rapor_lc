@@ -132,12 +132,12 @@ class AdminHomeNKController extends DataTableController<NK> {
     if (e.id.toString().contains(currentQuery)) return true;
     if (e.santri.nama.toLowerCase().contains(currentQuery)) return true;
     if (e.semester.toString().contains(currentQuery)) return true;
-    if (e.tahunAjaran.toLowerCase().contains(currentQuery)) return true;
+    if (e.tahun_ajaran.toLowerCase().contains(currentQuery)) return true;
     if (e.bulan.toString().contains(currentQuery)) return true;
-    if (e.variable.toLowerCase().contains(currentQuery)) return true;
-    if (e.nilaiMesjid.toString().contains(currentQuery)) return true;
-    if (e.nilaiKelas.toString().contains(currentQuery)) return true;
-    if (e.nilaiAsrama.toString().contains(currentQuery)) return true;
+    if (e.nama_variabel.toLowerCase().contains(currentQuery)) return true;
+    if (e.nilai_mesjid.toString().contains(currentQuery)) return true;
+    if (e.nilai_kelas.toString().contains(currentQuery)) return true;
+    if (e.nilai_asrama.toString().contains(currentQuery)) return true;
     if (e.akumulatif.toString().contains(currentQuery)) return true;
     if (e.predikat.toLowerCase().contains(currentQuery)) return true;
     return false;

@@ -41,8 +41,8 @@ class AdminHomeNPBUIView extends ViewState<AdminHomeNPBUI, AdminHomeNPBControlle
               DataCell(Text(item.id.toString())),
               DataCell(Text(item.santri.nama)),
               DataCell(Text(item.semester.toString())),
-              DataCell(Text(item.tahunAjaran)),
-              DataCell(Text(item.pelajaran.namaMapel)),
+              DataCell(Text(item.tahun_ajaran)),
+              DataCell(Text(item.pelajaran.nama_mapel)),
               DataCell(Text(item.presensi)),
               DataCell(IconButton(
                 onPressed: () => controller.tableOnEdit(item),

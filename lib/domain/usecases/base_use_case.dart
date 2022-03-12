@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/common/repository.dart';
 
 class BaseUseCase<Res, Par, Rep extends Repository>
     extends UseCase<UseCaseResponse<Res>, UseCaseParams<Par>> {
@@ -36,5 +37,3 @@ class UseCaseParams<T> {
 
   UseCaseParams(this.params);
 }
-
-abstract class Repository {}

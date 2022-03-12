@@ -35,7 +35,7 @@ Page page_nhb({int semester=1}) {
             children: [
               buildPageTitle('NILAI HASIL BELAJAR (NHB)'),
               SizedBox(height: 12.0),
-              MyPDFTable.buildIdentityTable(nhb__.santri, Semester(nhb__.semester), nhb__.tahunAjaran),
+              MyPDFTable.buildIdentityTable(nhb__.santri, Semester(nhb__.semester), nhb__.tahun_ajaran),
               SizedBox(height: 12.0),
               Expanded(
                 child: Center(

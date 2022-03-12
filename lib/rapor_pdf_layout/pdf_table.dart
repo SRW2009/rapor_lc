@@ -117,9 +117,9 @@ class MyPDFTable {
     for (var i = 0; i < nhbs.length; ++i) {
       var o = nhbs[i];
       children.add(_buildContentRow([
-        '${i + 1 + startFrom}', o.mataPelajaran.namaMapel,
-        '${o.nilaiHarian}', '${o.nilaiBulanan}',
-        '${o.nilaiProject}', '${o.nilaiAkhir}',
+        '${i + 1 + startFrom}', o.pelajaran.nama_mapel,
+        '${o.nilai_harian}', '${o.nilai_bulanan}',
+        '${o.nilai_project}', '${o.nilai_akhir}',
         '${o.akumulasi}', o.predikat
       ]));
     }
@@ -150,9 +150,9 @@ class MyPDFTable {
     for (var i = 0; i < nks.length; ++i) {
       var o = nks[i];
       children.add(_buildContentRow([
-        '${i + 1}', o.variable,
-        '${o.nilaiMesjid}', '${o.nilaiKelas}',
-        '${o.nilaiAsrama}', '${o.akumulatif}',
+        '${i + 1}', o.nama_variabel,
+        '${o.nilai_mesjid}', '${o.nilai_kelas}',
+        '${o.nilai_asrama}', '${o.akumulatif}',
         o.predikat
       ]));
     }
@@ -181,7 +181,7 @@ class MyPDFTable {
     for (var i = 0; i < npbs.length; ++i) {
       var o = npbs[i];
       children.add(_buildContentRow([
-        '${i + 1 + startFrom}', o.pelajaran.namaMapel,
+        '${i + 1 + startFrom}', o.pelajaran.nama_mapel,
         '${(o is NPBMO) ? o.n : o.semester}', (o.presensi),
       ]));
     }
@@ -320,8 +320,8 @@ class MyPDFTable {
       var o2 = npbpos[i+1];
       children.add(_buildContentRow([
         '${no++}',
-        o.pelajaran.namaMapel, '${o.semester}', (o.presensi),
-        o2.pelajaran.namaMapel, '${o2.semester}', (o2.presensi),
+        o.pelajaran.nama_mapel, '${o.semester}', (o.presensi),
+        o2.pelajaran.nama_mapel, '${o2.semester}', (o2.presensi),
       ]));
 
     }
