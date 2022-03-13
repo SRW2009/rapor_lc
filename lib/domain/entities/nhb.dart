@@ -17,7 +17,7 @@ class NHB {
   final MataPelajaran pelajaran;
   final int nilai_harian;
   final int nilai_bulanan;
-  final int nilai_project;
+  final int nilai_projek;
   final int nilai_akhir;
   final int akumulasi;
   final String predikat;
@@ -30,7 +30,7 @@ class NHB {
       this.pelajaran,
       this.nilai_harian,
       this.nilai_bulanan,
-      this.nilai_project,
+      this.nilai_projek,
       this.nilai_akhir,
       this.akumulasi,
       this.predikat);

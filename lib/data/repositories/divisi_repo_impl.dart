@@ -85,6 +85,7 @@ class DivisiRepositoryImpl extends DivisiRepository {
         ''',
       }),
     );
+    print(response.body);
     if (response.statusCode == StatusCode.getSuccess) {
       return (jsonDecode(response.body) as List)
           .map<Divisi>((e) => Divisi.fromJson(e)).toList();

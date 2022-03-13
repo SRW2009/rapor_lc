@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
@@ -26,7 +28,15 @@ class Santri {
     this.daftar_nk, this.daftar_npb,
   });
 
-  factory Santri.fromJson(Map<String, dynamic> json) => _$SantriFromJson(json);
+  factory Santri.fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return _$SantriFromJson(json);
+    } else if (json is String) {
+      Map<String, dynamic> newJson = jsonDecode(json);
+      return _$SantriFromJson(newJson);
+    }
+    throw Exception('Parsing error');
+  }
   Map<String, dynamic> toJson() => _$SantriToJson(this);
 }
 

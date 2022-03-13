@@ -119,7 +119,7 @@ class MyPDFTable {
       children.add(_buildContentRow([
         '${i + 1 + startFrom}', o.pelajaran.nama_mapel,
         '${o.nilai_harian}', '${o.nilai_bulanan}',
-        '${o.nilai_project}', '${o.nilai_akhir}',
+        '${o.nilai_projek}', '${o.nilai_akhir}',
         '${o.akumulasi}', o.predikat
       ]));
     }

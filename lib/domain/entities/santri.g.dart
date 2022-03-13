@@ -9,9 +9,7 @@ part of 'santri.dart';
 Santri _$SantriFromJson(Map<String, dynamic> json) => Santri(
       json['nis'] as String,
       json['nama'] as String,
-      guru: json['guru'] == null
-          ? null
-          : User.fromJson(json['guru'] as Map<String, dynamic>),
+      guru: json['guru'] == null ? null : User.fromJson(json['guru']),
       daftar_nhb: (json['daftar_nhb'] as List<dynamic>?)
           ?.map((e) => const NHBConverter().fromJson(e as Map<String, dynamic>))
           .toList(),

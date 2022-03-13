@@ -49,7 +49,7 @@ class AdminHomeNHBUIView extends ViewState<AdminHomeNHBUI, AdminHomeNHBControlle
             DataCell(Text(item.pelajaran.nama_mapel)),
             DataCell(Text(item.nilai_harian.toString())),
             DataCell(Text(item.nilai_bulanan.toString())),
-            DataCell(Text(item.nilai_project.toString())),
+            DataCell(Text(item.nilai_projek.toString())),
             DataCell(Text(item.nilai_akhir.toString())),
             DataCell(Text(item.akumulasi.toString())),
             DataCell(Text(item.predikat)),

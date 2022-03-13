@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
@@ -26,7 +28,15 @@ class User {
     }
   }
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return _$UserFromJson(json);
+    } else if (json is String) {
+      Map<String, dynamic> newJson = jsonDecode(json);
+      return _$UserFromJson(newJson);
+    }
+    throw Exception('Parsing error');
+  }
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 

@@ -44,7 +44,7 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
     _tahunAjaranCon = TextEditingController(text: widget.nhb.tahun_ajaran);
     _nilaiHarianCon = TextEditingController(text: widget.nhb.nilai_harian.toString());
     _nilaiBulananCon = TextEditingController(text: widget.nhb.nilai_bulanan.toString());
-    _nilaiProjectCon = TextEditingController(text: widget.nhb.nilai_project.toString());
+    _nilaiProjectCon = TextEditingController(text: widget.nhb.nilai_projek.toString());
     _nilaiAkhirCon = TextEditingController(text: widget.nhb.nilai_akhir.toString());
     _akumulasiCon = TextEditingController(text: widget.nhb.akumulasi.toString());
     _predikatCon = TextEditingController(text: widget.nhb.predikat);

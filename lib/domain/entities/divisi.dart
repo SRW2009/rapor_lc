@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'divisi.g.dart';
@@ -11,7 +13,15 @@ class Divisi {
 
   Divisi(this.id, this.nama, this.kadiv);
 
-  factory Divisi.fromJson(Map<String, dynamic> json) => _$DivisiFromJson(json);
+  factory Divisi.fromJson(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      return _$DivisiFromJson(json);
+    } else if (json is String) {
+      Map<String, dynamic> newJson = jsonDecode(json);
+      return _$DivisiFromJson(newJson);
+    }
+    throw Exception('Parsing error');
+  }
   Map<String, dynamic> toJson() => _$DivisiToJson(this);
 }
 

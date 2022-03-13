@@ -147,7 +147,7 @@ class AdminHomeNHBController extends DataTableController<NHB> {
     if (e.pelajaran.nama_mapel.toLowerCase().contains(currentQuery)) return true;
     if (e.nilai_harian.toString().contains(currentQuery)) return true;
     if (e.nilai_bulanan.toString().contains(currentQuery)) return true;
-    if (e.nilai_project.toString().contains(currentQuery)) return true;
+    if (e.nilai_projek.toString().contains(currentQuery)) return true;
     if (e.nilai_akhir.toString().contains(currentQuery)) return true;
     if (e.akumulasi.toString().contains(currentQuery)) return true;
     if (e.predikat.toLowerCase().contains(currentQuery)) return true;
