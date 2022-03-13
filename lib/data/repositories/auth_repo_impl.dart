@@ -27,6 +27,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       }),
     );
 
+    print(response.body);
     if (response.statusCode == StatusCode.postSuccess) {
       final data = jsonDecode(response.body);
       final status = data['status'] as int;
@@ -50,17 +51,13 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   }
 
   @override
-  Future<User> getCurrentUser() async {
-    final user = await _sharedPrefsRepository.getCurrentUser;
-    if (user == null) throw Exception();
-    return user;
+  Future<User?> getCurrentUser() async {
+    return await _sharedPrefsRepository.getCurrentUser;
   }
 
   @override
-  Future<String> getCurrentToken() async {
-    final token = await _sharedPrefsRepository.getToken;
-    if (token == null) throw Exception();
-    return token;
+  Future<String?> getCurrentToken() async {
+    return await _sharedPrefsRepository.getToken;
   }
 
   @override

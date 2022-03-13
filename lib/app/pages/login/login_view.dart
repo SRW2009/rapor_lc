@@ -139,7 +139,7 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
         const SizedBox(),
         ElevatedButton(
           onPressed: () => controller.doLogin(
-            _loginFormKey, User(_emailCon.text, _passwordCon.text),
+            _loginFormKey, User(_emailCon.text, _passwordCon.text, status: 0),
           ),
           child: const Text('Login'),
         ),

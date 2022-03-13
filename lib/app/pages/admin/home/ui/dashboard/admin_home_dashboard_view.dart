@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_controller.dart';
+import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
 import 'package:rapor_lc/data/repositories/nhb_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/nk_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/npb_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class AdminHomeDashboardUI extends View {
   AdminHomeDashboardUI({Key? key}) : super(key: key);
@@ -17,50 +19,63 @@ class AdminHomeDashboardUI extends View {
 class AdminHomeDashboardUIView extends ViewState<AdminHomeDashboardUI, AdminHomeDashboardController> {
   AdminHomeDashboardUIView()
       : super(AdminHomeDashboardController(
-      SantriRepositoryImpl(),
-      NHBRepositoryImpl(),
-      NKRepositoryImpl(),
-      NPBRepositoryImpl())
-  );
+    SantriRepositoryImpl(),
+    NHBRepositoryImpl(),
+    NKRepositoryImpl(),
+    NPBRepositoryImpl(),
+    ChartRepository(),
+  ));
 
   @override
-  Widget get view => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Expanded(
-        child: Row(
+  Widget get view => Container(
+    key: globalKey,
+    child: ControlledWidgetBuilder<AdminHomeDashboardController>(
+      builder: (context, controller) {
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
+          children: [
             Expanded(
-              child: Card(
-                color: Colors.blue,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Card(
+                      color: Colors.blue,
+                      child: Builder(
+                        builder: (context) {
+                          return Container();
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Card(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
-              child: Card(
-                color: Colors.blue,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: const [
+                  Expanded(
+                    child: Card(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  Expanded(
+                    child: Card(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
-        ),
-      ),
-      Expanded(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
-            Expanded(
-              child: Card(
-                color: Colors.blue,
-              ),
-            ),
-            Expanded(
-              child: Card(
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
+        );
+      }
+    ),
   );
 }

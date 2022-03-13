@@ -9,6 +9,6 @@ abstract class SantriRepository extends Repository {
   Future<List<Santri>> getSantriList(User guru);
   Future<Santri> getSantri(String nis);
   Future<RequestStatus> createSantri(Santri santri);
-  Future<RequestStatus> updateSantri(Santri newSantri);
+  Future<RequestStatus> updateSantri(Santri santri);
   Future<RequestStatus> deleteSantri(List<String> nisList);
 }

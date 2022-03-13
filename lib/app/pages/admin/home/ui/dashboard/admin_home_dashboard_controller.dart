@@ -2,6 +2,7 @@
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_presenter.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
 import 'package:rapor_lc/domain/entities/abstract/npb.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -21,7 +22,8 @@ class AdminHomeDashboardController extends Controller {
   RequestState npbState = RequestState.none;
 
   final AdminHomeDashboardPresenter _presenter;
-  AdminHomeDashboardController(santriRepository, nhbRepository, nkRepository, npbRepository)
+  final ChartRepository _chartRepository;
+  AdminHomeDashboardController(santriRepository, nhbRepository, nkRepository, npbRepository, this._chartRepository)
       : _presenter = AdminHomeDashboardPresenter(santriRepository, nhbRepository, nkRepository, npbRepository),
         super();
 

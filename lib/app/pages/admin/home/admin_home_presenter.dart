@@ -14,7 +14,7 @@ import 'package:rapor_lc/domain/usecases/npb/get_npb_list_admin.dart';
 import 'package:rapor_lc/domain/usecases/santri/get_santri_list_admin.dart';
 
 class AdminHomePresenter extends Presenter {
-  late Function(User) getCurrentUserOnNext;
+  late Function(User?) getCurrentUserOnNext;
   late Function() logoutOnComplete;
 
   final GetCurrentUserUseCase _getCurrentUserUseCase;
@@ -33,7 +33,7 @@ class AdminHomePresenter extends Presenter {
   }
 }
 
-class _GetCurrentUserObserver extends Observer<UseCaseResponse<User>> {
+class _GetCurrentUserObserver extends Observer<UseCaseResponse<User?>> {
   final AdminHomePresenter presenter;
 
   _GetCurrentUserObserver(this.presenter);
@@ -47,7 +47,7 @@ class _GetCurrentUserObserver extends Observer<UseCaseResponse<User>> {
   }
 
   @override
-  void onNext(UseCaseResponse<User>? response) {
+  void onNext(UseCaseResponse<User?>? response) {
     presenter.getCurrentUserOnNext(response!.response);
   }
 }

@@ -11,7 +11,7 @@ abstract class AuthenticationRepository extends Repository {
   Future<int> isAuthenticated();
 
   /// Returns the current authenticated [User].
-  Future<User> getCurrentUser();
+  Future<User?> getCurrentUser();
 
   /// Returns the current authenticated [User]'s token.
   Future<String?> getCurrentToken();

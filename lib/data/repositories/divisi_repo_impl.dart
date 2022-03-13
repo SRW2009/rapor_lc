@@ -23,11 +23,9 @@ class DivisiRepositoryImpl extends DivisiRepository {
         ''',
       }),
     );
-
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
     }
-
     return RequestStatus.failed;
   }
 
@@ -35,22 +33,20 @@ class DivisiRepositoryImpl extends DivisiRepository {
   Future<RequestStatus> deleteDivisi(List<String> ids) async {
     final token = await SharedPrefsRepository().getToken;
 
-    final deleteQuery = ids.map<String>((e) => 'id=$e').join(' AND ');
+    final deleteQuery = ids.map<String>((e) =>
+    'DELETE FROM tb_divisi WHERE id=$e'
+    ).join(';');
     final response = await http.post(
       DataConstant.queryUri,
       headers: DataConstant.headers(token),
       body: jsonEncode({
         'query_type': DataConstant.queryType_action,
-        'query': '''
-          DELETE FROM tb_divisi WHERE $deleteQuery
-        ''',
+        'query': deleteQuery,
       }),
     );
-
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
     }
-
     return RequestStatus.failed;
   }
 
@@ -68,12 +64,10 @@ class DivisiRepositoryImpl extends DivisiRepository {
         ''',
       }),
     );
-
     if (response.statusCode == StatusCode.getSuccess) {
       return (jsonDecode(response.body) as List)
           .map<Divisi>((e) => Divisi.fromJson(e)).toList()[0];
     }
-
     throw Exception();
   }
 
@@ -91,12 +85,10 @@ class DivisiRepositoryImpl extends DivisiRepository {
         ''',
       }),
     );
-
     if (response.statusCode == StatusCode.getSuccess) {
       return (jsonDecode(response.body) as List)
           .map<Divisi>((e) => Divisi.fromJson(e)).toList();
     }
-
     throw Exception();
   }
 
@@ -114,11 +106,9 @@ class DivisiRepositoryImpl extends DivisiRepository {
         ''',
       }),
     );
-
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
     }
-
     return RequestStatus.failed;
   }
 }

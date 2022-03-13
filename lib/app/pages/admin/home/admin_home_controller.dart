@@ -24,7 +24,7 @@ class AdminHomeController extends Controller {
       : _presenter = AdminHomePresenter(authRepo),
         super();
 
-  void _getCurrentUserOnNext(User user) {
+  void _getCurrentUserOnNext(User? user) {
     this.user = user;
     refreshUI();
   }

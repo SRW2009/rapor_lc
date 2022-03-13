@@ -8,5 +8,5 @@ abstract class UserRepository extends Repository {
   Future<User> getUserAdmin(String email);
   Future<RequestStatus> createUserAdmin(User user);
   Future<RequestStatus> updateUserAdmin(User user);
-  Future<RequestStatus> deleteUserAdmin(List<String> email);
+  Future<RequestStatus> deleteUserAdmin(List<String> emails);
 }
