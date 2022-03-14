@@ -8,6 +8,6 @@ abstract class NHBRepository extends Repository {
   Future<List<NHB>> getNHBList(String santriNis);
   Future<NHB> getNHB(int id);
   Future<RequestStatus> createNHB(NHB nhb);
-  Future<RequestStatus> updateNHB(NHB newNHB);
+  Future<RequestStatus> updateNHB(NHB nhb);
   Future<RequestStatus> deleteNHB(List<String> ids);
 }

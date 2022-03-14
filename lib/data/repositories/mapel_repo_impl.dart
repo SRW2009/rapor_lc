@@ -118,15 +118,15 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
       body: jsonEncode({
         'query_type': DataConstant.queryType_action,
         'query': '''
-          UPDATE tb_mata_pelajaran SET divisi_id=${mapel.divisi.id}, nama_mapel='${mapel.nama_mapel}' WHERE id=${mapel.id}
+          UPDATE tb_mata_pelajaran 
+          SET divisi_id=${mapel.divisi.id}, nama_mapel='${mapel.nama_mapel}' 
+          WHERE id=${mapel.id}
         ''',
       }),
     );
-
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
     }
-
     return RequestStatus.failed;
   }
 }
