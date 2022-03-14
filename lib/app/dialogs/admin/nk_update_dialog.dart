@@ -33,6 +33,7 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
   late final TextEditingController _nilaiAsramaCon;
   late final TextEditingController _akumulatifCon;
   late final TextEditingController _predikatCon;
+  late final TextEditingController _noteCon;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
     _nilaiAsramaCon = TextEditingController(text: widget.nk.nilai_asrama.toString());
     _akumulatifCon = TextEditingController(text: widget.nk.akumulatif.toString());
     _predikatCon = TextEditingController(text: widget.nk.predikat);
+    _noteCon = TextEditingController(text: widget.nk.note);
     super.initState();
   }
 
@@ -83,9 +85,9 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
                   hint: '2020/2021',
                   validator: (s) {
                     if (s == null || s.isEmpty) return 'Harus Diisi';
-                    if (s.length != 9 && s.split('/').length != 2
-                        && int.tryParse(s.substring(0,4)) == null
-                        && int.tryParse(s.substring(5, 9)) == null) {
+                    if (s.length != 9 || s.split('/').length != 2
+                        || int.tryParse(s.substring(0,4)) == null
+                        || int.tryParse(s.substring(5, 9)) == null) {
                       return 'Format Salah';
                     }
                     return null;
@@ -97,6 +99,12 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
                 FormInputFieldNumber('Nilai Asrama', _nilaiAsramaCon),
                 FormInputFieldNumber('Akumulatif', _akumulatifCon),
                 FormInputField(label: 'Predikat', controller: _predikatCon),
+                FormInputField(
+                  label: 'Catatan',
+                  controller: _noteCon,
+                  inputType: TextInputType.multiline,
+                  maxLines: 3,
+                ),
               ],
             ),
           ),
@@ -108,7 +116,7 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
                 _tahunAjaranCon.text, int.tryParse(_bulanCon.text)!, _variabelCon.text,
                 int.tryParse(_nilaiMesjidCon.text)!, int.tryParse(_nilaiKelasCon.text)!,
                 int.tryParse(_nilaiAsramaCon.text)!, int.tryParse(_akumulatifCon.text)!,
-                _predikatCon.text)
+                _predikatCon.text)..note=_noteCon.text
           ),
         ),
       ],

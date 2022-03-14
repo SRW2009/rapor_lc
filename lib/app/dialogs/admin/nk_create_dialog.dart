@@ -31,6 +31,7 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
   late final TextEditingController _nilaiAsramaCon;
   late final TextEditingController _akumulatifCon;
   late final TextEditingController _predikatCon;
+  late final TextEditingController _noteCon;
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
     _nilaiAsramaCon = TextEditingController();
     _akumulatifCon = TextEditingController();
     _predikatCon = TextEditingController();
+    _noteCon = TextEditingController();
     super.initState();
   }
 
@@ -73,11 +75,12 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
                   hint: '2020/2021',
                   validator: (s) {
                     if (s == null || s.isEmpty) return 'Harus Diisi';
-                    if (s.length != 9 && s.split('/').length != 2
-                        && int.tryParse(s.substring(0,4)) == null
-                        && int.tryParse(s.substring(5, 9)) == null) {
+                    if (s.length != 9 || s.split('/').length != 2
+                        || int.tryParse(s.substring(0,4)) == null
+                        || int.tryParse(s.substring(5, 9)) == null) {
                       return 'Format Salah';
                     }
+
                     return null;
                   },
                 ),
@@ -87,6 +90,12 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
                 FormInputFieldNumber('Nilai Asrama', _nilaiAsramaCon),
                 FormInputFieldNumber('Akumulatif', _akumulatifCon),
                 FormInputField(label: 'Predikat', controller: _predikatCon),
+                FormInputField(
+                  label: 'Catatan',
+                  controller: _noteCon,
+                  inputType: TextInputType.multiline,
+                  maxLines: 3,
+                ),
               ],
             ),
           ),
@@ -98,7 +107,7 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
                 _tahunAjaranCon.text, int.tryParse(_bulanCon.text)!, _variabelCon.text,
                 int.tryParse(_nilaiMesjidCon.text)!, int.tryParse(_nilaiKelasCon.text)!,
                 int.tryParse(_nilaiAsramaCon.text)!, int.tryParse(_akumulatifCon.text)!,
-                _predikatCon.text)
+                _predikatCon.text)..note=_noteCon.text
           ),
         ),
       ],

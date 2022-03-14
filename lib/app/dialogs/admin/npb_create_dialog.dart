@@ -88,9 +88,9 @@ class _NPBCreateDialogState extends State<NPBCreateDialog> {
                   hint: '2020/2021',
                   validator: (s) {
                     if (s == null || s.isEmpty) return 'Harus Diisi';
-                    if (s.length != 9 && s.split('/').length != 2
-                        && int.tryParse(s.substring(0,4)) == null
-                        && int.tryParse(s.substring(5, 9)) == null) {
+                    if (s.length != 9 || s.split('/').length != 2
+                        || int.tryParse(s.substring(0,4)) == null
+                        || int.tryParse(s.substring(5, 9)) == null) {
                       return 'Format Salah';
                     }
                     return null;

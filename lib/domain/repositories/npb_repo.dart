@@ -8,6 +8,6 @@ abstract class NPBRepository extends Repository {
   Future<List<NPB>> getNPBList(String santriNis);
   Future<NPB> getNPB(int id);
   Future<RequestStatus> createNPB(NPB npb);
-  Future<RequestStatus> updateNPB(NPB newNPB);
+  Future<RequestStatus> updateNPB(NPB npb);
   Future<RequestStatus> deleteNPB(List<String> ids);
 }

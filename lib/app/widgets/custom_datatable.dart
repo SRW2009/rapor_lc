@@ -134,6 +134,7 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
                   );
                 }
                 if (controller.dataTableState == RequestState.loading) {
+                  _hasResized = false;
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
