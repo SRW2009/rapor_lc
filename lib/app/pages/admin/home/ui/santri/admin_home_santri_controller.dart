@@ -8,7 +8,7 @@ import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
+import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
 
 class AdminHomeSantriController extends DataTableController<Santri> {
   final AdminHomeSantriPresenter _presenter;

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
+import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'form_field/form_decoration.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/admin/nk_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/nk_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/base_datatable_controller.dart';
+import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
