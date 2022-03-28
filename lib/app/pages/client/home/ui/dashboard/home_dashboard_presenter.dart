@@ -10,7 +10,7 @@ import 'package:rapor_lc/domain/usecases/nk/get_nk_list_admin.dart';
 import 'package:rapor_lc/domain/usecases/npb/get_npb_list_admin.dart';
 import 'package:rapor_lc/domain/usecases/santri/get_santri_list_admin.dart';
 
-class AdminHomeDashboardPresenter extends Presenter {
+class HomeDashboardPresenter extends Presenter {
   late Function(List<Santri>) getSantriListOnNext;
   late Function(dynamic) getSantriListOnError;
   late Function(List<NHB>) getNHBListOnNext;
@@ -24,7 +24,7 @@ class AdminHomeDashboardPresenter extends Presenter {
   GetNHBListAdminUseCase _getNHBListAdminUseCase;
   GetNKListAdminUseCase _getNKListAdminUseCase;
   GetNPBListAdminUseCase _getNPBListAdminUseCase;
-  AdminHomeDashboardPresenter(santriRepository, nhbRepository, nkRepository, npbRepository)
+  HomeDashboardPresenter(santriRepository, nhbRepository, nkRepository, npbRepository)
       : _getSantriListAdminUseCase = GetSantriListAdminUseCase(santriRepository),
         _getNHBListAdminUseCase = GetNHBListAdminUseCase(nhbRepository),
         _getNKListAdminUseCase = GetNKListAdminUseCase(nkRepository),
@@ -45,7 +45,7 @@ class AdminHomeDashboardPresenter extends Presenter {
 }
 
 class _GetSantriListObserver extends Observer<UseCaseResponse<List<Santri>>> {
-  final AdminHomeDashboardPresenter presenter;
+  final HomeDashboardPresenter presenter;
 
   _GetSantriListObserver(this.presenter);
 
@@ -64,7 +64,7 @@ class _GetSantriListObserver extends Observer<UseCaseResponse<List<Santri>>> {
 }
 
 class _GetNHBListObserver extends Observer<UseCaseResponse<List<NHB>>> {
-  final AdminHomeDashboardPresenter presenter;
+  final HomeDashboardPresenter presenter;
 
   _GetNHBListObserver(this.presenter);
 
@@ -83,7 +83,7 @@ class _GetNHBListObserver extends Observer<UseCaseResponse<List<NHB>>> {
 }
 
 class _GetNKListObserver extends Observer<UseCaseResponse<List<NK>>> {
-  final AdminHomeDashboardPresenter presenter;
+  final HomeDashboardPresenter presenter;
 
   _GetNKListObserver(this.presenter);
 
@@ -102,7 +102,7 @@ class _GetNKListObserver extends Observer<UseCaseResponse<List<NK>>> {
 }
 
 class _GetNPBListObserver extends Observer<UseCaseResponse<List<NPB>>> {
-  final AdminHomeDashboardPresenter presenter;
+  final HomeDashboardPresenter presenter;
 
   _GetNPBListObserver(this.presenter);
 

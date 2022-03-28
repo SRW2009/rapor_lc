@@ -1,25 +1,17 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
-import 'package:rapor_lc/domain/entities/nk.dart';
-import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/entities/user.dart';
 import 'package:rapor_lc/domain/usecases/auth/get_current_user.dart';
 import 'package:rapor_lc/domain/usecases/auth/logout.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
-import 'package:rapor_lc/domain/usecases/nhb/get_nhb_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/nk/get_nk_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/npb/get_npb_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/santri/get_santri_list_admin.dart';
 
-class AdminHomePresenter extends Presenter {
+class HomePresenter extends Presenter {
   late Function(User?) getCurrentUserOnNext;
   late Function() logoutOnComplete;
 
   final GetCurrentUserUseCase _getCurrentUserUseCase;
   final LogoutUseCase _logoutUseCase;
-  AdminHomePresenter(authRepository)
+  HomePresenter(authRepository)
       : _getCurrentUserUseCase = GetCurrentUserUseCase(authRepository),
         _logoutUseCase = LogoutUseCase(authRepository);
 
@@ -34,7 +26,7 @@ class AdminHomePresenter extends Presenter {
 }
 
 class _GetCurrentUserObserver extends Observer<UseCaseResponse<User?>> {
-  final AdminHomePresenter presenter;
+  final HomePresenter presenter;
 
   _GetCurrentUserObserver(this.presenter);
 
@@ -53,7 +45,7 @@ class _GetCurrentUserObserver extends Observer<UseCaseResponse<User?>> {
 }
 
 class _LogoutObserver extends Observer<UseCaseResponse<void>> {
-  final AdminHomePresenter presenter;
+  final HomePresenter presenter;
 
   _LogoutObserver(this.presenter);
 

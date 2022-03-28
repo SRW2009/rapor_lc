@@ -9,7 +9,7 @@ import 'package:rapor_lc/domain/usecases/divisi/create_divisi.dart';
 import 'package:rapor_lc/domain/usecases/divisi/delete_divisi.dart';
 import 'package:rapor_lc/domain/usecases/divisi/update_divisi.dart';
 
-class AdminHomeDivisiPresenter extends Presenter {
+class HomeSantriPresenter extends Presenter {
   late Function(List<Divisi>) getDivisiList;
   late Function(RequestState) getDivisiListState;
   late Function(RequestStatus) createDivisiStatus;
@@ -20,7 +20,7 @@ class AdminHomeDivisiPresenter extends Presenter {
   final CreateDivisiUseCase _createDivisiUseCase;
   final UpdateDivisiUseCase _updateDivisiUseCase;
   final DeleteDivisiUseCase _deleteDivisiUseCase;
-  AdminHomeDivisiPresenter(divisiRepo)
+  HomeSantriPresenter(divisiRepo)
       : _getDivisiListAdminUseCase = GetDivisiListUseCase(divisiRepo),
         _createDivisiUseCase = CreateDivisiUseCase(divisiRepo),
         _updateDivisiUseCase = UpdateDivisiUseCase(divisiRepo),
@@ -53,7 +53,7 @@ class AdminHomeDivisiPresenter extends Presenter {
 }
 
 class _GetDivisiListObserver extends Observer<UseCaseResponse<List<Divisi>>> {
-  final AdminHomeDivisiPresenter _presenter;
+  final HomeSantriPresenter _presenter;
 
   _GetDivisiListObserver(this._presenter);
 
@@ -75,7 +75,7 @@ class _GetDivisiListObserver extends Observer<UseCaseResponse<List<Divisi>>> {
 }
 
 class _CreateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
-  final AdminHomeDivisiPresenter _presenter;
+  final HomeSantriPresenter _presenter;
 
   _CreateDivisiObserver(this._presenter);
 
@@ -94,7 +94,7 @@ class _CreateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
 }
 
 class _UpdateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
-  final AdminHomeDivisiPresenter _presenter;
+  final HomeSantriPresenter _presenter;
 
   _UpdateDivisiObserver(this._presenter);
 
@@ -113,7 +113,7 @@ class _UpdateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
 }
 
 class _DeleteDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
-  final AdminHomeDivisiPresenter _presenter;
+  final HomeSantriPresenter _presenter;
 
   _DeleteDivisiObserver(this._presenter);
 

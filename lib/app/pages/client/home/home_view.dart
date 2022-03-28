@@ -1,29 +1,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/app/pages/admin/home/admin_home_controller.dart';
+import 'package:rapor_lc/app/pages/client/home/home_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
 
-class AdminHomePage extends View {
-  AdminHomePage({Key? key}) : super(key: key);
+class HomePage extends View {
+  HomePage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => AdminHomePageView();
+  State<StatefulWidget> createState() => HomePageView();
 }
 
-class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
-  AdminHomePageView()
-      : super(AdminHomeController(AuthenticationRepositoryImpl()));
+class HomePageView extends ViewState<HomePage, HomeController> {
+  HomePageView()
+      : super(HomeController(AuthenticationRepositoryImpl()));
 
   @override
   Widget get view => Scaffold(
     key: globalKey,
     appBar: AppBar(
-      title: const Text('Admin'),
+      title: ControlledWidgetBuilder<HomeController>(
+        builder: (context, controller) => Text(controller.getTitle())
+      ),
     ),
     drawer: Drawer(
-      child: ControlledWidgetBuilder<AdminHomeController>(
+      child: ControlledWidgetBuilder<HomeController>(
         builder: (context, controller) => Column(
           children: [
             UserAccountsDrawerHeader(
@@ -36,14 +38,9 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
               accountName: Text(controller.user?.email ?? ''),
               accountEmail: Text(controller.user?.getStatusName ?? ''),
             ),
-            _drawerItem('Dashboard', AdminHomeState.dashboard, controller),
-            _drawerItem('Santri', AdminHomeState.santri, controller),
-            _drawerItem('NHB', AdminHomeState.nhb, controller),
-            _drawerItem('NK', AdminHomeState.nk, controller),
-            _drawerItem('NPB', AdminHomeState.npb, controller),
-            _drawerItem('User', AdminHomeState.user, controller),
-            _drawerItem('Mata Pelajaran', AdminHomeState.mapel, controller),
-            _drawerItem('Divisi', AdminHomeState.divisi, controller),
+            _drawerItem('Dashboard', HomeState.dashboard, controller),
+            _drawerItem('Daftar Santri', HomeState.santri, controller),
+            _drawerItem('Input Nilai', HomeState.record, controller),
             _drawerItemLogout(controller),
           ],
         ),
@@ -51,14 +48,14 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
     ),
     body: Padding(
       padding: const EdgeInsets.all(16.0),
-      child: ControlledWidgetBuilder<AdminHomeController>(
+      child: ControlledWidgetBuilder<HomeController>(
         builder: (context, controller) => controller.getUiView(controller),
       ),
     ),
   );
 
   ListTile _drawerItem(String title,
-      AdminHomeState state, AdminHomeController controller) => ListTile(
+      HomeState state, HomeController controller) => ListTile(
     onTap: () {
       Navigator.pop(context);
       controller.changeState(state);
@@ -67,7 +64,7 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
     title: Text(title),
   );
 
-  ListTile _drawerItemLogout(AdminHomeController controller) => ListTile(
+  ListTile _drawerItemLogout(HomeController controller) => ListTile(
     onTap: () {
       Navigator.pop(context);
       controller.onLogout();

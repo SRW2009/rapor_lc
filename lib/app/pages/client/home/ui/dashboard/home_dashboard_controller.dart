@@ -1,6 +1,6 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_presenter.dart';
+import 'package:rapor_lc/app/pages/client/home/ui/dashboard/home_dashboard_presenter.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
 import 'package:rapor_lc/domain/entities/abstract/npb.dart';
@@ -8,7 +8,7 @@ import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
-class AdminHomeDashboardController extends Controller {
+class HomeDashboardController extends Controller {
   List<Santri>? santriList;
   RequestState santriState = RequestState.none;
 
@@ -21,10 +21,10 @@ class AdminHomeDashboardController extends Controller {
   List<NPB>? npbList;
   RequestState npbState = RequestState.none;
 
-  final AdminHomeDashboardPresenter _presenter;
+  final HomeDashboardPresenter _presenter;
   final ChartRepository _chartRepository;
-  AdminHomeDashboardController(santriRepository, nhbRepository, nkRepository, npbRepository, this._chartRepository)
-      : _presenter = AdminHomeDashboardPresenter(santriRepository, nhbRepository, nkRepository, npbRepository),
+  HomeDashboardController(santriRepository, nhbRepository, nkRepository, npbRepository, this._chartRepository)
+      : _presenter = HomeDashboardPresenter(santriRepository, nhbRepository, nkRepository, npbRepository),
         super();
 
   void _getSantriListOnNext(List<Santri> list) {

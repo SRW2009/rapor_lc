@@ -7,12 +7,12 @@ import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'package:rapor_lc/common/request_status.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/divisi/admin_home_divisi_presenter.dart';
+import 'package:rapor_lc/app/pages/client/home/ui/santri/home_santri_presenter.dart';
 
-class AdminHomeDivisiController extends DataTableController<Divisi> {
-  final AdminHomeDivisiPresenter _presenter;
-  AdminHomeDivisiController(divisiRepo)
-      : _presenter = AdminHomeDivisiPresenter(divisiRepo),
+class HomeSantriController extends DataTableController<Divisi> {
+  final HomeSantriPresenter _presenter;
+  HomeSantriController(divisiRepo)
+      : _presenter = HomeSantriPresenter(divisiRepo),
         super();
 
   void _getDivisiList(List<Divisi> list) {
