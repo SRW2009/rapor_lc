@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/admin/divisi_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/divisi_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
-import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
+import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/divisi/admin_home_divisi_presenter.dart';
 
@@ -95,20 +95,20 @@ class AdminHomeDivisiController extends DataTableController<Divisi> {
   }
 
   @override
-  Widget createDialog() => DivisiCreateDialog(
+  Widget? createDialog() => DivisiCreateDialog(
     controller: this,
     onSave: (Divisi item) => doCreateDivisi(item),
   );
 
   @override
-  Widget updateDialog(Divisi e) => DivisiUpdateDialog(
-    divisi: e,
+  Widget? updateDialog(Divisi? e) => DivisiUpdateDialog(
+    divisi: e!,
     controller: this,
     onSave: (Divisi item) => doUpdateDivisi(item),
   );
 
   @override
-  Widget deleteDialog(List<String> selected) => DeleteDialog(
+  Widget? deleteDialog(List<String> selected) => DeleteDialog(
     showDeleted: () => selected,
     onSave: () => doDeleteDivisi(selected),
   );
@@ -119,8 +119,7 @@ class AdminHomeDivisiController extends DataTableController<Divisi> {
   @override
   bool searchWhereClause(Divisi e) {
     if (e.id.toString().contains(currentQuery)) return true;
-    if (e.nama.toLowerCase().contains(currentQuery)) return true;
-    if (e.kadiv.toLowerCase().contains(currentQuery)) return true;
+    if (e.name.toLowerCase().contains(currentQuery)) return true;
     return false;
   }
 }

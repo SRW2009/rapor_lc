@@ -4,6 +4,7 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin/home/admin_home_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
+import 'package:rapor_lc/data/test-repositories/auth_repo_impl.dart';
 
 class AdminHomePage extends View {
   AdminHomePage({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class AdminHomePage extends View {
 
 class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
   AdminHomePageView()
-      : super(AdminHomeController(AuthenticationRepositoryImpl()));
+      : super(AdminHomeController(AuthenticationRepositoryImplTest()));
 
   @override
   Widget get view => Scaffold(
@@ -33,17 +34,17 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
                   fit: BoxFit.cover,
                 ),
               ),
-              accountName: Text(controller.user?.email ?? ''),
-              accountEmail: Text(controller.user?.getStatusName ?? ''),
+              accountName: Text(controller.user?.name ?? ''),
+              accountEmail: Text(controller.user?.email ?? ''),
             ),
             _drawerItem('Dashboard', AdminHomeState.dashboard, controller),
             _drawerItem('Santri', AdminHomeState.santri, controller),
-            _drawerItem('NHB', AdminHomeState.nhb, controller),
-            _drawerItem('NK', AdminHomeState.nk, controller),
-            _drawerItem('NPB', AdminHomeState.npb, controller),
-            _drawerItem('User', AdminHomeState.user, controller),
+            _drawerItem('Guru', AdminHomeState.teacher, controller),
+            _drawerItem('Admin', AdminHomeState.admin, controller),
             _drawerItem('Mata Pelajaran', AdminHomeState.mapel, controller),
             _drawerItem('Divisi', AdminHomeState.divisi, controller),
+            _drawerItem('Nilai', AdminHomeState.nilai, controller),
+            _drawerItem('Relasi', AdminHomeState.relasi, controller),
             _drawerItemLogout(controller),
           ],
         ),

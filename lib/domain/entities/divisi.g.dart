@@ -8,12 +8,10 @@ part of 'divisi.dart';
 
 Divisi _$DivisiFromJson(Map<String, dynamic> json) => Divisi(
       json['id'] as int,
-      json['nama'] as String,
-      json['kadiv'] as String,
+      json['name'] as String,
     );
 
 Map<String, dynamic> _$DivisiToJson(Divisi instance) => <String, dynamic>{
       'id': instance.id,
-      'nama': instance.nama,
-      'kadiv': instance.kadiv,
+      'name': instance.name,
     };

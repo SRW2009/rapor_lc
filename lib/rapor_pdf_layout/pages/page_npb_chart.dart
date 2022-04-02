@@ -1,25 +1,14 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
-import 'package:rapor_lc/domain/entities/semester.dart';
 
 import 'package:rapor_lc/dummy_data/datasets/npb_datasets.dart' as npb;
 import 'package:rapor_lc/dummy_data/contents/npb_contents.dart' as npb_;
-import '../pdf_chart.dart';
-import '../pdf_common.dart';
-import '../pdf_table.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pdf_chart.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
+import 'package:rapor_lc/rapor_pdf_layout/pdf_table.dart';
 
 Page page_npb_chart({int semester=1}) {
-  NPB npb__;
-  if (semester == 1) {
-    npb__ = npb_.contents_observation.first;
-  }
-  else {
-    npb__ = npb_.contents.first;
-  }
-  List<String> plpsName = []
-  ..addAll(npb.plpsName_observation)
-  ..addAll(npb.plpsName);
+  List<String> plpsName = [...npb.plpsName];
 
   return Page(
     margin: const EdgeInsets.all(80.0),
@@ -30,7 +19,7 @@ Page page_npb_chart({int semester=1}) {
         children: [
           buildPageTitle('NILAI PROSES BELAJAR'),
           SizedBox(height: 12.0),
-          MyPDFTable.buildIdentityTable(npb__.santri, Semester(npb__.semester), npb__.tahun_ajaran),
+          MyPDFTable.buildIdentityTable(npb_.nilai[semester-1]),
           SizedBox(height: 12.0),
           Expanded(
             child: Center(

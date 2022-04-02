@@ -10,21 +10,24 @@ part 'mata_pelajaran.g.dart';
 @DivisiConverter()
 class MataPelajaran {
   final int id;
-  final Divisi divisi;
-  final String nama_mapel;
+  final String name;
+  final Divisi? divisi;
 
-  MataPelajaran(this.id, this.divisi, this.nama_mapel);
+  MataPelajaran(this.id, this.name, {this.divisi});
 
-  factory MataPelajaran.fromJson(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      return _$MataPelajaranFromJson(json);
-    } else if (json is String) {
-      Map<String, dynamic> newJson = jsonDecode(json);
-      return _$MataPelajaranFromJson(newJson);
-    }
-    throw Exception('Parsing error');
-  }
+  factory MataPelajaran.fromJson(Map<String, dynamic> json) => _$MataPelajaranFromJson(json);
   Map<String, dynamic> toJson() => _$MataPelajaranToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MataPelajaran &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name;
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
 }
 
 class MataPelajaranConverter implements JsonConverter<MataPelajaran, Map<String, dynamic>> {

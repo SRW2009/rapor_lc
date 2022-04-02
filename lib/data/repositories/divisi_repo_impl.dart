@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
@@ -19,7 +19,7 @@ class DivisiRepositoryImpl extends DivisiRepository {
       body: jsonEncode({
         'query_type': DataConstant.queryType_action,
         'query': '''
-          INSERT INTO tb_divisi (id, nama, kadiv) VALUES (NULL,'${divisi.nama}','${divisi.kadiv}')
+          INSERT INTO tb_divisi (id, nama, kadiv) VALUES (NULL,'${divisi.name}','${divisi.kadiv}')
         ''',
       }),
     );
@@ -103,7 +103,7 @@ class DivisiRepositoryImpl extends DivisiRepository {
       body: jsonEncode({
         'query_type': DataConstant.queryType_action,
         'query': '''
-          UPDATE tb_divisi SET nama='${divisi.nama}',kadiv='${divisi.kadiv}' WHERE id=${divisi.id}
+          UPDATE tb_divisi SET nama='${divisi.name}',kadiv='${divisi.kadiv}' WHERE id=${divisi.id}
         ''',
       }),
     );

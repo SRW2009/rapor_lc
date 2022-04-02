@@ -1,12 +1,12 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/usecases/auth/get_current_user.dart';
 import 'package:rapor_lc/domain/usecases/auth/logout.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 class HomePresenter extends Presenter {
-  late Function(User?) getCurrentUserOnNext;
+  late Function(Teacher?) getCurrentUserOnNext;
   late Function() logoutOnComplete;
 
   final GetCurrentUserUseCase _getCurrentUserUseCase;
@@ -25,7 +25,7 @@ class HomePresenter extends Presenter {
   }
 }
 
-class _GetCurrentUserObserver extends Observer<UseCaseResponse<User?>> {
+class _GetCurrentUserObserver extends Observer<UseCaseResponse<Teacher?>> {
   final HomePresenter presenter;
 
   _GetCurrentUserObserver(this.presenter);
@@ -39,7 +39,7 @@ class _GetCurrentUserObserver extends Observer<UseCaseResponse<User?>> {
   }
 
   @override
-  void onNext(UseCaseResponse<User?>? response) {
+  void onNext(UseCaseResponse<Teacher?>? response) {
     presenter.getCurrentUserOnNext(response!.response);
   }
 }

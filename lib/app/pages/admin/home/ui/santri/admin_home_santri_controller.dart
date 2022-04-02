@@ -5,24 +5,24 @@ import 'package:rapor_lc/app/dialogs/admin/santri_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/santri/admin_home_santri_presenter.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
-import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 
 class AdminHomeSantriController extends DataTableController<Santri> {
   final AdminHomeSantriPresenter _presenter;
-  AdminHomeSantriController(authRepo, userRepo)
-      : _presenter = AdminHomeSantriPresenter(authRepo, userRepo),
+  AdminHomeSantriController(authRepo, teacherRepo)
+      : _presenter = AdminHomeSantriPresenter(authRepo, teacherRepo),
         super();
 
-  Future<List<User>>? teacherList;
-  Future<List<User>> dialogOnFindTeacher(String? query) async {
-    teacherList ??= _presenter.futureGetTeacherList(1);
+  Future<List<Teacher>>? teacherList;
+  Future<List<Teacher>> dialogOnFindTeacher(String? query) async {
+    teacherList ??= _presenter.futureGetTeacherList();
     if (query == null || query == '') return teacherList!;
 
     return (await teacherList!)
-        .where((element) => element.email.toLowerCase().contains(query))
+        .where((element) => element.email!.toLowerCase().contains(query))
         .toList();
   }
 
@@ -106,32 +106,32 @@ class AdminHomeSantriController extends DataTableController<Santri> {
   }
 
   @override
-  Widget createDialog() => SantriCreateDialog(
+  Widget? createDialog() => SantriCreateDialog(
     controller: this,
     onSave: (Santri santri) => doCreateSantri(santri),
   );
 
   @override
-  Widget updateDialog(Santri e) => SantriUpdateDialog(
-    santri: e,
+  Widget? updateDialog(Santri? e) => SantriUpdateDialog(
+    santri: e!,
     controller: this,
     onSave: (Santri santri) => doUpdateSantri(santri),
   );
 
   @override
-  Widget deleteDialog(List<String> selected) => DeleteDialog(
+  Widget? deleteDialog(List<String> selected) => DeleteDialog(
     showDeleted: () => selected,
     onSave: () => doDeleteSantri(selected),
   );
 
   @override
-  String getSelectedKey(Santri e) => e.nis;
+  String getSelectedKey(Santri e) => e.id.toString();
 
   @override
   bool searchWhereClause(Santri e) {
-    if (e.nis.toLowerCase().contains(currentQuery)) return true;
-    if (e.nama.toLowerCase().contains(currentQuery)) return true;
-    if (e.guru?.email.toLowerCase().contains(currentQuery) ?? false) return true;
+    if (e.id.toString().contains(currentQuery)) return true;
+    if (e.name.toLowerCase().contains(currentQuery)) return true;
+    if (e.nis?.toLowerCase().contains(currentQuery) ?? false) return true;
     return false;
   }
 }

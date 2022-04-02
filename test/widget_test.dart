@@ -10,11 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 
-import 'package:rapor_lc/main.dart';
+import 'package:rapor_lc/app/main.dart';
 
 void main() {
-  test('Tes JSON Serializable', () async {
-    final mapel = MataPelajaran(0, Divisi(0, 'IT', 'Widi'), 'Aksel Programming');
-    print(mapel.toJson());
-  });
+
 }

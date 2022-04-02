@@ -1,11 +1,11 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/repositories/santri_repo.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +20,7 @@ class SantriRepositoryImpl extends SantriRepository {
       body: jsonEncode({
         'query_type': DataConstant.queryType_action,
         'query': '''
-          INSERT INTO tb_santri(nis, nama, teacher_email) VALUES ('${santri.nis}','${santri.nama}','${santri.guru?.email}')
+          INSERT INTO tb_santri(nis, nama, teacher_email) VALUES ('${santri.nis}','${santri.name}','${santri.guru?.email}')
         ''',
       }),
     );
@@ -77,7 +77,7 @@ class SantriRepositoryImpl extends SantriRepository {
   }
 
   @override
-  Future<List<Santri>> getSantriList(User guru) async {
+  Future<List<Santri>> getSantriList(Teacher guru) async {
     final token = await SharedPrefsRepository().getToken;
 
     final response = await http.post(
@@ -135,7 +135,7 @@ class SantriRepositoryImpl extends SantriRepository {
       body: jsonEncode({
         'query_type': DataConstant.queryType_action,
         'query': '''
-          UPDATE tb_santri SET nama='${santri.nama}',teacher_email='${santri.guru?.email}' WHERE nis="${santri.nis}"
+          UPDATE tb_santri SET nama='${santri.name}',teacher_email='${santri.guru?.email}' WHERE nis="${santri.nis}"
         ''',
       }),
     );

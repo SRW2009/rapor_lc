@@ -1,61 +1,61 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
-import 'package:rapor_lc/common/request_status.dart';
-import 'package:rapor_lc/domain/entities/divisi.dart';
+import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
-import 'package:rapor_lc/domain/usecases/divisi/get_divisi_list.dart';
-import 'package:rapor_lc/domain/usecases/divisi/create_divisi.dart';
-import 'package:rapor_lc/domain/usecases/divisi/delete_divisi.dart';
-import 'package:rapor_lc/domain/usecases/divisi/update_divisi.dart';
+import 'package:rapor_lc/domain/usecases/santri/get_santri_list.dart';
+import 'package:rapor_lc/domain/usecases/santri/create_santri.dart';
+import 'package:rapor_lc/domain/usecases/santri/delete_santri.dart';
+import 'package:rapor_lc/domain/usecases/santri/update_santri.dart';
 
 class HomeSantriPresenter extends Presenter {
-  late Function(List<Divisi>) getDivisiList;
-  late Function(RequestState) getDivisiListState;
-  late Function(RequestStatus) createDivisiStatus;
-  late Function(RequestStatus) updateDivisiStatus;
-  late Function(RequestStatus) deleteDivisiStatus;
+  late Function(List<Santri>) getSantriList;
+  late Function(RequestState) getSantriListState;
+  late Function(RequestStatus) createSantriStatus;
+  late Function(RequestStatus) updateSantriStatus;
+  late Function(RequestStatus) deleteSantriStatus;
 
-  final GetDivisiListUseCase _getDivisiListAdminUseCase;
-  final CreateDivisiUseCase _createDivisiUseCase;
-  final UpdateDivisiUseCase _updateDivisiUseCase;
-  final DeleteDivisiUseCase _deleteDivisiUseCase;
-  HomeSantriPresenter(divisiRepo)
-      : _getDivisiListAdminUseCase = GetDivisiListUseCase(divisiRepo),
-        _createDivisiUseCase = CreateDivisiUseCase(divisiRepo),
-        _updateDivisiUseCase = UpdateDivisiUseCase(divisiRepo),
-        _deleteDivisiUseCase = DeleteDivisiUseCase(divisiRepo);
+  final GetSantriListUseCase _getSantriListAdminUseCase;
+  final CreateSantriUseCase _createSantriUseCase;
+  final UpdateSantriUseCase _updateSantriUseCase;
+  final DeleteSantriUseCase _deleteSantriUseCase;
+  HomeSantriPresenter(santriRepo)
+      : _getSantriListAdminUseCase = GetSantriListUseCase(santriRepo),
+        _createSantriUseCase = CreateSantriUseCase(santriRepo),
+        _updateSantriUseCase = UpdateSantriUseCase(santriRepo),
+        _deleteSantriUseCase = DeleteSantriUseCase(santriRepo);
 
-  void doGetDivisiList() {
-    getDivisiListState(RequestState.loading);
-    _getDivisiListAdminUseCase.execute(_GetDivisiListObserver(this), UseCaseParams<int?>(null));
+  void doGetSantriList() {
+    getSantriListState(RequestState.loading);
+    _getSantriListAdminUseCase.execute(_GetSantriListObserver(this), UseCaseParams<int?>(null));
   }
-  void doCreateDivisi(Divisi santri) {
-    createDivisiStatus(RequestStatus.loading);
-    _createDivisiUseCase.execute(_CreateDivisiObserver(this), UseCaseParams<Divisi>(santri));
+  void doCreateSantri(Santri santri) {
+    createSantriStatus(RequestStatus.loading);
+    _createSantriUseCase.execute(_CreateSantriObserver(this), UseCaseParams<Santri>(santri));
   }
-  void doUpdateDivisi(Divisi santri) {
-    updateDivisiStatus(RequestStatus.loading);
-    _updateDivisiUseCase.execute(_UpdateDivisiObserver(this), UseCaseParams<Divisi>(santri));
+  void doUpdateSantri(Santri santri) {
+    updateSantriStatus(RequestStatus.loading);
+    _updateSantriUseCase.execute(_UpdateSantriObserver(this), UseCaseParams<Santri>(santri));
   }
-  void doDeleteDivisi(List<String> ids) {
-    updateDivisiStatus(RequestStatus.loading);
-    _deleteDivisiUseCase.execute(_DeleteDivisiObserver(this), UseCaseParams<List<String>>(ids));
+  void doDeleteSantri(List<String> ids) {
+    updateSantriStatus(RequestStatus.loading);
+    _deleteSantriUseCase.execute(_DeleteSantriObserver(this), UseCaseParams<List<String>>(ids));
   }
 
   @override
   void dispose() {
-    _getDivisiListAdminUseCase.dispose();
-    _createDivisiUseCase.dispose();
-    _updateDivisiUseCase.dispose();
-    _deleteDivisiUseCase.dispose();
+    _getSantriListAdminUseCase.dispose();
+    _createSantriUseCase.dispose();
+    _updateSantriUseCase.dispose();
+    _deleteSantriUseCase.dispose();
   }
 }
 
-class _GetDivisiListObserver extends Observer<UseCaseResponse<List<Divisi>>> {
+class _GetSantriListObserver extends Observer<UseCaseResponse<List<Santri>>> {
   final HomeSantriPresenter _presenter;
 
-  _GetDivisiListObserver(this._presenter);
+  _GetSantriListObserver(this._presenter);
 
   @override
   void onComplete() {}
@@ -63,21 +63,21 @@ class _GetDivisiListObserver extends Observer<UseCaseResponse<List<Divisi>>> {
   @override
   void onError(e) {
     print(e);
-    _presenter.getDivisiListState(RequestState.error);
+    _presenter.getSantriListState(RequestState.error);
   }
 
   @override
-  void onNext(UseCaseResponse<List<Divisi>>? response) {
+  void onNext(UseCaseResponse<List<Santri>>? response) {
     final list = response!.response;
-    _presenter.getDivisiList(list);
-    _presenter.getDivisiListState(list.isNotEmpty ? RequestState.loaded : RequestState.none);
+    _presenter.getSantriList(list);
+    _presenter.getSantriListState(list.isNotEmpty ? RequestState.loaded : RequestState.none);
   }
 }
 
-class _CreateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
+class _CreateSantriObserver extends Observer<UseCaseResponse<RequestStatus>> {
   final HomeSantriPresenter _presenter;
 
-  _CreateDivisiObserver(this._presenter);
+  _CreateSantriObserver(this._presenter);
 
   @override
   void onComplete() {}
@@ -85,18 +85,18 @@ class _CreateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
   @override
   void onError(e) {
     print(e);
-    _presenter.createDivisiStatus(RequestStatus.failed);
+    _presenter.createSantriStatus(RequestStatus.failed);
   }
 
   @override
   void onNext(UseCaseResponse<RequestStatus>? response) =>
-      _presenter.createDivisiStatus(response!.response);
+      _presenter.createSantriStatus(response!.response);
 }
 
-class _UpdateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
+class _UpdateSantriObserver extends Observer<UseCaseResponse<RequestStatus>> {
   final HomeSantriPresenter _presenter;
 
-  _UpdateDivisiObserver(this._presenter);
+  _UpdateSantriObserver(this._presenter);
 
   @override
   void onComplete() {}
@@ -104,18 +104,18 @@ class _UpdateDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
   @override
   void onError(e) {
     print(e);
-    _presenter.updateDivisiStatus(RequestStatus.failed);
+    _presenter.updateSantriStatus(RequestStatus.failed);
   }
 
   @override
   void onNext(UseCaseResponse<RequestStatus>? response) =>
-      _presenter.updateDivisiStatus(response!.response);
+      _presenter.updateSantriStatus(response!.response);
 }
 
-class _DeleteDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
+class _DeleteSantriObserver extends Observer<UseCaseResponse<RequestStatus>> {
   final HomeSantriPresenter _presenter;
 
-  _DeleteDivisiObserver(this._presenter);
+  _DeleteSantriObserver(this._presenter);
 
   @override
   void onComplete() {}
@@ -123,10 +123,10 @@ class _DeleteDivisiObserver extends Observer<UseCaseResponse<RequestStatus>> {
   @override
   void onError(e) {
     print(e);
-    _presenter.deleteDivisiStatus(RequestStatus.failed);
+    _presenter.deleteSantriStatus(RequestStatus.failed);
   }
 
   @override
   void onNext(UseCaseResponse<RequestStatus>? response) =>
-      _presenter.deleteDivisiStatus(response!.response);
+      _presenter.deleteSantriStatus(response!.response);
 }

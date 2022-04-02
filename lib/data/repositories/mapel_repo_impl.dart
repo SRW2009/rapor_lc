@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
@@ -20,7 +20,7 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
         'query_type': DataConstant.queryType_action,
         'query': '''
           INSERT INTO tb_mata_pelajaran (id, divisi_id, nama_mapel) 
-          VALUES (NULL,${mapel.divisi.id},'${mapel.nama_mapel}')
+          VALUES (NULL,${mapel.divisi.id},'${mapel.name}')
         ''',
       }),
     );
@@ -119,7 +119,7 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
         'query_type': DataConstant.queryType_action,
         'query': '''
           UPDATE tb_mata_pelajaran 
-          SET divisi_id=${mapel.divisi.id}, nama_mapel='${mapel.nama_mapel}' 
+          SET divisi_id=${mapel.divisi.id}, nama_mapel='${mapel.name}' 
           WHERE id=${mapel.id}
         ''',
       }),

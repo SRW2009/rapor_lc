@@ -2,14 +2,19 @@
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/login/login_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/domain/entities/abstract/user.dart';
+import 'package:rapor_lc/domain/entities/admin.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:flutter/material.dart';
 
 enum LoginFormState { login, forgotPass }
 
+enum LoginAs { teacher, admin }
+
 class LoginController extends Controller {
   bool isLoading = false;
   LoginFormState formState = LoginFormState.login;
+  LoginAs loginAs = LoginAs.teacher;
 
   final LoginPresenter _loginPresenter;
   LoginController(authRepo)
@@ -20,12 +25,12 @@ class LoginController extends Controller {
     isLoading = false;
     refreshUI();
 
-    // if user logged in as admin
+    // if teacher logged in as admin
     if (e == 2) {
       Navigator.of(getContext()).pushReplacementNamed(Pages.admin_home);
       return;
     }
-    // if user logged in as teacher
+    // if teacher logged in as teacher
     if (e == 1) {
       Navigator.of(getContext()).pushReplacementNamed(Pages.home);
       return;
@@ -73,11 +78,22 @@ class LoginController extends Controller {
     _loginPresenter.forgotPasswordOnError = _forgotPasswordOnError;
   }
 
-  void doLogin(GlobalKey<FormState> key, User user) {
+  void setLoginAs(int i) {
+    loginAs = LoginAs.values[i];
+    refreshUI();
+  }
+
+  void doLogin(GlobalKey<FormState> key, String email, String password) {
     if (key.currentState!.validate()) {
       isLoading = true;
       refreshUI();
-      _loginPresenter.doLogin(user);
+      if (loginAs == LoginAs.teacher) {
+        final user = Teacher(0, '', email: email, password: password);
+        _loginPresenter.doLoginTeacher(user);
+      } else {
+        final user = Admin(0, '', email: email, password: password);
+        _loginPresenter.doLoginAdmin(user);
+      }
     }
   }
 

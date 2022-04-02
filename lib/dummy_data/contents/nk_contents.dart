@@ -1,18 +1,7 @@
 
-import 'package:rapor_lc/domain/entities/nk.dart';
-import 'package:rapor_lc/domain/entities/santri.dart';
+import 'package:rapor_lc/dummy_data/dummies.dart' as d;
 
-final _santri = Santri('12345678', 'John Doe');
-final _variables = [
-  'Inisiatif',
-  'Kontrol Diri',
-  'Kontrol Potensi',
-  'Menghargai Karya'
-];
-final contents = List<NK>.generate(_variables.length,
-        (i) => NK(i, _santri, 1, '2021/2022', 1, _variables[i], 89, 77, 65, 80, 'BB')).toList();
-
-
+final nilai = [d.nilai_observation, d.nilai];
 const adviceTitle = 'NASEHAT DEWAN GURU';
 const adviceContent = '''
 Inisiatif Ananda dinilai berkembang sangat baik, Ayah Bunda dapat membantu dengan memberikan banyak tugas dan tanggung jawab dengan bobot berat, serta sesekali mengkritisi pelaksanaan tugas itu sambil menunjukkan cara yang lebih baik dalam mengerjakan.\n

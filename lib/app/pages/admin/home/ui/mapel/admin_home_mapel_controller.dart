@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/admin/mapel_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/mapel_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
-import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
+import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/mapel/admin_home_mapel_presenter.dart';
@@ -21,9 +21,7 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
     divisiList ??= _presenter.futureGetDivisiList();
     if (query == null || query == '') return divisiList!;
 
-    return (await divisiList!)
-        .where((element) => element.nama.toLowerCase().contains(query))
-        .toList();
+    return (await divisiList!).toList();
   }
 
   void _getMataPelajaranList(List<MataPelajaran> list) {
@@ -106,20 +104,20 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
   }
 
   @override
-  Widget createDialog() => MataPelajaranCreateDialog(
+  Widget? createDialog() => MataPelajaranCreateDialog(
     controller: this,
     onSave: (MataPelajaran item) => doCreateMataPelajaran(item),
   );
 
   @override
-  Widget updateDialog(MataPelajaran e) => MataPelajaranUpdateDialog(
-    mataPelajaran: e,
+  Widget? updateDialog(MataPelajaran? e) => MataPelajaranUpdateDialog(
+    mataPelajaran: e!,
     controller: this,
     onSave: (MataPelajaran item) => doUpdateMataPelajaran(item),
   );
 
   @override
-  Widget deleteDialog(List<String> selected) => DeleteDialog(
+  Widget? deleteDialog(List<String> selected) => DeleteDialog(
     showDeleted: () => selected,
     onSave: () => doDeleteMataPelajaran(selected),
   );
@@ -130,8 +128,8 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
   @override
   bool searchWhereClause(MataPelajaran e) {
     if (e.id.toString().contains(currentQuery)) return true;
-    if (e.divisi.nama.toLowerCase().contains(currentQuery)) return true;
-    if (e.nama_mapel.toLowerCase().contains(currentQuery)) return true;
+    if (e.name.toLowerCase().contains(currentQuery)) return true;
+    if (e.divisi?.name.toLowerCase().contains(currentQuery) ?? false) return true;
     return false;
   }
 }

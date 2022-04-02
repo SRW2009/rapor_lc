@@ -7,12 +7,9 @@ part of 'nhb.dart';
 // **************************************************************************
 
 NHB _$NHBFromJson(Map<String, dynamic> json) => NHB(
-      json['id'] as int,
-      const SantriConverter().fromJson(json['santri'] as Map<String, dynamic>),
-      json['semester'] as int,
-      json['tahun_ajaran'] as String,
+      json['no'] as int,
       const MataPelajaranConverter()
-          .fromJson(json['pelajaran'] as Map<String, dynamic>),
+          .fromJson(json['mapel'] as Map<String, dynamic>),
       json['nilai_harian'] as int,
       json['nilai_bulanan'] as int,
       json['nilai_projek'] as int,
@@ -22,11 +19,8 @@ NHB _$NHBFromJson(Map<String, dynamic> json) => NHB(
     );
 
 Map<String, dynamic> _$NHBToJson(NHB instance) => <String, dynamic>{
-      'id': instance.id,
-      'santri': const SantriConverter().toJson(instance.santri),
-      'semester': instance.semester,
-      'tahun_ajaran': instance.tahun_ajaran,
-      'pelajaran': const MataPelajaranConverter().toJson(instance.pelajaran),
+      'no': instance.no,
+      'mapel': const MataPelajaranConverter().toJson(instance.pelajaran),
       'nilai_harian': instance.nilai_harian,
       'nilai_bulanan': instance.nilai_bulanan,
       'nilai_projek': instance.nilai_projek,

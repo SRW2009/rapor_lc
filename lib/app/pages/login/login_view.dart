@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/pages/login/login_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field_radios.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/data/test-repositories/auth_repo_impl.dart';
+import 'package:rapor_lc/domain/entities/abstract/user.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 
 class LoginPage extends View {
   LoginPage({Key? key}) : super(key: key);
@@ -16,7 +19,7 @@ class LoginPage extends View {
 
 class LoginPageView extends ViewState<LoginPage, LoginController> {
   LoginPageView()
-      : super(LoginController(AuthenticationRepositoryImpl()));
+      : super(LoginController(AuthenticationRepositoryImplTest()));
 
   final _duration = const Duration(milliseconds: 400);
   final _loginFormKey = GlobalKey<FormState>();
@@ -105,6 +108,12 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        FormInputFieldRadios(
+          label: 'Login As',
+          value: controller.loginAs.index,
+          onChanged: controller.setLoginAs,
+          contents: const ['Teacher', 'Admin'],
+        ),
         FormInputField(
           label: 'Email',
           controller: _emailCon,
@@ -138,9 +147,7 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
         ),
         const SizedBox(),
         ElevatedButton(
-          onPressed: () => controller.doLogin(
-            _loginFormKey, User(_emailCon.text, _passwordCon.text, status: 0),
-          ),
+          onPressed: () => controller.doLogin(_loginFormKey, _emailCon.text, _passwordCon.text),
           child: const Text('Login'),
         ),
       ],

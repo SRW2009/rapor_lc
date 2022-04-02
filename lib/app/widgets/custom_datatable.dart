@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:rapor_lc/app/widgets/base_datatable_controller.dart';
+import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 import 'form_field/form_decoration.dart';
 
@@ -9,6 +9,7 @@ class CustomDataTable<Entity> extends StatefulWidget {
   final String title;
   final List<String> tableHeaders;
   final List<DataCell> Function(Entity item) tableContentBuilder;
+  final bool showNumber;
 
   const CustomDataTable({
     Key? key,
@@ -16,6 +17,7 @@ class CustomDataTable<Entity> extends StatefulWidget {
     required this.title,
     required this.tableHeaders,
     required this.tableContentBuilder,
+    this.showNumber=false,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,8 @@ class CustomDataTable<Entity> extends StatefulWidget {
 }
 
 class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
+  static const _minWidth = 412.0;
+
   final _dataTableKey = GlobalKey();
   bool _hasResized = false;
   double? _finalWidth;
@@ -65,11 +69,11 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
                         onSubmitted: controller.tableSearch,
                       ),
                     ),
-                    IconButton(
+                    if (controller.createDialogExist) IconButton(
                       onPressed: controller.tableOnAdd,
                       icon: const Icon(Icons.add),
                     ),
-                    IconButton(
+                    if (controller.deleteDialogExist) IconButton(
                       onPressed: controller.selectedMap.values.any((element) => element)
                           ? controller.tableOnDelete : null,
                       icon: const Icon(Icons.delete),
@@ -89,7 +93,7 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
                       final box = _dataTableKey.currentContext?.findRenderObject() as RenderBox?;
                       if (box != null) {
                         setState(() {
-                          _finalWidth = box.size.width;
+                          _finalWidth = (box.size.width < _minWidth) ? _minWidth : box.size.width;
                         });
                       }
                     });
@@ -101,8 +105,11 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
                     scaleEnabled: false,
                     child: DataTable(
                       key: _dataTableKey,
-                      columns: widget.tableHeaders
-                          .map<DataColumn>((e) => DataColumn(label: Text(e))).toList(),
+                      columns: [
+                        if (widget.showNumber) const DataColumn(label: Text('No')),
+                        ...widget.tableHeaders
+                            .map<DataColumn>((e) => DataColumn(label: Text(e))).toList(),
+                      ],
                       rows: List<DataRow>.generate(filteredListLength, (index) {
                         final Entity item = controller.filteredList[index];
                         final selected = controller.selectedMap[controller.getSelectedKey(item)]!;
@@ -111,7 +118,10 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
                           selected: selected,
                           onSelectChanged: (val) =>
                               controller.tableOnSelectChanged(controller.getSelectedKey(item), val!),
-                          cells: widget.tableContentBuilder(item),
+                          cells: [
+                            if (widget.showNumber) DataCell(Text('$index')),
+                            ...widget.tableContentBuilder(item),
+                          ],
                         );
                       }),
                     ),

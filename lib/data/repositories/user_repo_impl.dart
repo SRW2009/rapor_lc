@@ -1,16 +1,16 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
-import 'package:rapor_lc/domain/repositories/user_repo.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
+import 'package:rapor_lc/domain/repositories/admin_repo.dart';
 import 'package:http/http.dart' as http;
 
-class UserRepositoryImpl extends UserRepository {
+class UserRepositoryImpl extends AdminRepository {
   @override
-  Future<RequestStatus> createUserAdmin(User user) async {
+  Future<RequestStatus> createAdmin(Teacher user) async {
     final token = await SharedPrefsRepository().getToken;
 
     final md5response = await http.post(
@@ -43,7 +43,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<RequestStatus> deleteUserAdmin(List<String> emails) async {
+  Future<RequestStatus> deleteAdmin(List<String> emails) async {
     final token = await SharedPrefsRepository().getToken;
 
     final deleteQuery = emails.map<String>((e) =>
@@ -66,7 +66,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<User> getUserAdmin(String email) async {
+  Future<Teacher> getAdmin(String email) async {
     final token = await SharedPrefsRepository().getToken;
 
     final response = await http.post(
@@ -82,14 +82,14 @@ class UserRepositoryImpl extends UserRepository {
 
     if (response.statusCode == StatusCode.getSuccess) {
       return (jsonDecode(response.body) as List)
-          .map<User>((e) => User.fromJson(e)).toList()[0];
+          .map<Teacher>((e) => Teacher.fromJson(e)).toList()[0];
     }
 
     throw Exception();
   }
 
   @override
-  Future<List<User>> getUserListAdmin([int? status=-1]) async {
+  Future<List<Teacher>> getAdminList([int? status=-1]) async {
     final token = await SharedPrefsRepository().getToken;
 
     final response = await http.post(
@@ -105,14 +105,14 @@ class UserRepositoryImpl extends UserRepository {
 
     if (response.statusCode == StatusCode.getSuccess) {
       return (jsonDecode(response.body) as List)
-          .map<User>((e) => User.fromJson(e)).toList();
+          .map<Teacher>((e) => Teacher.fromJson(e)).toList();
     }
 
     throw Exception();
   }
 
   @override
-  Future<RequestStatus> updateUserAdmin(User user) async {
+  Future<RequestStatus> updateAdmin(Teacher user) async {
     final token = await SharedPrefsRepository().getToken;
 
     final md5response = await http.post(

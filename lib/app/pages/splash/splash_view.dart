@@ -5,6 +5,7 @@ import 'package:rapor_lc/app/pages/splash/splash_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/app/widgets/splash_logo.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
+import 'package:rapor_lc/data/test-repositories/auth_repo_impl.dart';
 import 'package:rapor_lc/domain/repositories/auth_repo.dart';
 
 class SplashPage extends View {
@@ -17,7 +18,7 @@ class SplashPage extends View {
 class SplashPageView extends ViewState<SplashPage, SplashController> {
 
   SplashPageView()
-      : super(SplashController(AuthenticationRepositoryImpl()));
+      : super(SplashController(AuthenticationRepositoryImplTest()));
 
   @override
   Widget get view => Scaffold(key: globalKey, body: body);

@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_controller.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
-import 'package:rapor_lc/data/repositories/nhb_repo_impl.dart';
-import 'package:rapor_lc/data/repositories/nk_repo_impl.dart';
-import 'package:rapor_lc/data/repositories/npb_repo_impl.dart';
-import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:rapor_lc/data/test-repositories/nilai_repo_impl.dart';
+import 'package:rapor_lc/data/test-repositories/santri_repo_impl.dart';
 
 class AdminHomeDashboardUI extends View {
   AdminHomeDashboardUI({Key? key}) : super(key: key);
@@ -19,10 +16,8 @@ class AdminHomeDashboardUI extends View {
 class AdminHomeDashboardUIView extends ViewState<AdminHomeDashboardUI, AdminHomeDashboardController> {
   AdminHomeDashboardUIView()
       : super(AdminHomeDashboardController(
-    SantriRepositoryImpl(),
-    NHBRepositoryImpl(),
-    NKRepositoryImpl(),
-    NPBRepositoryImpl(),
+    SantriRepositoryImplTest(),
+    NilaiRepositoryImplTest(),
     ChartRepository(),
   ));
 

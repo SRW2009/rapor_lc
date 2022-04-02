@@ -1,12 +1,12 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
+import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 import 'package:rapor_lc/domain/usecases/nhb/get_nhb_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/nk/get_nk_list_admin.dart';
+import 'package:rapor_lc/domain/usecases/nk/get_nilai_list_admin.dart';
 import 'package:rapor_lc/domain/usecases/npb/get_npb_list_admin.dart';
 import 'package:rapor_lc/domain/usecases/santri/get_santri_list_admin.dart';
 
@@ -17,7 +17,7 @@ class HomeDashboardPresenter extends Presenter {
   late Function(dynamic) getNHBListOnError;
   late Function(List<NK>) getNKListOnNext;
   late Function(dynamic) getNKListOnError;
-  late Function(List<NPB>) getNPBListOnNext;
+  late Function(List<Nilai>) getNPBListOnNext;
   late Function(dynamic) getNPBListOnError;
 
   GetSantriListAdminUseCase _getSantriListAdminUseCase;
@@ -101,7 +101,7 @@ class _GetNKListObserver extends Observer<UseCaseResponse<List<NK>>> {
   }
 }
 
-class _GetNPBListObserver extends Observer<UseCaseResponse<List<NPB>>> {
+class _GetNPBListObserver extends Observer<UseCaseResponse<List<Nilai>>> {
   final HomeDashboardPresenter presenter;
 
   _GetNPBListObserver(this.presenter);
@@ -115,7 +115,7 @@ class _GetNPBListObserver extends Observer<UseCaseResponse<List<NPB>>> {
   }
 
   @override
-  void onNext(UseCaseResponse<List<NPB>>? response) {
+  void onNext(UseCaseResponse<List<Nilai>>? response) {
     presenter.getNPBListOnNext(response!.response);
   }
 }

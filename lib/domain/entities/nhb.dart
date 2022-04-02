@@ -7,13 +7,10 @@ import 'package:json_annotation/json_annotation.dart';
 part 'nhb.g.dart';
 
 @JsonSerializable()
-@SantriConverter()
 @MataPelajaranConverter()
 class NHB {
-  final int id;
-  final Santri santri;
-  final int semester;
-  final String tahun_ajaran;
+  final int no;
+  @JsonKey(name: 'mapel')
   final MataPelajaran pelajaran;
   final int nilai_harian;
   final int nilai_bulanan;
@@ -23,10 +20,7 @@ class NHB {
   final String predikat;
 
   NHB(
-      this.id,
-      this.santri,
-      this.semester,
-      this.tahun_ajaran,
+      this.no,
       this.pelajaran,
       this.nilai_harian,
       this.nilai_bulanan,
@@ -47,4 +41,14 @@ class NHBConverter implements JsonConverter<NHB, Map<String, dynamic>> {
 
   @override
   Map<String, dynamic> toJson(NHB object) => object.toJson();
+}
+
+class NullableNHBConverter implements JsonConverter<NHB?, Map<String, dynamic>?> {
+  const NullableNHBConverter();
+
+  @override
+  NHB? fromJson(Map<String, dynamic>? json) => json != null ? NHB.fromJson(json) : null;
+
+  @override
+  Map<String, dynamic>? toJson(NHB? object) => object?.toJson();
 }

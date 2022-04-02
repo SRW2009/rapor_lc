@@ -2,18 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin/home/admin_home_presenter.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/admin/admin_home_admin_view.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_view.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/divisi/admin_home_divisi_view.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/mapel/admin_home_mapel_view.dart';
-import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/dashboard/admin_home_dashboard_view.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/nhb/admin_home_nhb_view.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/nk/admin_home_nk_view.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/npb/admin_home_npb_view.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/nilai/admin_home_nilai_view.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/relation/admin_home_relation_view.dart';
 import 'package:rapor_lc/app/pages/admin/home/ui/santri/admin_home_santri_view.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/user/admin_home_user_view.dart';
+import 'package:rapor_lc/app/pages/admin/home/ui/teacher/admin_home_teacher_view.dart';
+import 'package:rapor_lc/app/pages/pages.dart';
+import 'package:rapor_lc/domain/entities/abstract/user.dart';
 
-enum AdminHomeState { dashboard, santri, nhb, nk, npb, user, mapel, divisi }
+enum AdminHomeState { dashboard, santri, teacher, admin, mapel, divisi, nilai, relasi }
 
 class AdminHomeController extends Controller {
   AdminHomeState state = AdminHomeState.dashboard;
@@ -43,8 +43,8 @@ class AdminHomeController extends Controller {
   void _doGetCurrentUser() => _presenter.doGetCurrentUser();
   void _doLogout() => _presenter.doLogout();
 
-  void onLogout() {
-    showDialog(
+  void onLogout() async {
+    final result = await showDialog<bool>(
       context: getContext(),
       builder: (context) => AlertDialog(
         title: const Text('Perhatian'),
@@ -52,20 +52,20 @@ class AdminHomeController extends Controller {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(context, false);
             },
             child: const Text('TIDAK'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              _doLogout();
+              Navigator.pop(context, true);
             },
             child: const Text('YA'),
           ),
         ],
       ),
     );
+    if (result ?? false) _doLogout();
   }
 
   void changeState(AdminHomeState state) {
@@ -79,18 +79,18 @@ class AdminHomeController extends Controller {
         return AdminHomeDashboardUI();
       case AdminHomeState.santri:
         return AdminHomeSantriUI();
-      case AdminHomeState.nhb:
-        return AdminHomeNHBUI();
-      case AdminHomeState.nk:
-        return AdminHomeNKUI();
-      case AdminHomeState.npb:
-        return AdminHomeNPBUI();
-      case AdminHomeState.user:
-        return AdminHomeUserUI();
+      case AdminHomeState.teacher:
+        return AdminHomeTeacherUI();
+      case AdminHomeState.admin:
+        return AdminHomeAdminUI();
       case AdminHomeState.mapel:
         return AdminHomeMataPelajaranUI();
       case AdminHomeState.divisi:
         return AdminHomeDivisiUI();
+      case AdminHomeState.nilai:
+        return AdminHomeNilaiUI();
+      case AdminHomeState.relasi:
+        return AdminHomeRelationUI();
       default:
         return Container();
     }

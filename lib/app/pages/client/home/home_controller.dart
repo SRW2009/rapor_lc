@@ -4,20 +4,20 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client/home/home_presenter.dart';
 import 'package:rapor_lc/app/pages/client/home/ui/dashboard/home_dashboard_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 
 enum HomeState { dashboard, santri, record }
 
 class HomeController extends Controller {
   HomeState state = HomeState.dashboard;
-  User? user;
+  Teacher? user;
 
   final HomePresenter _presenter;
   HomeController(authRepo)
       : _presenter = HomePresenter(authRepo),
         super();
 
-  void _getCurrentUserOnNext(User? user) {
+  void _getCurrentUserOnNext(Teacher? user) {
     this.user = user;
     refreshUI();
   }

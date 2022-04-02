@@ -33,7 +33,7 @@ class _GetAuthStatusObserver implements Observer<UseCaseResponse<int>> {
 
   @override
   void onError(e) {
-    // if any errors occured, proceed as if the user is not logged in
+    // if any errors occured, proceed as if the teacher is not logged in
     print(e);
     _splashPresenter.getAuthStatusOnNext(0);
     onComplete();

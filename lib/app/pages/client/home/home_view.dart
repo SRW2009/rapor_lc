@@ -4,6 +4,7 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client/home/home_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
+import 'package:rapor_lc/data/test-repositories/auth_repo_impl.dart';
 
 class HomePage extends View {
   HomePage({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class HomePage extends View {
 
 class HomePageView extends ViewState<HomePage, HomeController> {
   HomePageView()
-      : super(HomeController(AuthenticationRepositoryImpl()));
+      : super(HomeController(AuthenticationRepositoryImplTest()));
 
   @override
   Widget get view => Scaffold(

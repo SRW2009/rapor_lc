@@ -1,18 +1,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/nhb/admin_home_nhb_controller.dart';
+import 'package:rapor_lc/app/pages/admin/nhb/admin_nhb_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_number.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
-import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
-import 'package:rapor_lc/domain/entities/santri.dart';
 
 class NHBUpdateDialog extends StatefulWidget {
   final NHB nhb;
   final Function(NHB) onSave;
-  final AdminHomeNHBController controller;
+  final AdminNHBController controller;
 
   const NHBUpdateDialog({Key? key, required this.nhb, required this.onSave, required this.controller,
   }) : super(key: key);
@@ -23,11 +22,8 @@ class NHBUpdateDialog extends StatefulWidget {
 
 class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
   final _key = GlobalKey<FormState>();
-  late final TextEditingController _idCon;
-  Santri? _santriCon;
+  late final TextEditingController _noCon;
   MataPelajaran? _mapelCon;
-  late final TextEditingController _semesterCon;
-  late final TextEditingController _tahunAjaranCon;
   late final TextEditingController _nilaiHarianCon;
   late final TextEditingController _nilaiBulananCon;
   late final TextEditingController _nilaiProjectCon;
@@ -37,11 +33,8 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
 
   @override
   void initState() {
-    _idCon = TextEditingController(text: widget.nhb.id.toString());
-    _santriCon = widget.nhb.santri;
+    _noCon = TextEditingController(text: widget.nhb.no.toString());
     _mapelCon = widget.nhb.pelajaran;
-    _semesterCon = TextEditingController(text: widget.nhb.semester.toString());
-    _tahunAjaranCon = TextEditingController(text: widget.nhb.tahun_ajaran);
     _nilaiHarianCon = TextEditingController(text: widget.nhb.nilai_harian.toString());
     _nilaiBulananCon = TextEditingController(text: widget.nhb.nilai_bulanan.toString());
     _nilaiProjectCon = TextEditingController(text: widget.nhb.nilai_projek.toString());
@@ -64,40 +57,17 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FormInputField(
-                  label: 'ID',
-                  controller: _idCon,
+                  label: 'Nomor',
+                  controller: _noCon,
                   isDisabled: true,
-                ),
-                FormDropdownSearch<Santri>(
-                  label: 'Santri',
-                  compareFn: (o1, o2) => o1?.nis == o2?.nis,
-                  onFind: widget.controller.dialogOnFindSantri,
-                  showItem: (e) => '${e.nis} - ${e.nama}',
-                  onPick: (val) => _santriCon = val,
-                  selectedItem: () => _santriCon,
                 ),
                 FormDropdownSearch<MataPelajaran>(
                   label: 'Mata Pelajaran',
                   compareFn: (o1, o2) => o1?.id == o2?.id,
                   onFind: widget.controller.dialogOnFindMapel,
-                  showItem: (e) => '${e.id} - ${e.nama_mapel}',
+                  showItem: (e) => '${e.id} - ${e.name}',
                   onPick: (val) => _mapelCon = val,
                   selectedItem: () => _mapelCon,
-                ),
-                FormInputFieldNumber('Semester', _semesterCon),
-                FormInputField(
-                  label: 'Tahun Ajaran',
-                  controller: _tahunAjaranCon,
-                  hint: '2020/2021',
-                  validator: (s) {
-                    if (s == null || s.isEmpty) return 'Harus Diisi';
-                    if (s.length != 9 || s.split('/').length != 2
-                        || int.tryParse(s.substring(0,4)) == null
-                        || int.tryParse(s.substring(5, 9)) == null) {
-                      return 'Format Salah';
-                    }
-                    return null;
-                  },
                 ),
                 FormInputFieldNumber('Nilai Harian', _nilaiHarianCon),
                 FormInputFieldNumber('Nilai Bulanan', _nilaiBulananCon),
@@ -112,8 +82,7 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            NHB(widget.nhb.id, _santriCon!, int.tryParse(_semesterCon.text)!,
-                _tahunAjaranCon.text, _mapelCon!, int.tryParse(_nilaiHarianCon.text)!,
+            NHB(widget.nhb.no, _mapelCon!, int.tryParse(_nilaiHarianCon.text)!,
                 int.tryParse(_nilaiBulananCon.text)!, int.tryParse(_nilaiProjectCon.text)!,
                 int.tryParse(_nilaiAkhirCon.text)!, int.tryParse(_akumulasiCon.text)!,
                 _predikatCon.text)

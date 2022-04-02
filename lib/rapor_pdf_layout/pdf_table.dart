@@ -2,12 +2,13 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/domain/entities/abstract/npb.dart';
+import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/npbmo.dart';
 import 'package:rapor_lc/domain/entities/npbpo.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/semester.dart';
+import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
 import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
 
 class MyPDFTable {
@@ -40,7 +41,10 @@ class MyPDFTable {
     );
   }
   
-  static Widget buildIdentityTable(Santri santri, Semester semester, String tahunAjaran) {
+  static Widget buildIdentityTable(Nilai nilai) {
+    final santri = nilai.santri,
+        semester = nilai.BaS.semesterToString(),
+        tahunAjaran = nilai.tahunAjaran;
     return Container(
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(
@@ -62,7 +66,7 @@ class MyPDFTable {
               TableRow(
                 children: [
                   timesText('Nama   '),
-                  timesText(': ${santri.nama}'),
+                  timesText(': ${santri.name}'),
                 ],
               ),
               TableRow(
@@ -86,7 +90,7 @@ class MyPDFTable {
               TableRow(
                 children: [
                   timesText('Semester'),
-                  timesText(': ${semester.n} (${semester.toString()})'),
+                  timesText(': $semester'),
                 ],
               ),
               TableRow(
@@ -117,7 +121,7 @@ class MyPDFTable {
     for (var i = 0; i < nhbs.length; ++i) {
       var o = nhbs[i];
       children.add(_buildContentRow([
-        '${i + 1 + startFrom}', o.pelajaran.nama_mapel,
+        '${i + 1 + startFrom}', o.pelajaran.name,
         '${o.nilai_harian}', '${o.nilai_bulanan}',
         '${o.nilai_projek}', '${o.nilai_akhir}',
         '${o.akumulasi}', o.predikat
@@ -172,7 +176,8 @@ class MyPDFTable {
     );
   }
 
-  static Table buildNPBTable(List<NPB> npbs, {int startFrom=0}) {
+  static Table buildNPBTable(Nilai nilai, {int startFrom=0}) {
+    final npbs = nilai.npb ?? [];
     List<TableRow> children = [
       _buildHeaderRow([
         'No', 'Nama Mapel', '/N', 'Presensi'
@@ -181,8 +186,8 @@ class MyPDFTable {
     for (var i = 0; i < npbs.length; ++i) {
       var o = npbs[i];
       children.add(_buildContentRow([
-        '${i + 1 + startFrom}', o.pelajaran.nama_mapel,
-        '${(o is NPBMO) ? o.n : o.semester}', (o.presensi),
+        '${i + 1 + startFrom}', o.pelajaran.name,
+        '${(o is NPBMO) ? o.n : nilai.BaS.semester}', (o.presensi),
       ]));
     }
 
@@ -201,7 +206,8 @@ class MyPDFTable {
     );
   }
 
-  static Table buildNPBPOTable(List<NPBPO> npbpos) {
+  static Table buildNPBPOTable(Nilai nilai) {
+    final npbpos = nilai.npb?.whereType<NPBPO>().toList() ?? [];
     List<TableRow> children = [
       TableRow(
         decoration: const BoxDecoration(
@@ -320,8 +326,8 @@ class MyPDFTable {
       var o2 = npbpos[i+1];
       children.add(_buildContentRow([
         '${no++}',
-        o.pelajaran.nama_mapel, '${o.semester}', (o.presensi),
-        o2.pelajaran.nama_mapel, '${o2.semester}', (o2.presensi),
+        o.pelajaran.name, '${nilai.BaS.semester}', (o.presensi),
+        o2.pelajaran.name, '${nilai.BaS.semester}', (o2.presensi),
       ]));
 
     }

@@ -1,6 +1,4 @@
 
-import 'dart:convert';
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'divisi.g.dart';
@@ -8,21 +6,23 @@ part 'divisi.g.dart';
 @JsonSerializable()
 class Divisi {
   final int id;
-  final String nama;
-  final String kadiv;
+  final String name;
 
-  Divisi(this.id, this.nama, this.kadiv);
+  const Divisi(this.id, this.name);
 
-  factory Divisi.fromJson(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      return _$DivisiFromJson(json);
-    } else if (json is String) {
-      Map<String, dynamic> newJson = jsonDecode(json);
-      return _$DivisiFromJson(newJson);
-    }
-    throw Exception('Parsing error');
-  }
+  factory Divisi.fromJson(Map<String, dynamic> json) => _$DivisiFromJson(json);
   Map<String, dynamic> toJson() => _$DivisiToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Divisi &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name;
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
 }
 
 class DivisiConverter implements JsonConverter<Divisi, Map<String, dynamic>> {
@@ -33,4 +33,14 @@ class DivisiConverter implements JsonConverter<Divisi, Map<String, dynamic>> {
 
   @override
   Map<String, dynamic> toJson(Divisi object) => object.toJson();
+}
+
+class NullableDivisiConverter implements JsonConverter<Divisi?, Map<String, dynamic>?> {
+  const NullableDivisiConverter();
+
+  @override
+  Divisi? fromJson(Map<String, dynamic>? json) => json != null ? Divisi.fromJson(json) : null;
+
+  @override
+  Map<String, dynamic>? toJson(Divisi? object) => object?.toJson();
 }

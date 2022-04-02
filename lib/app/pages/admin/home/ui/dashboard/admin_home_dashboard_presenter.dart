@@ -1,46 +1,30 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
-import 'package:rapor_lc/domain/entities/nk.dart';
+import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
-import 'package:rapor_lc/domain/usecases/nhb/get_nhb_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/nk/get_nk_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/npb/get_npb_list_admin.dart';
-import 'package:rapor_lc/domain/usecases/santri/get_santri_list_admin.dart';
+import 'package:rapor_lc/domain/usecases/nilai/get_nilai_list.dart';
+import 'package:rapor_lc/domain/usecases/santri/get_santri_list.dart';
 
 class AdminHomeDashboardPresenter extends Presenter {
   late Function(List<Santri>) getSantriListOnNext;
   late Function(dynamic) getSantriListOnError;
-  late Function(List<NHB>) getNHBListOnNext;
-  late Function(dynamic) getNHBListOnError;
-  late Function(List<NK>) getNKListOnNext;
-  late Function(dynamic) getNKListOnError;
-  late Function(List<NPB>) getNPBListOnNext;
-  late Function(dynamic) getNPBListOnError;
+  late Function(List<Nilai>) getNilaiListOnNext;
+  late Function(dynamic) getNilaiListOnError;
 
-  GetSantriListAdminUseCase _getSantriListAdminUseCase;
-  GetNHBListAdminUseCase _getNHBListAdminUseCase;
-  GetNKListAdminUseCase _getNKListAdminUseCase;
-  GetNPBListAdminUseCase _getNPBListAdminUseCase;
-  AdminHomeDashboardPresenter(santriRepository, nhbRepository, nkRepository, npbRepository)
-      : _getSantriListAdminUseCase = GetSantriListAdminUseCase(santriRepository),
-        _getNHBListAdminUseCase = GetNHBListAdminUseCase(nhbRepository),
-        _getNKListAdminUseCase = GetNKListAdminUseCase(nkRepository),
-        _getNPBListAdminUseCase = GetNPBListAdminUseCase(npbRepository);
+  final GetSantriListUseCase _getSantriListUseCase;
+  final GetNilaiListUseCase _getNilaiListUseCase;
+  AdminHomeDashboardPresenter(santriRepo, nilaiRepo)
+      : _getSantriListUseCase = GetSantriListUseCase(santriRepo),
+        _getNilaiListUseCase = GetNilaiListUseCase(nilaiRepo);
 
-  void doGetSantriList() => _getSantriListAdminUseCase.execute(_GetSantriListObserver(this));
-  void doGetNHBList() => _getNHBListAdminUseCase.execute(_GetNHBListObserver(this));
-  void doGetNKList() => _getNKListAdminUseCase.execute(_GetNKListObserver(this));
-  void doGetNPBList() => _getNPBListAdminUseCase.execute(_GetNPBListObserver(this));
+  void doGetSantriList() => _getSantriListUseCase.execute(_GetSantriListObserver(this));
+  void doGetNilaiList() => _getNilaiListUseCase.execute(_GetNilaiListObserver(this));
 
   @override
   void dispose() {
-    _getSantriListAdminUseCase.dispose();
-    _getNHBListAdminUseCase.dispose();
-    _getNKListAdminUseCase.dispose();
-    _getNPBListAdminUseCase.dispose();
+    _getSantriListUseCase.dispose();
+    _getNilaiListUseCase.dispose();
   }
 }
 
@@ -63,59 +47,21 @@ class _GetSantriListObserver extends Observer<UseCaseResponse<List<Santri>>> {
   }
 }
 
-class _GetNHBListObserver extends Observer<UseCaseResponse<List<NHB>>> {
+class _GetNilaiListObserver extends Observer<UseCaseResponse<List<Nilai>>> {
   final AdminHomeDashboardPresenter presenter;
 
-  _GetNHBListObserver(this.presenter);
+  _GetNilaiListObserver(this.presenter);
 
   @override
   void onComplete() {}
 
   @override
   void onError(e) {
-    presenter.getNHBListOnError(e);
+    presenter.getNilaiListOnError(e);
   }
 
   @override
-  void onNext(UseCaseResponse<List<NHB>>? response) {
-    presenter.getNHBListOnNext(response!.response);
-  }
-}
-
-class _GetNKListObserver extends Observer<UseCaseResponse<List<NK>>> {
-  final AdminHomeDashboardPresenter presenter;
-
-  _GetNKListObserver(this.presenter);
-
-  @override
-  void onComplete() {}
-
-  @override
-  void onError(e) {
-    presenter.getNKListOnError(e);
-  }
-
-  @override
-  void onNext(UseCaseResponse<List<NK>>? response) {
-    presenter.getNKListOnNext(response!.response);
-  }
-}
-
-class _GetNPBListObserver extends Observer<UseCaseResponse<List<NPB>>> {
-  final AdminHomeDashboardPresenter presenter;
-
-  _GetNPBListObserver(this.presenter);
-
-  @override
-  void onComplete() {}
-
-  @override
-  void onError(e) {
-    presenter.getNPBListOnError(e);
-  }
-
-  @override
-  void onNext(UseCaseResponse<List<NPB>>? response) {
-    presenter.getNPBListOnNext(response!.response);
+  void onNext(UseCaseResponse<List<Nilai>>? response) {
+    presenter.getNilaiListOnNext(response!.response);
   }
 }

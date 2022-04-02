@@ -19,12 +19,10 @@ class DivisiCreateDialog extends StatefulWidget {
 class _DivisiCreateDialogState extends State<DivisiCreateDialog> {
   final _key = GlobalKey<FormState>();
   late final TextEditingController _namaCon;
-  late final TextEditingController _kadivCon;
 
   @override
   void initState() {
     _namaCon = TextEditingController();
-    _kadivCon = TextEditingController();
     super.initState();
   }
 
@@ -44,10 +42,6 @@ class _DivisiCreateDialogState extends State<DivisiCreateDialog> {
                   label: 'Nama',
                   controller: _namaCon,
                 ),
-                FormInputField(
-                  label: 'Kadiv',
-                  controller: _kadivCon,
-                ),
               ],
             ),
           ),
@@ -55,7 +49,7 @@ class _DivisiCreateDialogState extends State<DivisiCreateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            Divisi(0, _namaCon.text, _kadivCon.text),
+            Divisi(0, _namaCon.text),
           ),
         ),
       ],

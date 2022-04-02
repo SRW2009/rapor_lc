@@ -9,13 +9,15 @@ part of 'mata_pelajaran.dart';
 MataPelajaran _$MataPelajaranFromJson(Map<String, dynamic> json) =>
     MataPelajaran(
       json['id'] as int,
-      const DivisiConverter().fromJson(json['divisi'] as Map<String, dynamic>),
-      json['nama_mapel'] as String,
+      json['name'] as String,
+      divisi: json['divisi'] == null
+          ? null
+          : Divisi.fromJson(json['divisi'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$MataPelajaranToJson(MataPelajaran instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'divisi': const DivisiConverter().toJson(instance.divisi),
-      'nama_mapel': instance.nama_mapel,
+      'name': instance.name,
+      'divisi': instance.divisi,
     };

@@ -34,7 +34,7 @@ class HomeSantriUIView extends ViewState<HomeSantriUI, HomeSantriController> {
             ],
             tableContentBuilder: (item) => [
               DataCell(Text(item.id.toString())),
-              DataCell(Text(item.nama)),
+              DataCell(Text(item.name)),
               DataCell(Text(item.kadiv)),
               DataCell(IconButton(
                 onPressed: () => controller.tableOnEdit(item),
