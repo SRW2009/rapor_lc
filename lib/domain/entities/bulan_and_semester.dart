@@ -32,6 +32,12 @@ class BulanAndSemester {
   String bulanToString() => Month.values[bulan-1].name;
 
   String semesterToString() => '${SemesterAsText.values[semester-1].name} (${SemesterInRoman.values[semester-1].name})';
+
+  int compareTo(BulanAndSemester otherBaS) {
+    final thisVal = double.tryParse('$bulan.$semester') ?? 0;
+    final otherVal = double.tryParse('${otherBaS.bulan}.${otherBaS.semester}') ?? 0;
+    return thisVal.compareTo(otherVal);
+  }
 }
 
 class BaSConverter implements JsonConverter<BulanAndSemester, String> {

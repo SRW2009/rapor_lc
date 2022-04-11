@@ -22,6 +22,7 @@ const divisiList = <Divisi>[
   Divisi(1, 'Tahfiz'),
   Divisi(2, 'Bahasa'),
   Divisi(3, 'MPP'),
+  Divisi(4, 'Kesantrian'),
 ];
 
 final teacherList = List<Teacher>.generate(6, (i) => Teacher(i, 'Guru $i', divisi: divisiList[i % 4], isLeader: (i%2 == 0)));
@@ -40,6 +41,10 @@ final mapelList = <MataPelajaran>[
   MataPelajaran(mapelI++, 'Kemandirian', divisi: divisiList[3]),
   MataPelajaran(mapelI++, 'Karate', divisi: divisiList[3]),
   MataPelajaran(mapelI++, 'Akhlak', divisi: divisiList[3]),
+  MataPelajaran(mapelI++, 'Inisiatif', divisi: divisiList[4]),
+  MataPelajaran(mapelI++, 'Kontrol Diri', divisi: divisiList[4]),
+  MataPelajaran(mapelI++, 'Kontrol Potensi', divisi: divisiList[4]),
+  MataPelajaran(mapelI++, 'Menghargai Karya', divisi: divisiList[4]),
 ];
 final mapelList_observation = <MataPelajaran>[
   MataPelajaran(mapelI++, 'RBQ 1', divisi: divisiList[1]),
@@ -58,17 +63,21 @@ final mapelList_observation = <MataPelajaran>[
 
 final relationList = List<Relation>.generate(6, (i) => Relation(i, teacherList[i], santriList[i]));
 
+var nhbNo = mapelList.length;
+final nhbList = mapelList
+    .where((element) => element.divisi?.name != 'Kesantrian')
+    .map<NHB>((e) => NHB(--nhbNo, e,
+    _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), 'B')).toList();
+final nhbList_observation = mapelList_observation
+    .where((element) => element.divisi?.name != 'Kesantrian')
+    .map<NHB>((e) => NHB(nhbNo++, e,
+    _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), 'B')).toList();
+
 var npbNo = 0;
 final npbList = mapelList.map<NPB>((e) => NPBPO(npbNo++, e,
     '${_rand.nextInt(100)}%')).toList();
 final npbList_observation = mapelList_observation.map<NPB>((e) => NPBMO(npbNo++, e,
     '${_rand.nextInt(100)}%', _rand.nextInt(3)+1)).toList();
-
-var nhbNo = 0;
-final nhbList = mapelList.map<NHB>((e) => NHB(nhbNo++, e,
-    _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), 'B')).toList();
-final nhbList_observation = mapelList_observation.map<NHB>((e) => NHB(nhbNo++, e,
-    _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), 'B')).toList();
 
 const _nkVariables = [
   'Inisiatif',

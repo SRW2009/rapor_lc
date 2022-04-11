@@ -4,10 +4,26 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/utils/request_state.dart';
 
 abstract class DataTableController<Entity> extends Controller {
-  List<Entity> normalList = [];
-  List<Entity> filteredList = [];
-  Map<String, bool> selectedMap = {};
-  RequestState dataTableState = RequestState.none;
+  DataTableController()
+      : normalList = [],
+        filteredList = [],
+        selectedMap = {},
+        dataTableState = RequestState.none;
+
+  DataTableController.initial(List<Entity> initialList)
+      : normalList = initialList,
+        filteredList = initialList,
+        selectedMap = {},
+        dataTableState = RequestState.loaded
+  {
+    selectedMap.addEntries(initialList.map<MapEntry<String, bool>>
+    ((e) => MapEntry(getSelectedKey(e), false)));
+  }
+
+  List<Entity> normalList;
+  List<Entity> filteredList;
+  Map<String, bool> selectedMap;
+  RequestState dataTableState;
 
   void refresh();
   Widget? createDialog();

@@ -5,9 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 
 class SharedPrefsRepository {
-  static const _USER_EMAIL = 'teacher:email';
-  static const _USER_STATUS = 'teacher:status';
-  static const _USER_TOKEN = 'teacher:token';
+  static const _USER_NAME = 'user:name';
+  static const _USER_EMAIL = 'user:email';
+  static const _USER_STATUS = 'user:status';
+  static const _USER_TOKEN = 'user:token';
 
   final Future<SharedPreferences> _sharedPreferences;
 
@@ -25,18 +26,19 @@ class SharedPrefsRepository {
     if (_currentUser != null) return _currentUser!;
 
     final pref = await _sharedPreferences;
+    final name = pref.getString(_USER_NAME);
     final email = pref.getString(_USER_EMAIL);
     final status = pref.getInt(_USER_STATUS);
 
-    if (email == null || status == null) {
+    if (name == null || email == null || status == null) {
       return null;
     }
 
     User? user;
     if (status == 1) {
-      user = Teacher(0, '', email: email);
+      user = Teacher(0, name, email: email);
     } else if (status == 2) {
-      user = Admin(0, '', email: email);
+      user = Admin(0, name, email: email);
     }
 
     _currentUser = user;
@@ -45,10 +47,11 @@ class SharedPrefsRepository {
 
   Future<bool> setCurrentUser(User user) async {
     final pref = await _sharedPreferences;
+    final name = await pref.setString(_USER_NAME, user.name);
     final email = await pref.setString(_USER_EMAIL, user.email!);
     final status = await pref.setInt(_USER_STATUS, user.status);
 
-    if (email && status) {
+    if (name && email && status) {
       _currentUser = user;
       return true;
     }

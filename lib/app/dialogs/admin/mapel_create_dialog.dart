@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/mapel/admin_home_mapel_controller.dart';
+import 'package:rapor_lc/app/pages/admin-col/home/ui/mapel/admin_home_mapel_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';

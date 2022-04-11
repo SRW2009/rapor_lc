@@ -2,7 +2,7 @@
 class Urls {
   static const _hostUrl = 'http://localhost:8080';//'http://10.50.50.2:1421';
   static const loginTeacherUrl = '$_hostUrl/v1/login';
-  static const loginAdminUrl = '$_hostUrl/v1/login-admin';
+  static const loginAdminUrl = '$_hostUrl/v1/login-admin-col';
 }
 
 class DataConstant {

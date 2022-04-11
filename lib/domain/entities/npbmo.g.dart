@@ -7,6 +7,7 @@ part of 'npbmo.dart';
 // **************************************************************************
 
 NPBMO _$NPBMOFromJson(Map<String, dynamic> json) => NPBMO(
+      json['no'] as int,
       const MataPelajaranConverter()
           .fromJson(json['mapel'] as Map<String, dynamic>),
       json['presensi'] as String,
@@ -15,6 +16,7 @@ NPBMO _$NPBMOFromJson(Map<String, dynamic> json) => NPBMO(
     );
 
 Map<String, dynamic> _$NPBMOToJson(NPBMO instance) => <String, dynamic>{
+      'no': instance.no,
       'mapel': const MataPelajaranConverter().toJson(instance.pelajaran),
       'presensi': instance.presensi,
       'note': instance.note,

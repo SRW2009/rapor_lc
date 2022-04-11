@@ -17,7 +17,8 @@ class TeacherRepositoryImplTest extends TeacherRepository {
   @override
   Future<RequestStatus> createTeacher(Teacher user) =>
       Future.delayed(DataConstant.test_duration, () async {
-        teacherList.add(user);
+        final item = Teacher.fromJson(user.toJson()..['id']=teacherList.length);
+        teacherList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;

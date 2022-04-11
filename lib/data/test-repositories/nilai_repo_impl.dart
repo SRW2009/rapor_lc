@@ -17,7 +17,8 @@ class NilaiRepositoryImplTest extends NilaiRepository {
   @override
   Future<RequestStatus> createNilai(Nilai nilai) =>
       Future.delayed(DataConstant.test_duration, () async {
-        nilaiList.add(nilai);
+        final item = Nilai.fromJson(nilai.toJson()..['id']=nilaiList.length);
+        nilaiList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;

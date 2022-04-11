@@ -17,7 +17,8 @@ class DivisiRepositoryImplTest extends DivisiRepository {
   @override
   Future<RequestStatus> createDivisi(Divisi divisi) =>
       Future.delayed(DataConstant.test_duration, () async {
-        divisiList.add(divisi);
+        final item = Divisi.fromJson(divisi.toJson()..['id']=divisiList.length);
+        divisiList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;

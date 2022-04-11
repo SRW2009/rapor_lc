@@ -17,7 +17,8 @@ class MataPelajaranRepositoryImplTest extends MataPelajaranRepository {
   @override
   Future<RequestStatus> createMataPelajaran(MataPelajaran mapel) =>
       Future.delayed(DataConstant.test_duration, () async {
-        mapelList.add(mapel);
+        final item = MataPelajaran.fromJson(mapel.toJson()..['id']=mapelList.length);
+        mapelList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;
@@ -51,4 +52,9 @@ class MataPelajaranRepositoryImplTest extends MataPelajaranRepository {
         //failed
         return RequestStatus.failed;
       });
+
+  @override
+  Future<List<MataPelajaran>> getNKVariables() async =>
+      Future.delayed(DataConstant.test_duration, () async =>
+          mapelList.where((element) => element.divisi?.id == 4).toList());
 }

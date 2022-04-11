@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/teacher/admin_home_teacher_controller.dart';
+import 'package:rapor_lc/app/pages/admin-col/home/ui/teacher/admin_home_teacher_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_checkbox.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';

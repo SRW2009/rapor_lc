@@ -12,14 +12,15 @@ class FormInputFieldRadios extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<int>(
-      initialValue: value,
-      validator: (i) {
-        if (i == null || i == -1) return 'Pilih salah satu';
-        return null;
-      },
-      builder: (state) {
-        return Column(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: FormField<int>(
+        initialValue: value,
+        validator: (i) {
+          if (i == null || i == -1) return 'Pilih salah satu';
+          return null;
+        },
+        builder: (state) => Column(
           children: [
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -56,10 +57,9 @@ class FormInputFieldRadios extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(state.errorText!, style: Theme.of(context).textTheme.overline!.copyWith(color: Colors.red),),
             ),
-            const SizedBox(height: 16.0,),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }

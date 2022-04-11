@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/nk/admin_nk_controller.dart';
+import 'package:rapor_lc/app/pages/admin-col/nk/admin_nk_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_number.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -70,6 +70,7 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
                   controller: _noteCon,
                   inputType: TextInputType.multiline,
                   maxLines: 3,
+                  validator: (s) => null,
                 ),
               ],
             ),

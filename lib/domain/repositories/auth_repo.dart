@@ -8,7 +8,7 @@ abstract class AuthenticationRepository extends Repository {
   Future<int> authenticateTeacher(
       {required String email, required String password});
 
-  /// Authenticates teacher as admin using his [email] and [password]
+  /// Authenticates teacher as admin-col using his [email] and [password]
   Future<int> authenticateAdmin(
       {required String email, required String password});
 

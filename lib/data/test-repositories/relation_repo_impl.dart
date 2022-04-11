@@ -17,7 +17,8 @@ class RelationRepositoryImplTest extends RelationRepository {
   @override
   Future<RequestStatus> createRelation(Relation relation) =>
       Future.delayed(DataConstant.test_duration, () async {
-        relationList.add(relation);
+        final item = Relation.fromJson(relation.toJson()..['id']=relationList.length);
+        relationList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;

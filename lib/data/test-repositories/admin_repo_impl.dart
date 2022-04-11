@@ -17,7 +17,8 @@ class AdminRepositoryImplTest extends AdminRepository {
   @override
   Future<RequestStatus> createAdmin(Admin user) =>
       Future.delayed(DataConstant.test_duration, () async {
-        adminList.add(user);
+        final item = Admin.fromJson(user.toJson()..['id']=adminList.length);
+        adminList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;

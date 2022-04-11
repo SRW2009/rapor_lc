@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/npb/admin_npb_controller.dart';
+import 'package:rapor_lc/app/pages/admin-col/npb/admin_npb_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_number.dart';
@@ -89,6 +89,7 @@ class _NPBUpdateDialogState extends State<NPBUpdateDialog> {
                   controller: _noteCon,
                   inputType: TextInputType.multiline,
                   maxLines: 3,
+                  validator: (s) => null,
                 ),
               ],
             ),

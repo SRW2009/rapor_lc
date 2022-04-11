@@ -1,4 +1,5 @@
 
+import 'package:rapor_lc/app/utils/temp_data.dart';
 import 'package:rapor_lc/common/enum.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
@@ -17,7 +18,8 @@ class SantriRepositoryImplTest extends SantriRepository {
   @override
   Future<RequestStatus> createSantri(Santri santri) =>
       Future.delayed(DataConstant.test_duration, () async {
-        santriList.add(santri);
+        final item = Santri.fromJson(santri.toJson()..['id']=santriList.length);
+        santriList.add(item);
         return RequestStatus.success;
         //failed
         return RequestStatus.failed;

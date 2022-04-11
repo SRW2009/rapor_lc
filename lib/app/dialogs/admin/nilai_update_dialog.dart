@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin/home/ui/nilai/admin_home_nilai_controller.dart';
+import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_bas.dart';
 import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
@@ -53,50 +54,13 @@ class _NilaiUpdateDialogState extends State<NilaiUpdateDialog> {
                   controller: _idCon,
                   isDisabled: true,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: DropdownButton<int>(
-                          hint: const Text('Bulan'),
-                          isExpanded: true,
-                          value: _BaSCon.bulan != 0 ? _BaSCon.bulan : null,
-                          items: Month.values.map<DropdownMenuItem<int>>((e) => DropdownMenuItem(
-                            value: e.index+1,
-                            child: Text(e.name),
-                          )).toList(),
-                          onChanged: (index) {
-                            if (index != null) {
-                              setState(() {
-                                _BaSCon.bulan = index;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 24.0),
-                      Expanded(
-                        child: DropdownButton<int>(
-                          hint: const Text('Semester'),
-                          isExpanded: true,
-                          value: _BaSCon.semester != 0 ? _BaSCon.semester : null,
-                          items: SemesterAsText.values.map<DropdownMenuItem<int>>((e) => DropdownMenuItem(
-                            value: e.index+1,
-                            child: Text(e.name),
-                          )).toList(),
-                          onChanged: (index) {
-                            if (index != null) {
-                              setState(() {
-                                _BaSCon.semester = index;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                FormInputBaS(
+                  BaS: _BaSCon,
+                  onChanged: (val) {
+                    setState(() {
+                      _BaSCon = val;
+                    });
+                  },
                 ),
                 FormInputField(
                   label: 'Tahun Ajaran',

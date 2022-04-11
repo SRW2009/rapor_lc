@@ -25,7 +25,7 @@ class LoginController extends Controller {
     isLoading = false;
     refreshUI();
 
-    // if teacher logged in as admin
+    // if teacher logged in as admin-col
     if (e == 2) {
       Navigator.of(getContext()).pushReplacementNamed(Pages.admin_home);
       return;
