@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_controller.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable.dart';
-import 'package:rapor_lc/data/test-repositories/nilai_repo_impl.dart';
-import 'package:rapor_lc/data/test-repositories/santri_repo_impl.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
+import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
+import 'package:rapor_lc/domain/entities/npb.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -19,7 +19,7 @@ class AdminHomeNilaiUI extends View {
 
 class AdminHomeNilaiUIView extends ViewState<AdminHomeNilaiUI, AdminHomeNilaiController> {
   AdminHomeNilaiUIView()
-      : super(AdminHomeNilaiController(NilaiRepositoryImplTest(), SantriRepositoryImplTest()));
+      : super(AdminHomeNilaiController(NilaiRepositoryImpl(), SantriRepositoryImpl()));
 
   @override
   Widget get view => Center(

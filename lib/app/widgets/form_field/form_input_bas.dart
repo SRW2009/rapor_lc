@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
 
-class FormInputBaS extends StatelessWidget {
+class FormInputBaS extends StatefulWidget {
   final BulanAndSemester BaS;
   final void Function(BulanAndSemester val) onChanged;
 
@@ -12,11 +12,18 @@ class FormInputBaS extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<FormInputBaS> createState() => _FormInputBaSState();
+}
+
+class _FormInputBaSState extends State<FormInputBaS> {
+  bool isOdd = false;
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24.0),
       child: FormField<BulanAndSemester>(
-        initialValue: BaS,
+        initialValue: widget.BaS,
         validator: (val) {
           if (val == null || (val.bulan == 0 && val.semester == 0)) return 'Pilih Bulan & Semester';
           if (val.bulan == 0) return 'Pilih Bulan';
@@ -32,17 +39,20 @@ class FormInputBaS extends StatelessWidget {
                   child: _container(
                     state: state,
                     child: DropdownButton<int>(
-                      hint: const Text('Bulan'),
+                      hint: const Text('Semester'),
                       underline: const SizedBox(),
                       isExpanded: true,
-                      value: BaS.bulan != 0 ? BaS.bulan : null,
-                      items: Month.values.map<DropdownMenuItem<int>>((e) => DropdownMenuItem(
+                      value: widget.BaS.semester != 0 ? widget.BaS.semester : null,
+                      items: SemesterAsText.values.map<DropdownMenuItem<int>>((e) => DropdownMenuItem(
                         value: e.index+1,
                         child: Text(e.name),
                       )).toList(),
                       onChanged: (index) {
                         if (index != null) {
-                          onChanged(BaS..bulan=index);
+                          widget.onChanged(widget.BaS..semester=index..bulan=0);
+                          setState(() {
+                            isOdd = (index%2==1);
+                          });
                         }
                       },
                     ),
@@ -53,17 +63,19 @@ class FormInputBaS extends StatelessWidget {
                   child: _container(
                     state: state,
                     child: DropdownButton<int>(
-                      hint: const Text('Semester'),
+                      hint: const Text('Bulan'),
                       underline: const SizedBox(),
                       isExpanded: true,
-                      value: BaS.semester != 0 ? BaS.semester : null,
-                      items: SemesterAsText.values.map<DropdownMenuItem<int>>((e) => DropdownMenuItem(
+                      value: widget.BaS.bulan != 0 ? widget.BaS.bulan : null,
+                      items: Month.values
+                          .getRange(isOdd ? 0 : 6, isOdd ? 6 : 12)
+                          .map<DropdownMenuItem<int>>((e) => DropdownMenuItem(
                         value: e.index+1,
                         child: Text(e.name),
                       )).toList(),
                       onChanged: (index) {
                         if (index != null) {
-                          onChanged(BaS..semester=index);
+                          widget.onChanged(widget.BaS..bulan=index);
                         }
                       },
                     ),

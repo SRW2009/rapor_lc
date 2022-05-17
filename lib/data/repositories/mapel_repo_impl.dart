@@ -1,132 +1,119 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/common/enum.dart';
-import 'package:rapor_lc/data/helpers/constant.dart';
-import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
-import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
-import 'package:rapor_lc/domain/repositories/mapel_repo.dart';
 import 'package:http/http.dart' as http;
+import 'package:rapor_lc/common/enum/request_status.dart';
+import 'package:rapor_lc/data/helpers/constant.dart';
+import 'package:rapor_lc/data/helpers/shared_prefs.dart';
+import 'package:rapor_lc/data/models/mata_pelajaran_model.dart';
+import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
+import 'package:rapor_lc/domain/repositories/mapel_repo.dart';
 
 class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   @override
+  String get url => Urls.adminMapel;
+
+  @override
+  Future<List<MataPelajaran>> getMataPelajaranList() async {
+    final token = await SharedPrefs().getToken;
+
+    // check request privilege
+    final user = await SharedPrefs().getCurrentUser;
+    if (user == null) throw Exception();
+    Uri uri;
+    if (user is Teacher) uri = Uri.parse(Urls.teacherGetMapel);
+    else uri = readUri();
+
+    final response = await http.get(
+      uri,
+      headers: DataConstant.headers(token),
+    );
+    if (response.statusCode == StatusCode.getSuccess) {
+      var iterable =(jsonDecode(response.body) as List)
+          .map<MataPelajaran>((e) => MataPelajaranModel.fromJsonToEntity(e))
+          .where((element) => element.divisi?.name != 'Kesantrian');
+
+      if (user is Teacher) return iterable
+          .where((element) => element.divisi?.id == user.divisi?.id)
+          .toList();
+      return iterable.toList();
+    }
+    throw Exception();
+  }
+
+  @override
   Future<RequestStatus> createMataPelajaran(MataPelajaran mapel) async {
-    final token = await SharedPrefsRepository().getToken;
+    final token = await SharedPrefs().getToken;
 
     final response = await http.post(
-      DataConstant.queryUri,
+      createUri(),
       headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_action,
-        'query': '''
-          INSERT INTO tb_mata_pelajaran (id, divisi_id, nama_mapel) 
-          VALUES (NULL,${mapel.divisi.id},'${mapel.name}')
-        ''',
-      }),
+      body: jsonEncode(MataPelajaranModel.fromEntityToJson(mapel)),
     );
-
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
     }
+    return RequestStatus.failed;
+  }
 
+  @override
+  Future<RequestStatus> updateMataPelajaran(MataPelajaran mapel) async {
+    final token = await SharedPrefs().getToken;
+
+    final response = await http.put(
+      updateUri(mapel.id),
+      headers: DataConstant.headers(token),
+      body: jsonEncode(MataPelajaranModel.fromEntityToJson(mapel)),
+    );
+    if (response.statusCode == StatusCode.putSuccess) {
+      return RequestStatus.success;
+    }
     return RequestStatus.failed;
   }
 
   @override
   Future<RequestStatus> deleteMataPelajaran(List<String> ids) async {
-    final token = await SharedPrefsRepository().getToken;
+    final token = await SharedPrefs().getToken;
 
-    final deleteQuery = ids.map<String>((e) =>
-    'DELETE FROM tb_mata_pelajaran WHERE id=$e'
-    ).join(';');
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_action,
-        'query': deleteQuery,
-      }),
-    );
+    bool success = true;
+    for (var id in ids) {
+      final response = await http.delete(
+        deleteUri(id),
+        headers: DataConstant.headers(token),
+      );
 
-    if (response.statusCode == StatusCode.postSuccess) {
-      return RequestStatus.success;
+      if (response.statusCode != StatusCode.deleteSuccess) {
+        success = false;
+        break;
+      }
     }
-
+    if (success) return RequestStatus.success;
     return RequestStatus.failed;
   }
 
   @override
-  Future<MataPelajaran> getMataPelajaran(int id) async {
-    final token = await SharedPrefsRepository().getToken;
+  Future<List<MataPelajaran>> getNKVariables() async {
+    final token = await SharedPrefs().getToken;
 
-    final response = await http.post(
-      DataConstant.queryUri,
+    // check request privilege
+    final user = await SharedPrefs().getCurrentUser;
+    if (user == null) throw Exception();
+    Uri uri;
+    if (user is Teacher) uri = Uri.parse(Urls.teacherGetMapel);
+    else uri = readUri();
+
+    final response = await http.get(
+      uri,
       headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_get,
-        'query': '''
-          SELECT id, nama_mapel, 
-          (SELECT GROUP_CONCAT(JSON_OBJECT('id', tb_divisi.id, 'nama', tb_divisi.nama, 'kadiv', tb_divisi.kadiv)) 
-          FROM tb_divisi WHERE tb_divisi.id=mapel.id) as divisi 
-          FROM tb_mata_pelajaran as mapel 
-          WHERE id=$id
-        ''',
-      }),
     );
-
     if (response.statusCode == StatusCode.getSuccess) {
-      return (jsonDecode(response.body) as List)
-          .map<MataPelajaran>((e) => MataPelajaran.fromJson(e)).toList()[0];
-    }
+      var iterable =(jsonDecode(response.body) as List)
+          .map<MataPelajaran>((e) => MataPelajaranModel.fromJsonToEntity(e))
+          .where((element) => element.divisi?.name == 'Kesantrian');
 
+      return iterable.toList();
+    }
     throw Exception();
-  }
-
-  @override
-  Future<List<MataPelajaran>> getMataPelajaranList() async {
-    final token = await SharedPrefsRepository().getToken;
-
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_get,
-        'query': '''
-          SELECT id, nama_mapel, 
-          (SELECT GROUP_CONCAT(JSON_OBJECT('id', tb_divisi.id, 'nama', tb_divisi.nama, 'kadiv', tb_divisi.kadiv)) 
-          FROM tb_divisi WHERE tb_divisi.id=mapel.id) as divisi 
-          FROM tb_mata_pelajaran as mapel
-        ''',
-      }),
-    );
-
-    if (response.statusCode == StatusCode.getSuccess) {
-      return (jsonDecode(response.body) as List)
-          .map<MataPelajaran>((e) => MataPelajaran.fromJson(e)).toList();
-    }
-
-    throw Exception();
-  }
-
-  @override
-  Future<RequestStatus> updateMataPelajaran(MataPelajaran mapel) async {
-    final token = await SharedPrefsRepository().getToken;
-
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_action,
-        'query': '''
-          UPDATE tb_mata_pelajaran 
-          SET divisi_id=${mapel.divisi.id}, nama_mapel='${mapel.name}' 
-          WHERE id=${mapel.id}
-        ''',
-      }),
-    );
-    if (response.statusCode == StatusCode.postSuccess) {
-      return RequestStatus.success;
-    }
-    return RequestStatus.failed;
   }
 }

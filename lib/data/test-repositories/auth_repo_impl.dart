@@ -1,8 +1,9 @@
 
 import 'package:rapor_lc/data/helpers/constant.dart';
-import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
+import 'package:rapor_lc/data/helpers/shared_prefs.dart';
 import 'package:rapor_lc/domain/entities/abstract/user.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
+import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/repositories/auth_repo.dart';
 
@@ -12,9 +13,9 @@ class AuthenticationRepositoryImplTest extends AuthenticationRepository {
   @override
   Future<int> authenticateTeacher({required String email, required String password}) {
     return Future.delayed(DataConstant.test_duration, () async {
-      final user = Teacher(0, 'Guruku', email: email, isLeader: false, divisi: null);
-      await SharedPrefsRepository().setCurrentUser(user);
-      await SharedPrefsRepository().setToken(_testToken);
+      final user = Teacher(0, 'Guruku', email: email, isLeader: true, divisi: Divisi(0, 'IT'));
+      await SharedPrefs().setCurrentUser(user);
+      await SharedPrefs().setToken(_testToken);
 
       return user.status;
       // failed
@@ -26,8 +27,8 @@ class AuthenticationRepositoryImplTest extends AuthenticationRepository {
   Future<int> authenticateAdmin({required String email, required String password}) async =>
       Future.delayed(DataConstant.test_duration, () async {
         final user = Admin(0, 'Adminku', email: email);
-        await SharedPrefsRepository().setCurrentUser(user);
-        await SharedPrefsRepository().setToken(_testToken);
+        await SharedPrefs().setCurrentUser(user);
+        await SharedPrefs().setToken(_testToken);
 
         return user.status;
         // failed
@@ -43,17 +44,20 @@ class AuthenticationRepositoryImplTest extends AuthenticationRepository {
 
   @override
   Future<User?> getCurrentUser() async =>
-      await SharedPrefsRepository().getCurrentUser;
+      await SharedPrefs().getCurrentUser;
 
   @override
   Future<String?> getCurrentToken() async =>
-      await SharedPrefsRepository().getToken;
+      await SharedPrefs().getToken;
 
   @override
   Future<int> isAuthenticated() async =>
-      await SharedPrefsRepository().getLoginPrivilege;
+      (await SharedPrefs().getCurrentUser)?.status ?? 0;
 
   @override
   Future<bool> logout() async =>
-      await SharedPrefsRepository().logout();
+      await SharedPrefs().logout();
+
+  @override
+  String get url => throw UnimplementedError();
 }

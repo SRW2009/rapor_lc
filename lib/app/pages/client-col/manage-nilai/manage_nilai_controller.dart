@@ -5,10 +5,11 @@ import 'package:rapor_lc/app/dialogs/client/nilai_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/client-col/manage-nilai/manage_nilai_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
+import 'package:rapor_lc/domain/entities/excel_obj.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
@@ -17,8 +18,8 @@ class ManageNilaiController extends DataTableController<Nilai> {
   final ChartRepository chartRepository;
 
   final ManageNilaiPresenter _presenter;
-  ManageNilaiController(nilaiRepo, this.santri, List<Nilai> initialList, this.chartRepository)
-      : _presenter = ManageNilaiPresenter(nilaiRepo),
+  ManageNilaiController(nilaiRepo, excelRepo, this.santri, List<Nilai> initialList, this.chartRepository)
+      : _presenter = ManageNilaiPresenter(nilaiRepo, excelRepo),
         super.initial(initialList);
 
   void _getNilaiList(List<Nilai> list) {
@@ -55,6 +56,7 @@ class ManageNilaiController extends DataTableController<Nilai> {
     _presenter.createNilaiStatus = (status) => _reqNilaiStatus(status, 'membuat');
     _presenter.updateNilaiStatus = (status) => _reqNilaiStatus(status, 'mengubah');
     _presenter.deleteNilaiStatus = (status) => _reqNilaiStatus(status, 'menghapus');
+    _presenter.exportNilaiStatus = (status) => _reqNilaiStatus(status, 'expor');
   }
 
   @override
@@ -64,7 +66,7 @@ class ManageNilaiController extends DataTableController<Nilai> {
   }
 
   Widget getNHBChart(Nilai item) {
-    return chartRepository.nhbChart(item.nhb ?? []);
+    return chartRepository.nhbChart(item.nhb);
   }
 
   void onTapNHB(Nilai item) async {
@@ -89,6 +91,7 @@ class ManageNilaiController extends DataTableController<Nilai> {
   void doCreateNilai(Nilai item) => _presenter.doCreateNilai(item);
   void doUpdateNilai(Nilai item) => _presenter.doUpdateNilai(item);
   void doDeleteNilai(List<String> nis) => _presenter.doDeleteNilai(nis);
+  void doExportNilai() => _presenter.doExportNilai(ExcelObject(santri, normalList));
 
   @override
   Widget? createDialog() => ClientNilaiCreateDialog(

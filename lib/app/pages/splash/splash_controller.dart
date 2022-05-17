@@ -1,9 +1,8 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_presenter.dart';
-import 'package:flutter/material.dart';
-import 'package:rapor_lc/app/pages/splash/splash_view.dart';
 
 class SplashController extends Controller {
   bool isLoading = false;

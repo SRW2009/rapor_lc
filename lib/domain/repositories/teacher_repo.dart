@@ -1,5 +1,5 @@
 
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/common/repository.dart';
 

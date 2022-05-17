@@ -1,5 +1,5 @@
 
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
+import 'package:rapor_lc/domain/entities/npb.dart';
 import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -18,20 +18,20 @@ class Nilai {
   final int id;
 
   @BaSConverter()
-  @JsonKey(name: 'bulan')
+  @JsonKey(name: 'semester')
   final BulanAndSemester BaS;
 
-  @JsonKey(name: 'tahun_ajaran')
+  @JsonKey(name: 'year')
   final String tahunAjaran;
 
   @JsonKey(name: 'student')
   final Santri santri;
 
-  List<NHB>? nhb;
-  List<NK>? nk;
-  List<NPB>? npb;
+  List<NHB> nhb;
+  List<NK> nk;
+  List<NPB> npb;
 
-  Nilai(this.id, this.BaS, this.tahunAjaran, this.santri, {this.nhb, this.nk, this.npb});
+  Nilai(this.id, this.BaS, this.tahunAjaran, this.santri, {this.nhb=const [], this.nk=const [], this.npb=const []});
 
   factory Nilai.fromJson(Map<String, dynamic> json) => _$NilaiFromJson(json);
   Map<String, dynamic> toJson() => _$NilaiToJson(this);

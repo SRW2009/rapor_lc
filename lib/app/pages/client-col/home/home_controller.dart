@@ -77,12 +77,12 @@ class HomeController extends Controller {
     }
   }
 
-  Widget getUiView(HomeController controller) {
+  Widget getUiView() {
     switch (navIndex) {
       case 0:
         return HomeRecordUI();
       case 1:
-        return HomeDashboardUI(homeController: controller);
+        return HomeDashboardUI(homeController: this);
       default:
         return Container();
     }

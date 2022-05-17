@@ -9,7 +9,7 @@ enum SemesterInRoman { I, II, III, IV, V, VI }
 enum SemesterAsText { Satu, Dua, Tiga, Empat, Lima, Enam }
 
 @JsonSerializable(createFactory: false, createToJson: false)
-class BulanAndSemester {
+class BulanAndSemester implements Comparable {
   int bulan;
   int semester;
 
@@ -31,11 +31,19 @@ class BulanAndSemester {
 
   String bulanToString() => Month.values[bulan-1].name;
 
+  String bulanFormatted() {
+    var length = '$bulan';
+    if (length == 1) return '0$bulan';
+    return '$bulan';
+  }
+
   String semesterToString() => '${SemesterAsText.values[semester-1].name} (${SemesterInRoman.values[semester-1].name})';
 
-  int compareTo(BulanAndSemester otherBaS) {
-    final thisVal = double.tryParse('$bulan.$semester') ?? 0;
-    final otherVal = double.tryParse('${otherBaS.bulan}.${otherBaS.semester}') ?? 0;
+  @override
+  int compareTo(other) {
+    if (other is! BulanAndSemester) throw TypeError();
+    final thisVal = double.tryParse('$semester.${bulanFormatted()}') ?? 0;
+    final otherVal = double.tryParse('${other.semester}.${other.bulanFormatted()}') ?? 0;
     return thisVal.compareTo(otherVal);
   }
 }

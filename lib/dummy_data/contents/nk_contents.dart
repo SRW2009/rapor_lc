@@ -1,7 +1,7 @@
 
 import 'package:rapor_lc/dummy_data/dummies.dart' as d;
 
-final nilai = [d.nilai_observation, d.nilai];
+final nilai = [d.nilai_s_odd, d.nilai_s_even];
 const adviceTitle = 'NASEHAT DEWAN GURU';
 const adviceContent = '''
 Inisiatif Ananda dinilai berkembang sangat baik, Ayah Bunda dapat membantu dengan memberikan banyak tugas dan tanggung jawab dengan bobot berat, serta sesekali mengkritisi pelaksanaan tugas itu sambil menunjukkan cara yang lebih baik dalam mengerjakan.\n

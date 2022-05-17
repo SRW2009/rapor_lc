@@ -1,11 +1,6 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
-import 'package:rapor_lc/dummy_data/datasets/npb_datasets.dart' as npb;
-import 'package:rapor_lc/dummy_data/contents/npb_contents.dart' as npb_;
-import '../pdf_chart.dart';
-import '../pdf_table.dart';
-
 final page_title = Page(
   margin: const EdgeInsets.all(100.0),
   pageFormat: PdfPageFormat.a4,

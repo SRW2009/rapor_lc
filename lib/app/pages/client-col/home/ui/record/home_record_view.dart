@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client-col/home/ui/record/home_record_controller.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/app/widgets/searchbar.dart';
-import 'package:rapor_lc/data/test-repositories/nilai_repo_impl.dart';
-import 'package:rapor_lc/data/test-repositories/santri_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
 
 class HomeRecordUI extends View {
   HomeRecordUI({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class HomeRecordUI extends View {
 
 class HomeSantriUIView extends ViewState<HomeRecordUI, HomeRecordController> {
   HomeSantriUIView()
-      : super(HomeRecordController(SantriRepositoryImplTest(), NilaiRepositoryImplTest()));
+      : super(HomeRecordController(SantriRepositoryImpl(), NilaiRepositoryImpl()));
 
   @override
   Widget get view => Container(
@@ -38,31 +38,25 @@ class HomeSantriUIView extends ViewState<HomeRecordUI, HomeRecordController> {
           );
         }
         if (controller.santriListState == RequestState.none) {
-          return const Card(
-            child: Center(
-              child: Text('Belum ada Santri. \nHubungi Admin untuk menginput Santri.'),
-            ),
+          return Center(
+            child: Text('Belum ada Santri. \nHubungi Admin untuk menginput Santri.'),
           );
         }
         if (controller.santriListState == RequestState.error) {
-          return Card(
-            child: Center(
-              child: Column(
-                children: [
-                  const Text('Terjadi Masalah.'),
-                  ElevatedButton(
-                    onPressed: controller.doGetSantriList,
-                    child: const Text('Reload'),
-                  ),
-                ],
-              ),
+          return Center(
+            child: Column(
+              children: [
+                const Text('Terjadi Masalah.'),
+                ElevatedButton(
+                  onPressed: controller.doGetSantriList,
+                  child: const Text('Reload'),
+                ),
+              ],
             ),
           );
         }
-        return const Card(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
+        return Center(
+          child: CircularProgressIndicator(),
         );
       },
     ),

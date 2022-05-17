@@ -1,5 +1,5 @@
 
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/repositories/mapel_repo.dart';
@@ -57,4 +57,7 @@ class MataPelajaranRepositoryImplTest extends MataPelajaranRepository {
   Future<List<MataPelajaran>> getNKVariables() async =>
       Future.delayed(DataConstant.test_duration, () async =>
           mapelList.where((element) => element.divisi?.id == 4).toList());
+
+  @override
+  String get url => throw UnimplementedError();
 }

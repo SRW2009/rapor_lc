@@ -1,8 +1,7 @@
 
-import 'package:rapor_lc/common/enum.dart';
-import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/teacher.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/common/repository.dart';
+import 'package:rapor_lc/domain/entities/santri.dart';
 
 abstract class SantriRepository extends Repository {
   Future<List<Santri>> getSantriList();

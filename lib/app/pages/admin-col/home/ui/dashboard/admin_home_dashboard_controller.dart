@@ -1,11 +1,9 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/dashboard/admin_home_dashboard_presenter.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
-import 'package:rapor_lc/domain/entities/nilai.dart';
-import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
 class AdminHomeDashboardController extends Controller {

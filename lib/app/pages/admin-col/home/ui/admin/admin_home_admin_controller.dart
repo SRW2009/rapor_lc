@@ -4,8 +4,8 @@ import 'package:rapor_lc/app/dialogs/admin/admin_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/admin_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/admin/admin_home_admin_presenter.dart';
 

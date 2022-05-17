@@ -1,7 +1,7 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';

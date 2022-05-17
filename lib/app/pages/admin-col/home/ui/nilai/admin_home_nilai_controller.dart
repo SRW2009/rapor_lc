@@ -5,10 +5,10 @@ import 'package:rapor_lc/app/dialogs/admin/nilai_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
-import 'package:rapor_lc/common/enum.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
+import 'package:rapor_lc/domain/entities/npb.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -110,15 +110,15 @@ class AdminHomeNilaiController extends DataTableController<Nilai> {
   tableOnMore(Nilai nilai, Type arg) {
     if (arg == NHB) {
       Navigator.of(getContext())
-          .pushNamed(Pages.admin_manage_nhb, arguments: nilai);
+          .pushNamed(Pages.manage_nhb, arguments: nilai);
     }
     if (arg == NK) {
       Navigator.of(getContext())
-          .pushNamed(Pages.admin_manage_nk, arguments: nilai);
+          .pushNamed(Pages.manage_nk, arguments: nilai);
     }
     if (arg == NPB) {
       Navigator.of(getContext())
-          .pushNamed(Pages.admin_manage_npb, arguments: nilai);
+          .pushNamed(Pages.manage_npb, arguments: nilai);
     }
   }
 

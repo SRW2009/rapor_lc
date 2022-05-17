@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/teacher/admin_home_teacher_controller.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable.dart';
-import 'package:rapor_lc/data/test-repositories/divisi_repo_impl.dart';
-import 'package:rapor_lc/data/test-repositories/teacher_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/divisi_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/teacher_repo_impl.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 
 class AdminHomeTeacherUI extends View {
@@ -16,7 +16,7 @@ class AdminHomeTeacherUI extends View {
 
 class AdminHomeTeacherUIView extends ViewState<AdminHomeTeacherUI, AdminHomeTeacherController> {
   AdminHomeTeacherUIView()
-      : super(AdminHomeTeacherController(TeacherRepositoryImplTest(), DivisiRepositoryImplTest()));
+      : super(AdminHomeTeacherController(TeacherRepositoryImpl(), DivisiRepositoryImpl()));
 
   @override
   Widget get view => Center(

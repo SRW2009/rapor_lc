@@ -1,5 +1,5 @@
 
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/repositories/divisi_repo.dart';
@@ -52,4 +52,7 @@ class DivisiRepositoryImplTest extends DivisiRepository {
         //failed
         return RequestStatus.failed;
       });
+
+  @override
+  String get url => throw UnimplementedError();
 }

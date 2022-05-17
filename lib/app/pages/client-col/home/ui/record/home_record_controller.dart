@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client-col/home/ui/record/home_record_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 

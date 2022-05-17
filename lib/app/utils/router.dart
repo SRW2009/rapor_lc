@@ -1,15 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/admin_home_view.dart';
-import 'package:rapor_lc/app/pages/admin-col/nhb/admin_nhb_view.dart';
-import 'package:rapor_lc/app/pages/admin-col/nk/admin_nk_view.dart';
-import 'package:rapor_lc/app/pages/admin-col/npb/admin_npb_view.dart';
 import 'package:rapor_lc/app/pages/client-col/home/home_view.dart';
-import 'package:rapor_lc/app/pages/client-col/manage-nhb/manage_nhb_view.dart';
 import 'package:rapor_lc/app/pages/client-col/manage-nilai/manage_nilai_view.dart';
-import 'package:rapor_lc/app/pages/client-col/manage-nk/manage_nk_view.dart';
-import 'package:rapor_lc/app/pages/client-col/manage-npb/manage_npb_view.dart';
 import 'package:rapor_lc/app/pages/login/login_view.dart';
+import 'package:rapor_lc/app/pages/manage-nhb/manage_nhb_view.dart';
+import 'package:rapor_lc/app/pages/manage-nk/manage_nk_view.dart';
+import 'package:rapor_lc/app/pages/manage-npb/manage_npb_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_view.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
@@ -32,24 +29,15 @@ class Router {
         return _buildRoute(settings, ManageNilaiPage(arg[0], arg[1]));
       case Pages.manage_nhb:
         final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, ManageNHBPage(arg));
+        return _buildRoute(settings, ManageNHBPage(nilai: arg));
       case Pages.manage_nk:
         final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, ManageNKPage(arg));
+        return _buildRoute(settings, ManageNKPage(nilai: arg));
       case Pages.manage_npb:
         final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, ManageNPBPage(arg));
+        return _buildRoute(settings, ManageNPBPage(nilai: arg));
       case Pages.admin_home:
         return _buildRoute(settings, AdminHomePage());
-      case Pages.admin_manage_nhb:
-        final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, AdminNHBPage(nilai: arg));
-      case Pages.admin_manage_nk:
-        final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, AdminNKPage(nilai: arg));
-      case Pages.admin_manage_npb:
-        final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, AdminNPBPage(nilai: arg));
       default:
         return null;
     }

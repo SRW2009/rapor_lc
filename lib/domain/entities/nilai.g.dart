@@ -8,26 +8,32 @@ part of 'nilai.dart';
 
 Nilai _$NilaiFromJson(Map<String, dynamic> json) => Nilai(
       json['id'] as int,
-      const BaSConverter().fromJson(json['bulan'] as String),
-      json['tahun_ajaran'] as String,
+      const BaSConverter().fromJson(json['semester'] as String),
+      json['year'] as String,
       const SantriConverter().fromJson(json['student'] as Map<String, dynamic>),
       nhb: (json['nhb'] as List<dynamic>?)
-          ?.map((e) => const NHBConverter().fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) =>
+                  const NHBConverter().fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       nk: (json['nk'] as List<dynamic>?)
-          ?.map((e) => const NKConverter().fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) =>
+                  const NKConverter().fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       npb: (json['npb'] as List<dynamic>?)
-          ?.map((e) => const NPBConverter().fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map((e) =>
+                  const NPBConverter().fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$NilaiToJson(Nilai instance) => <String, dynamic>{
       'id': instance.id,
-      'bulan': const BaSConverter().toJson(instance.BaS),
-      'tahun_ajaran': instance.tahunAjaran,
+      'semester': const BaSConverter().toJson(instance.BaS),
+      'year': instance.tahunAjaran,
       'student': const SantriConverter().toJson(instance.santri),
-      'nhb': instance.nhb?.map(const NHBConverter().toJson).toList(),
-      'nk': instance.nk?.map(const NKConverter().toJson).toList(),
-      'npb': instance.npb?.map(const NPBConverter().toJson).toList(),
+      'nhb': instance.nhb.map(const NHBConverter().toJson).toList(),
+      'nk': instance.nk.map(const NKConverter().toJson).toList(),
+      'npb': instance.npb.map(const NPBConverter().toJson).toList(),
     };

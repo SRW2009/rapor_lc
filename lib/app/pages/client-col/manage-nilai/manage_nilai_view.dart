@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client-col/manage-nilai/manage_nilai_controller.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/app/widgets/searchbar.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
-import 'package:rapor_lc/data/test-repositories/nilai_repo_impl.dart';
+import 'package:rapor_lc/device/repository/excel_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
@@ -21,10 +22,12 @@ class ManageNilaiPage extends View {
 
 class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiController> {
   ManageNilaiPageView(santri, nilaiList)
-      : super(ManageNilaiController(NilaiRepositoryImplTest(), santri, nilaiList, ChartRepository()));
+      : super(ManageNilaiController(
+      NilaiRepositoryImpl(), ExcelRepositoryImpl(), santri, nilaiList, ChartRepository(),
+  ));
 
   @override
-  Widget get view => SizedBox(
+  Widget get view => Container(
     key: globalKey,
     child: ControlledWidgetBuilder<ManageNilaiController>(
       builder: (context, controller) {
@@ -63,7 +66,7 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
               ),
               TextButton(
                 child: const Text('EXPORT'),
-                onPressed: () {},
+                onPressed: controller.doExportNilai,
               ),
               TextButton(
                 child: const Text('NEW'),
@@ -137,7 +140,7 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
               childrenPadding: const EdgeInsets.all(16.0),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (item.nhb?.isNotEmpty ?? false) Padding(
+                if (item.nhb.isNotEmpty) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
@@ -149,24 +152,24 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Pelajaran: '),
                         TextSpan(
-                          text: item.nhb!.first.pelajaran.name,
+                          text: item.nhb.first.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nAkumulasi: '),
                         TextSpan(
-                          text: item.nhb!.first.akumulasi.toString(),
+                          text: item.nhb.first.akumulasi.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPredikat: '),
                         TextSpan(
-                          text: item.nhb!.first.predikat,
+                          text: item.nhb.first.predikat,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
                   ),
                 ),
-                if ((item.nhb?.length ?? 0) > 1) Padding(
+                if (item.nhb.length > 1) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
@@ -178,17 +181,17 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Pelajaran: '),
                         TextSpan(
-                          text: item.nhb!.last.pelajaran.name,
+                          text: item.nhb.last.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nAkumulasi: '),
                         TextSpan(
-                          text: item.nhb!.last.akumulasi.toString(),
+                          text: item.nhb.last.akumulasi.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPredikat: '),
                         TextSpan(
-                          text: item.nhb!.last.predikat,
+                          text: item.nhb.last.predikat,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
@@ -209,7 +212,7 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
               childrenPadding: const EdgeInsets.all(16.0),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (item.nk?.isNotEmpty ?? false) Padding(
+                if (item.nk.isNotEmpty) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
@@ -221,24 +224,24 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Variabel: '),
                         TextSpan(
-                          text: item.nk!.first.nama_variabel,
+                          text: item.nk.first.nama_variabel,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nAkumulatif: '),
                         TextSpan(
-                          text: item.nk!.first.akumulatif.toString(),
+                          text: item.nk.first.akumulatif.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPredikat: '),
                         TextSpan(
-                          text: item.nk!.first.predikat,
+                          text: item.nk.first.predikat,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
                   ),
                 ),
-                if ((item.nk?.length ?? 0) > 1) Padding(
+                if (item.nk.length > 1) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
@@ -250,17 +253,17 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Variabel: '),
                         TextSpan(
-                          text: item.nk!.last.nama_variabel,
+                          text: item.nk.last.nama_variabel,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nAkumulatif: '),
                         TextSpan(
-                          text: item.nk!.last.akumulatif.toString(),
+                          text: item.nk.last.akumulatif.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPredikat: '),
                         TextSpan(
-                          text: item.nk!.last.predikat,
+                          text: item.nk.last.predikat,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
@@ -281,7 +284,7 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
               childrenPadding: const EdgeInsets.all(16.0),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (item.npb?.isNotEmpty ?? false) Padding(
+                if (item.npb.isNotEmpty) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
@@ -293,24 +296,19 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Pelajaran: '),
                         TextSpan(
-                          text: item.npb!.first.pelajaran.name,
+                          text: item.npb.first.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPresensi: '),
                         TextSpan(
-                          text: item.npb!.first.presensi.toString(),
-                          style: TextStyle(fontWeight: FontWeight.w400),
-                        ),
-                        TextSpan(text: '\n/n: '),
-                        TextSpan(
-                          text: item.npb!.first.n.toString(),
+                          text: item.npb.first.presensi.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
                   ),
                 ),
-                if ((item.npb?.length ?? 0) > 1) Padding(
+                if (item.npb.length > 1) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
@@ -322,17 +320,12 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Pelajaran: '),
                         TextSpan(
-                          text: item.npb!.last.pelajaran.name,
+                          text: item.npb.last.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPresensi: '),
                         TextSpan(
-                          text: item.npb!.last.presensi,
-                          style: TextStyle(fontWeight: FontWeight.w400),
-                        ),
-                        TextSpan(text: '\n/n: '),
-                        TextSpan(
-                          text: item.npb!.first.n.toString(),
+                          text: item.npb.last.presensi,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],

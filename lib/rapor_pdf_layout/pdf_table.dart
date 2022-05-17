@@ -1,14 +1,12 @@
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rapor_lc/domain/entities/abstract/npb.dart';
-import 'package:rapor_lc/domain/entities/nilai.dart';
+import 'package:rapor_lc/common/nilai_calc.dart';
 import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
-import 'package:rapor_lc/domain/entities/npbmo.dart';
-import 'package:rapor_lc/domain/entities/npbpo.dart';
-import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
+import 'package:rapor_lc/domain/entities/npb.dart';
+import 'package:rapor_lc/common/item_frequency.dart';
 import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
 
 class MyPDFTable {
@@ -109,7 +107,47 @@ class MyPDFTable {
     );
   }
   
-  static Table buildNHBTable(List<NHB> nhbs, {int startFrom=0}) {
+  static Table buildNHBTable(List<Nilai> nilaiList, int semester, {int startFrom=0}) {
+    // key of this map is mapel id
+    Map<int, NHB> nhbValueMap = {};
+
+    // process nhb to match parameters
+    for (var nilai in nilaiList) {
+      // only take nilai that match requested semester
+      if (nilai.BaS.semester != semester) continue;
+
+      for (var o in nilai.nhb) {
+        // update value
+        nhbValueMap.update(
+          o.pelajaran.id,
+          (v) {
+            // calculate mean of both value
+            num harian = (v.nilai_harian+o.nilai_harian)/2;
+            num bulanan = (v.nilai_bulanan+o.nilai_bulanan)/2;
+            num projek = (v.nilai_projek+o.nilai_projek)/2;
+            num akhir = (v.nilai_akhir+o.nilai_akhir)/2;
+
+            // NaN checker
+            harian = harian.isNaN ? 0 : harian;
+            bulanan = bulanan.isNaN ? 0 : bulanan;
+            projek = projek.isNaN ? 0 : projek;
+            akhir = akhir.isNaN ? 0 : akhir;
+
+            var acc = NilaiCalculation.accumulate([harian.round(), bulanan.round(), projek.round(), akhir.round()]);
+            var pred = NilaiCalculation.toPredicate(acc);
+            return NHB(v.no, v.pelajaran, harian.round(), bulanan.round(), projek.round(), akhir.round(), acc, pred);
+          },
+          ifAbsent: () {
+            var acc = NilaiCalculation.accumulate([o.nilai_harian, o.nilai_bulanan, o.nilai_projek, o.nilai_akhir]);
+            var pred = NilaiCalculation.toPredicate(acc);
+            return NHB(o.no, o.pelajaran, o.nilai_harian, o.nilai_bulanan, o.nilai_projek, o.nilai_akhir, acc, pred);
+          },
+        );
+      }
+    }
+
+    // build table
+    var i = 0;
     List<TableRow> children = [
       _buildHeaderRow([
         'No', 'Mata Pelajaran' ,
@@ -117,17 +155,13 @@ class MyPDFTable {
         'Nilai \nProject', 'Nilai \nAkhir',
         'Akumulasi', 'Predikat',
       ]),
+      ...nhbValueMap.entries.map<TableRow>((o) => _buildContentRow([
+        '${(++i) + startFrom}', o.value.pelajaran.name,
+        '${o.value.nilai_harian}', '${o.value.nilai_bulanan}',
+        '${o.value.nilai_projek}', '${o.value.nilai_akhir}',
+        '${o.value.akumulasi}', o.value.predikat
+      ]))
     ];
-    for (var i = 0; i < nhbs.length; ++i) {
-      var o = nhbs[i];
-      children.add(_buildContentRow([
-        '${i + 1 + startFrom}', o.pelajaran.name,
-        '${o.nilai_harian}', '${o.nilai_bulanan}',
-        '${o.nilai_projek}', '${o.nilai_akhir}',
-        '${o.akumulasi}', o.predikat
-      ]));
-    }
-
     return Table(
       tableWidth: TableWidth.max,
       columnWidths: const {
@@ -176,167 +210,49 @@ class MyPDFTable {
     );
   }
 
-  static Table buildNPBTable(Nilai nilai, {int startFrom=0}) {
-    final npbs = nilai.npb ?? [];
+  static Table buildNPBTable(List<Nilai> nilaiList, int semester, bool isIT, {int startFrom=0}) {
+    List<int> ids = [];
+    List<ItemFrequency<NPB>> processedNPB = [];
+
+    // process npb to match parameters
+    for (var nilai in nilaiList) {
+      // only take nilai that match requested semester
+      if (nilai.BaS.semester != semester) continue;
+
+      for (var o in nilai.npb) {
+        // separate npb by IT division or not
+        if (isIT && o.pelajaran.divisi!.name != 'IT') continue;
+        if (!isIT && o.pelajaran.divisi!.name == 'IT') continue;
+
+        // if item exist, update item frequency
+        if (ids.contains(o.no)) {
+          processedNPB.firstWhere((element) => element.item.no==o.no).n++;
+          continue;
+        }
+        // otherwise add item to data
+        ids.add(o.no);
+        processedNPB.add(ItemFrequency(o, n: 1));
+      }
+    }
+
+    // build table
+    var i = 0;
     List<TableRow> children = [
+      // header
       _buildHeaderRow([
         'No', 'Nama Mapel', '/N', 'Presensi'
       ]),
+      //contents
+      ...processedNPB.map((o) => _buildContentRow([
+        '${(++i) + startFrom}', o.item.pelajaran.name,
+        '${o.n}', o.item.presensi,
+      ]))
     ];
-    for (var i = 0; i < npbs.length; ++i) {
-      var o = npbs[i];
-      children.add(_buildContentRow([
-        '${i + 1 + startFrom}', o.pelajaran.name,
-        '${(o is NPBMO) ? o.n : nilai.BaS.semester}', (o.presensi),
-      ]));
-    }
-
     return Table(
       tableWidth: TableWidth.max,
       columnWidths: const {
         0: IntrinsicColumnWidth(),
         1: IntrinsicColumnWidth(flex: 2),
-        2: IntrinsicColumnWidth(flex: 1),
-        3: IntrinsicColumnWidth(flex: 1),
-        4: IntrinsicColumnWidth(flex: 1),
-        5: IntrinsicColumnWidth(flex: 1),
-        6: IntrinsicColumnWidth(flex: 1),
-      },
-      children: children,
-    );
-  }
-
-  static Table buildNPBPOTable(Nilai nilai) {
-    final npbpos = nilai.npb?.whereType<NPBPO>().toList() ?? [];
-    List<TableRow> children = [
-      TableRow(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(color: PdfColors.black, width: 1.0),
-          ),
-        ),
-        children: [
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-            ),
-            height: 25.0,
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(color: PdfColors.black, width: 1.0),
-                right: BorderSide(color: PdfColors.black, width: 1.0),
-              ),
-            ),
-            padding: const EdgeInsets.all(6.0),
-            child: FittedBox(fit: BoxFit.scaleDown, child: Text('No', textAlign: TextAlign.center, style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold))),
-          ),
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-              minHeight: 1.0,
-            ),
-            height: 25.0,
-          ),
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-              minHeight: 1.0,
-            ),
-            height: 25.0,
-            padding: const EdgeInsets.all(6.0),
-            child: FittedBox(fit: BoxFit.scaleDown, child: Text('IT', textAlign: TextAlign.center, style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold))),
-          ),
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-              minHeight: 1.0,
-            ),
-            height: 25.0,
-            decoration: const BoxDecoration(
-              border: Border(
-                right: BorderSide(color: PdfColors.black, width: 1.0),
-              ),
-            ),
-          ),
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-              minHeight: 1.0,
-            ),
-            height: 25.0,
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(color: PdfColors.black, width: 1.0),
-              ),
-            ),
-          ),
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-              minHeight: 1.0,
-            ),
-            height: 25.0,
-            padding: const EdgeInsets.all(6.0),
-            child: FittedBox(fit: BoxFit.scaleDown, child: Text('Tahfiz', textAlign: TextAlign.center, style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold))),
-          ),
-          Container(
-            constraints: const BoxConstraints(
-              minWidth: 1.0,
-              minHeight: 1.0,
-            ),
-            height: 25.0,
-            decoration: const BoxDecoration(
-              border: Border(
-                right: BorderSide(color: PdfColors.black, width: 1.0),
-              ),
-            ),
-          ),
-        ],
-      ),
-      TableRow(
-        children: [
-          '', 'Nama PLP', '/N', 'Presensi', 'Nama PLP', '/N', 'Presensi',
-        ].map<Widget>((e) {
-          if (e.isEmpty || e == '') {
-            return Container(
-              width: 1.0,
-              height: 25.0,
-              padding: const EdgeInsets.all(6.0),
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: PdfColors.black, width: 1.0),
-                ),
-              ),
-            );
-          }
-          return Container(
-            height: 25.0,
-            padding: const EdgeInsets.all(6.0),
-            decoration: BoxDecoration(
-              border: Border.all(color: PdfColors.black, width: 1.0),
-            ),
-            child: FittedBox(fit: BoxFit.scaleDown, child: Text(e, textAlign: TextAlign.center, style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold))),
-          );
-        }).toList(),
-      ),
-    ];
-    var no = 1;
-    for (var i = 0; i < npbpos.length; i+=2) {
-      var o = npbpos[i];
-      var o2 = npbpos[i+1];
-      children.add(_buildContentRow([
-        '${no++}',
-        o.pelajaran.name, '${nilai.BaS.semester}', (o.presensi),
-        o2.pelajaran.name, '${nilai.BaS.semester}', (o2.presensi),
-      ]));
-
-    }
-
-    return Table(
-      tableWidth: TableWidth.max,
-      columnWidths: const {
-        0: IntrinsicColumnWidth(),
-        1: IntrinsicColumnWidth(flex: 1),
         2: IntrinsicColumnWidth(flex: 1),
         3: IntrinsicColumnWidth(flex: 1),
         4: IntrinsicColumnWidth(flex: 1),

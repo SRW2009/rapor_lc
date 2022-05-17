@@ -1,17 +1,15 @@
 
-import 'dart:convert';
-
-import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rapor_lc/domain/entities/divisi.dart';
 
 part 'mata_pelajaran.g.dart';
 
 @JsonSerializable()
-@DivisiConverter()
+@NullableDivisiConverter()
 class MataPelajaran {
   final int id;
   final String name;
-  final Divisi? divisi;
+  Divisi? divisi;
 
   MataPelajaran(this.id, this.name, {this.divisi});
 

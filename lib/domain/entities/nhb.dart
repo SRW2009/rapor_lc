@@ -1,8 +1,6 @@
 
-import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
-import 'package:rapor_lc/domain/entities/santri.dart';
-
 import 'package:json_annotation/json_annotation.dart';
+import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 
 part 'nhb.g.dart';
 

@@ -13,8 +13,11 @@ class Relation {
   final Teacher teacher;
   @JsonKey(name: 'student')
   final Santri santri;
+  final String? name;
+  @JsonKey(name: 'is_active')
+  final bool isActive;
 
-  Relation(this.id, this.teacher, this.santri);
+  Relation(this.id, this.teacher, this.santri, {this.name, this.isActive=false});
 
   factory Relation.fromJson(json) => _$RelationFromJson(json);
   Map<String, dynamic> toJson() => _$RelationToJson(this);

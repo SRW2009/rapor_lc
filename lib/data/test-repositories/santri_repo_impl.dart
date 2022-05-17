@@ -1,6 +1,5 @@
 
-import 'package:rapor_lc/app/utils/temp_data.dart';
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/repositories/santri_repo.dart';
@@ -53,4 +52,7 @@ class SantriRepositoryImplTest extends SantriRepository {
         //failed
         return RequestStatus.failed;
       });
+
+  @override
+  String get url => throw UnimplementedError();
 }

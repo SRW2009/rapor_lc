@@ -1,7 +1,6 @@
 
-import 'package:rapor_lc/common/enum.dart';
-import 'package:rapor_lc/domain/entities/abstract/user.dart';
 import 'package:rapor_lc/common/repository.dart';
+import 'package:rapor_lc/domain/entities/abstract/user.dart';
 
 abstract class AuthenticationRepository extends Repository {
   /// Authenticates teacher as teacher using his [email] and [password]

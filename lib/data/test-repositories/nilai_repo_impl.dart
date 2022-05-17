@@ -1,5 +1,5 @@
 
-import 'package:rapor_lc/common/enum.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/repositories/nilai_repo.dart';
@@ -10,7 +10,7 @@ class NilaiRepositoryImplTest extends NilaiRepository {
 
   // singleton
   NilaiRepositoryImplTest._internal()
-      : nilaiList = [d.nilai, d.nilai_observation];
+      : nilaiList = [d.nilai_s_even, d.nilai_s_odd];
   static final NilaiRepositoryImplTest _instance = NilaiRepositoryImplTest._internal();
   factory NilaiRepositoryImplTest() => _instance;
 
@@ -52,4 +52,7 @@ class NilaiRepositoryImplTest extends NilaiRepository {
         //failed
         return RequestStatus.failed;
       });
+
+  @override
+  String get url => throw UnimplementedError();
 }

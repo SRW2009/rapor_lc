@@ -1,7 +1,5 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/common/enum.dart';
-import 'package:rapor_lc/domain/entities/abstract/user.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/usecases/auth/forgot_password.dart';

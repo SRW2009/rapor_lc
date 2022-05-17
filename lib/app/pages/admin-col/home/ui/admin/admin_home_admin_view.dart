@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/admin/admin_home_admin_controller.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable.dart';
-import 'package:rapor_lc/data/test-repositories/admin_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/admin_repo_impl.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
 
 class AdminHomeAdminUI extends View {
@@ -15,7 +15,7 @@ class AdminHomeAdminUI extends View {
 
 class AdminHomeAdminUIView extends ViewState<AdminHomeAdminUI, AdminHomeAdminController> {
   AdminHomeAdminUIView()
-      : super(AdminHomeAdminController(AdminRepositoryImplTest()));
+      : super(AdminHomeAdminController(AdminRepositoryImpl()));
 
   @override
   Widget get view => Center(

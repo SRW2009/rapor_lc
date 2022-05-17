@@ -1,14 +1,11 @@
 
-import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/login/login_controller.dart';
 import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_radios.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
-import 'package:rapor_lc/data/test-repositories/auth_repo_impl.dart';
-import 'package:rapor_lc/domain/entities/abstract/user.dart';
-import 'package:rapor_lc/domain/entities/teacher.dart';
 
 class LoginPage extends View {
   LoginPage({Key? key}) : super(key: key);
@@ -19,7 +16,7 @@ class LoginPage extends View {
 
 class LoginPageView extends ViewState<LoginPage, LoginController> {
   LoginPageView()
-      : super(LoginController(AuthenticationRepositoryImplTest()));
+      : super(LoginController(AuthenticationRepositoryImpl()));
 
   final _duration = const Duration(milliseconds: 400);
   final _loginFormKey = GlobalKey<FormState>();

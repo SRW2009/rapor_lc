@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/santri/admin_home_santri_controller.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable.dart';
-import 'package:rapor_lc/data/test-repositories/santri_repo_impl.dart';
-import 'package:rapor_lc/data/test-repositories/teacher_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/teacher_repo_impl.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
 class AdminHomeSantriUI extends View {
@@ -16,7 +16,7 @@ class AdminHomeSantriUI extends View {
 
 class AdminHomeSantriUIView extends ViewState<AdminHomeSantriUI, AdminHomeSantriController> {
   AdminHomeSantriUIView()
-      : super(AdminHomeSantriController(SantriRepositoryImplTest(), TeacherRepositoryImplTest()));
+      : super(AdminHomeSantriController(SantriRepositoryImpl(), TeacherRepositoryImpl()));
 
   @override
   Widget get view => Center(

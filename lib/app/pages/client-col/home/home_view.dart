@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client-col/home/home_controller.dart';
-import 'package:rapor_lc/data/test-repositories/auth_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
 
 class HomePage extends View {
   HomePage({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class HomePage extends View {
 
 class HomePageView extends ViewState<HomePage, HomeController> {
   HomePageView()
-      : super(HomeController(AuthenticationRepositoryImplTest()));
+      : super(HomeController(AuthenticationRepositoryImpl()));
 
   @override
   Widget get view => Container(
@@ -40,7 +40,7 @@ class HomePageView extends ViewState<HomePage, HomeController> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: controller.getUiView(controller),
+            child: controller.getUiView(),
           ),
         );
       }

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
-import 'package:rapor_lc/app/utils/request_state.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'form_field/form_decoration.dart';
 
 class CustomDataTable<Entity> extends StatefulWidget {
@@ -44,13 +44,20 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
             padding: const EdgeInsets.all(20.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    fontSize: 22.0,
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 22.0,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 Row(
@@ -58,7 +65,7 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                      padding: const EdgeInsets.only(left: 10.0, right: 4.0),
                       width: 200.0,
                       child: TextField(
                         decoration: inputDecoration

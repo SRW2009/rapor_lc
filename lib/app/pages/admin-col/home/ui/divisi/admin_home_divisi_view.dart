@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/divisi/admin_home_divisi_controller.dart';
 import 'package:rapor_lc/app/widgets/custom_datatable.dart';
-import 'package:rapor_lc/data/test-repositories/divisi_repo_impl.dart';
+import 'package:rapor_lc/data/repositories/divisi_repo_impl.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 
 class AdminHomeDivisiUI extends View {
@@ -15,7 +15,7 @@ class AdminHomeDivisiUI extends View {
 
 class AdminHomeDivisiUIView extends ViewState<AdminHomeDivisiUI, AdminHomeDivisiController> {
   AdminHomeDivisiUIView()
-      : super(AdminHomeDivisiController(DivisiRepositoryImplTest()));
+      : super(AdminHomeDivisiController(DivisiRepositoryImpl()));
 
   @override
   Widget get view => Center(

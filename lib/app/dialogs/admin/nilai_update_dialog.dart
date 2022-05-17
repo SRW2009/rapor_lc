@@ -82,6 +82,7 @@ class _NilaiUpdateDialogState extends State<NilaiUpdateDialog> {
                   onFind: widget.controller.dialogOnFindSantri,
                   showItem: (e) => '${e.nis} - ${e.name}',
                   onPick: (val) => _santriCon = val,
+                  selectedItem: () => _santriCon,
                 ),
               ],
             ),
