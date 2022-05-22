@@ -3,7 +3,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 
 import 'package:rapor_lc/dummy_data/contents/nk_contents.dart' as nk_;
-import '../pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_common.dart';
 
 Widget _signatureContainer(String date, String signerRank, String signerName) {
   return Container(

@@ -3,11 +3,11 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 
-import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_chart.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_table.dart';
+import 'package:rapor_lc/device/pdf/pdf_chart.dart';
+import 'package:rapor_lc/device/pdf/pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_table.dart';
 
-Page page_nhb(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1}) {
+Page page_nk(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1}) {
   return Page(
     margin: const EdgeInsets.all(0),
     pageFormat: PdfPageFormat.a4,
@@ -23,20 +23,22 @@ Page page_nhb(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1}) 
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildPageTitle('NILAI HASIL BELAJAR (NHB)'),
+              buildPageTitle('NILAI KEMANDIRIAN'),
               SizedBox(height: 12.0),
               MyPDFTable.buildIdentityTable(nilaiList.firstWhere((e) => e.BaS.semester==semester)),
               SizedBox(height: 12.0),
               Expanded(
                 child: Center(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: MyPDFChart.buildNHBPieChart(nilaiList, semester),
+                  child:
+                  SizedBox(
+                    width: 500.0,
+                    height: 400.0,
+                    child: MyPDFChart.buildNKLineChart(nilaiList, semester),
                   ),
                 ),
               ),
               SizedBox(height: 12.0),
-              MyPDFTable.buildNHBTable(nilaiList, semester),
+              MyPDFTable.buildNKTable(nilaiList, semester),
             ],
           ),
         ),

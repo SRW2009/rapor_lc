@@ -5,10 +5,10 @@ import 'package:rapor_lc/app/pages/client-col/manage-nilai/manage_nilai_controll
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/app/widgets/searchbar.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
-import 'package:rapor_lc/device/repository/excel_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
+import 'package:rapor_lc/device/excel/repository/excel_repo_impl.dart';
 
 class ManageNilaiPage extends View {
   ManageNilaiPage(this.santri, this.nilaiList, {Key? key}) : super(key: key);

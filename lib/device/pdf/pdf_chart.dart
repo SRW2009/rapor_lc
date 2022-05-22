@@ -2,7 +2,7 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_chart_datasets_factory.dart';
+import 'package:rapor_lc/device/pdf/pdf_data_factory.dart';
 
 class MyPDFChart {
   static Widget _buildTitle(String title) {
@@ -23,7 +23,7 @@ class MyPDFChart {
     final _months = ['Januari', 'Februari', 'Maret', 'April', 'Mei',
       'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-    var datasets = DatasetsFactory.buildNKDatasets(nilaiList, semester);
+    var datasets = ChartDatasetsFactory.buildNKDatasets(nilaiList, semester);
     return Chart(
       title: _buildTitle('Analisa Aspek Kemadirian Santri'),
       bottom: ChartLegend(
@@ -51,7 +51,7 @@ class MyPDFChart {
   }
 
   static Chart buildNHBPieChart(List<Nilai> nilaiList, int semester) {
-    var datasets = DatasetsFactory.buildNHBDatasets(nilaiList, semester);
+    var datasets = ChartDatasetsFactory.buildNHBDatasets(nilaiList, semester);
     return Chart(
       title: _buildTitle('Analisa Dominasi Santri'),
       grid: PieGrid(),
@@ -69,7 +69,7 @@ class MyPDFChart {
   }
 
   static Chart buildNPBBarChart(List<Nilai> nilaiList, int semester, bool isIT) {
-    var data = DatasetsFactory.buildNPBDatasets(nilaiList, semester, isIT);
+    var data = ChartDatasetsFactory.buildNPBDatasets(nilaiList, semester, isIT);
     return Chart(
       title: _buildTitle('Analisa Proses Belajar Santri'),
       bottom: ChartLegend(

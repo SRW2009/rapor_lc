@@ -1,13 +1,9 @@
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rapor_lc/common/nilai_calc.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/device/pdf/pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_data_factory.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
-import 'package:rapor_lc/domain/entities/nk.dart';
-import 'package:rapor_lc/domain/entities/npb.dart';
-import 'package:rapor_lc/common/item_frequency.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
 
 class MyPDFTable {
   static TableRow _buildHeaderRow(List<String> titles) {
@@ -108,43 +104,7 @@ class MyPDFTable {
   }
   
   static Table buildNHBTable(List<Nilai> nilaiList, int semester, {int startFrom=0}) {
-    // key of this map is mapel id
-    Map<int, NHB> nhbValueMap = {};
-
-    // process nhb to match parameters
-    for (var nilai in nilaiList) {
-      // only take nilai that match requested semester
-      if (nilai.BaS.semester != semester) continue;
-
-      for (var o in nilai.nhb) {
-        // update value
-        nhbValueMap.update(
-          o.pelajaran.id,
-          (v) {
-            // calculate mean of both value
-            num harian = (v.nilai_harian+o.nilai_harian)/2;
-            num bulanan = (v.nilai_bulanan+o.nilai_bulanan)/2;
-            num projek = (v.nilai_projek+o.nilai_projek)/2;
-            num akhir = (v.nilai_akhir+o.nilai_akhir)/2;
-
-            // NaN checker
-            harian = harian.isNaN ? 0 : harian;
-            bulanan = bulanan.isNaN ? 0 : bulanan;
-            projek = projek.isNaN ? 0 : projek;
-            akhir = akhir.isNaN ? 0 : akhir;
-
-            var acc = NilaiCalculation.accumulate([harian.round(), bulanan.round(), projek.round(), akhir.round()]);
-            var pred = NilaiCalculation.toPredicate(acc);
-            return NHB(v.no, v.pelajaran, harian.round(), bulanan.round(), projek.round(), akhir.round(), acc, pred);
-          },
-          ifAbsent: () {
-            var acc = NilaiCalculation.accumulate([o.nilai_harian, o.nilai_bulanan, o.nilai_projek, o.nilai_akhir]);
-            var pred = NilaiCalculation.toPredicate(acc);
-            return NHB(o.no, o.pelajaran, o.nilai_harian, o.nilai_bulanan, o.nilai_projek, o.nilai_akhir, acc, pred);
-          },
-        );
-      }
-    }
+    final contents = TableContentsFactory.buildNHBContents(nilaiList, semester);
 
     // build table
     var i = 0;
@@ -155,12 +115,12 @@ class MyPDFTable {
         'Nilai \nProject', 'Nilai \nAkhir',
         'Akumulasi', 'Predikat',
       ]),
-      ...nhbValueMap.entries.map<TableRow>((o) => _buildContentRow([
-        '${(++i) + startFrom}', o.value.pelajaran.name,
-        '${o.value.nilai_harian}', '${o.value.nilai_bulanan}',
-        '${o.value.nilai_projek}', '${o.value.nilai_akhir}',
-        '${o.value.akumulasi}', o.value.predikat
-      ]))
+      ...contents.values.map<TableRow>((o) => _buildContentRow([
+        '${(++i) + startFrom}', o.pelajaran.name,
+        '${o.nilai_harian}', '${o.nilai_bulanan}',
+        '${o.nilai_projek}', '${o.nilai_akhir}',
+        '${o.akumulasi}', o.predikat
+      ])),
     ];
     return Table(
       tableWidth: TableWidth.max,
@@ -179,22 +139,21 @@ class MyPDFTable {
     );
   }
 
-  static Table buildNKTable(List<NK> nks) {
+  static Table buildNKTable(List<Nilai> nilaiList, int semester, {int startFrom=0}) {
+    final contents = TableContentsFactory.buildNKContents(nilaiList, semester);
+
+    var i = 0;
     List<TableRow> children = [
       _buildHeaderRow([
         'No', 'Variable', 'Nilai Mesjid', 'Nilai Kelas', 'Nilai Asrama', 'Akumulatif', 'Predikat',
       ]),
-    ];
-    for (var i = 0; i < nks.length; ++i) {
-      var o = nks[i];
-      children.add(_buildContentRow([
-        '${i + 1}', o.nama_variabel,
+      ...contents.values.map<TableRow>((o) => _buildContentRow([
+        '${(++i) + startFrom}', o.nama_variabel,
         '${o.nilai_mesjid}', '${o.nilai_kelas}',
         '${o.nilai_asrama}', '${o.akumulatif}',
-        o.predikat
-      ]));
-    }
-
+        o.predikat,
+      ])),
+    ];
     return Table(
       tableWidth: TableWidth.max,
       columnWidths: const {
@@ -211,29 +170,7 @@ class MyPDFTable {
   }
 
   static Table buildNPBTable(List<Nilai> nilaiList, int semester, bool isIT, {int startFrom=0}) {
-    List<int> ids = [];
-    List<ItemFrequency<NPB>> processedNPB = [];
-
-    // process npb to match parameters
-    for (var nilai in nilaiList) {
-      // only take nilai that match requested semester
-      if (nilai.BaS.semester != semester) continue;
-
-      for (var o in nilai.npb) {
-        // separate npb by IT division or not
-        if (isIT && o.pelajaran.divisi!.name != 'IT') continue;
-        if (!isIT && o.pelajaran.divisi!.name == 'IT') continue;
-
-        // if item exist, update item frequency
-        if (ids.contains(o.no)) {
-          processedNPB.firstWhere((element) => element.item.no==o.no).n++;
-          continue;
-        }
-        // otherwise add item to data
-        ids.add(o.no);
-        processedNPB.add(ItemFrequency(o, n: 1));
-      }
-    }
+    final contents = TableContentsFactory.buildNPBContents(nilaiList, semester, isIT);
 
     // build table
     var i = 0;
@@ -243,7 +180,7 @@ class MyPDFTable {
         'No', 'Nama Mapel', '/N', 'Presensi'
       ]),
       //contents
-      ...processedNPB.map((o) => _buildContentRow([
+      ...contents.map((o) => _buildContentRow([
         '${(++i) + startFrom}', o.item.pelajaran.name,
         '${o.n}', o.item.presensi,
       ]))

@@ -7,7 +7,7 @@ import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
 import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
 
-import 'package:rapor_lc/rapor_pdf_layout/pages/root.dart';
+import 'package:rapor_lc/device/pdf/pages/root.dart';
 import 'package:rapor_lc/dummy_data/dummies.dart' as d;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;

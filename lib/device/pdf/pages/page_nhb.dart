@@ -1,12 +1,13 @@
+
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 
-import 'package:rapor_lc/rapor_pdf_layout/pdf_chart.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_table.dart';
+import 'package:rapor_lc/device/pdf/pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_chart.dart';
+import 'package:rapor_lc/device/pdf/pdf_table.dart';
 
-Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1, bool isIT=false}) {
+Page page_nhb(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1}) {
   return Page(
     margin: const EdgeInsets.all(0),
     pageFormat: PdfPageFormat.a4,
@@ -22,7 +23,7 @@ Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semeste
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildPageTitle('NILAI PROSES BELAJAR ${isIT ? '(IT)' : ''}'),
+              buildPageTitle('NILAI HASIL BELAJAR (NHB)'),
               SizedBox(height: 12.0),
               MyPDFTable.buildIdentityTable(nilaiList.firstWhere((e) => e.BaS.semester==semester)),
               SizedBox(height: 12.0),
@@ -30,27 +31,12 @@ Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semeste
                 child: Center(
                   child: AspectRatio(
                     aspectRatio: 1,
-                    child: MyPDFChart.buildNPBBarChart(nilaiList, semester, isIT),
+                    child: MyPDFChart.buildNHBPieChart(nilaiList, semester),
                   ),
                 ),
               ),
               SizedBox(height: 12.0),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'Catatan: Jumlah stepping stone pertahun 20.\ntotal dalam setahun 30.',
-                  style: const TextStyle(
-                    height: 1.15,
-                    letterSpacing: 1.1,
-                    fontSize: 12.0,
-                  ),
-                ),
-              ),
-              SizedBox(height: 12.0),
-              buildPageNumber(1),
+              MyPDFTable.buildNHBTable(nilaiList, semester),
             ],
           ),
         ),

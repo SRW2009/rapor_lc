@@ -3,8 +3,8 @@ import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 
 import 'package:rapor_lc/dummy_data/contents/npb_contents.dart' as npb;
-import 'package:rapor_lc/rapor_pdf_layout/pdf_common.dart';
-import 'package:rapor_lc/rapor_pdf_layout/pdf_table.dart';
+import 'package:rapor_lc/device/pdf/pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_table.dart';
 
 Page page_npb_table(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1, bool isIT=false}) {
   return Page(
