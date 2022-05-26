@@ -108,7 +108,7 @@ class _CustomDataTableState<Entity> extends State<CustomDataTable<Entity>> {
 
                   final filteredListLength = controller.filteredList.length;
                   return InteractiveViewer(
-                    constrained: false,
+                    constrained: (_finalWidth ?? _minWidth) < _minWidth,
                     scaleEnabled: false,
                     child: DataTable(
                       key: _dataTableKey,

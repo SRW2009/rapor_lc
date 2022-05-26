@@ -16,7 +16,13 @@ class FormInputBaS extends StatefulWidget {
 }
 
 class _FormInputBaSState extends State<FormInputBaS> {
-  bool isOdd = false;
+  late bool isOdd;
+
+  @override
+  void initState() {
+    isOdd = widget.BaS.semester.isOdd;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

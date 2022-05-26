@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-
 class FormInputFieldCheckBox extends StatelessWidget {
   final String label;
   final bool value;
