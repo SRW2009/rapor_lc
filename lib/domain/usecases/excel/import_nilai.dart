@@ -1,8 +1,15 @@
 
-import 'package:rapor_lc/domain/entities/excel_obj.dart';
-import 'package:rapor_lc/domain/repositories/excel_repo.dart';
-import 'package:rapor_lc/domain/usecases/base_use_case.dart';
+import 'dart:io';
 
-class ImportNilaiUseCase extends BaseUseCase<ExcelObject, void, ExcelRepository>{
-  ImportNilaiUseCase(ExcelRepository repo) : super(repo, (repo, param) => repo.importNilai());
+import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/domain/repositories/excel_repo.dart';
+
+class ImportNilaiUseCase extends UseCase<String, List<File>> {
+  ExcelRepository repository;
+
+  ImportNilaiUseCase(this.repository);
+
+  @override
+  Future<Stream<String?>> buildUseCaseStream(List<File>? params) async =>
+      repository.importNilai(params ?? []);
 }

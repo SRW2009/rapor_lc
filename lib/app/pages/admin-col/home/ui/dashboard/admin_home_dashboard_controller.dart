@@ -1,7 +1,16 @@
 
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
+import 'package:rapor_lc/app/dialogs/admin/print_dialog.dart';
+import 'package:rapor_lc/app/dialogs/common/logs_dialog.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/dashboard/admin_home_dashboard_presenter.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
+import 'package:rapor_lc/common/print_settings.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
@@ -14,54 +23,45 @@ class AdminHomeDashboardController extends Controller {
   List<Nilai>? nilaiList;
   RequestState nilaiState = RequestState.none;
 
+  final dialogKey = GlobalKey<LogsDialogState>();
+  bool showLogsDialog = false;
+
   final AdminHomeDashboardPresenter _presenter;
-  AdminHomeDashboardController(santriRepository, nilaiRepository)
-      : _presenter = AdminHomeDashboardPresenter(santriRepository, nilaiRepository),
+  AdminHomeDashboardController(santriRepository, nilaiRepository, printingRepository, excelRepository)
+      : _presenter = AdminHomeDashboardPresenter(santriRepository, nilaiRepository, printingRepository, excelRepository),
         super();
 
-  void _getSantriListOnNext(List<Santri> list) {
-    if (list.isEmpty) {
-      santriState = RequestState.none;
-      refreshUI();
-      return;
-    }
-
+  void _getSantriList(List<Santri> list) {
     santriList = list;
     filteredSantriList = list.cast();
-    santriState = RequestState.loaded;
+  }
+
+  void _getSantriListState(RequestState state) {
+    santriState = state;
     refreshUI();
   }
 
-  void _getSantriListOnError(e) {
-    print(e);
-    santriState = RequestState.error;
-    refreshUI();
-  }
-
-  void _getNilaiListOnNext(List<Nilai> list) {
-    if (list.isEmpty) {
-      nilaiState = RequestState.none;
-      refreshUI();
-      return;
-    }
-
+  void _getNilaiList(List<Nilai> list) {
     nilaiList = list;
-    nilaiState = RequestState.loaded;
-    refreshUI();
   }
 
-  void _getNilaiListOnError(e) {
-    print(e);
-    nilaiState = RequestState.error;
+  void _getNilaiListState(RequestState state) {
+    nilaiState = state;
+    refreshUI();
+  }
+  void _printExceptionMessage(String message) {
+    if (dialogKey.currentState != null)
+      dialogKey.currentState!.addLine(message);
     refreshUI();
   }
 
   @override
   void initListeners() {
-    _presenter.getSantriListOnNext = _getSantriListOnNext;
-    _presenter.getSantriListOnError = _getSantriListOnError;
-    _presenter.getNilaiListOnNext = _getNilaiListOnNext;
-    _presenter.getNilaiListOnError = _getNilaiListOnError;
+    _presenter.getSantriList = _getSantriList;
+    _presenter.getSantriListState = _getSantriListState;
+    _presenter.getNilaiList = _getNilaiList;
+    _presenter.getNilaiListState = _getNilaiListState;
+    _presenter.printExceptionMessage = _printExceptionMessage;
   }
 
   void getSantriList() {
@@ -74,6 +74,63 @@ class AdminHomeDashboardController extends Controller {
     refreshUI();
     _presenter.doGetNilaiList();
   }
+  void print(List<Santri> santriList, List<Nilai> nilaiList) async {
+    // show print settings dialog
+    PrintSettings? printSettings;
+    await showDialog<bool>(
+      context: getContext(),
+      builder: (dContext) {
+        return PrintDialog(
+          onSave: (val) {
+            printSettings = val;
+          },
+        );
+      },
+    );
+    // return if canceled
+    if (printSettings == null) return;
+    // show logs dialog
+    dialogKey.currentState?.updateLog('');
+    showLogsDialog = true;
+    refreshUI();
+    // do print
+    _presenter.doPrint(santriList, nilaiList, printSettings);
+  }
+  void printDummy() => _presenter.doPrintDummy();
+  void import() async {
+    // pick files
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+    );
+    if (result != null) {
+      List<File> files = result.paths.fold<List<File>>([], (list, path) {
+        if (path != null) list.add(File(path));
+        return list;
+      });
+      // show logs dialog
+      dialogKey.currentState?.updateLog('');
+      showLogsDialog = true;
+      refreshUI();
+      // do import
+      _presenter.doImport(files);
+    }
+  }
+  void saveImportSample() async {
+    ByteData data = await rootBundle.load("assets/files/import_example.xlsx");
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+    String? selectedDirectory = await FilePicker.platform.saveFile(
+      fileName: 'import-example.xlsx',
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+    );
+
+    if (selectedDirectory != null) {
+      await File(selectedDirectory).writeAsBytes(bytes);
+    }
+  }
 
   @override
   void onInitState() {
@@ -85,6 +142,11 @@ class AdminHomeDashboardController extends Controller {
   void onDisposed() {
     _presenter.dispose();
     super.onDisposed();
+  }
+
+  void closeLogsDialog() {
+    showLogsDialog = false;
+    refreshUI();
   }
 
   String currentQuery = '';

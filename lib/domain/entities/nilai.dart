@@ -19,13 +19,13 @@ class Nilai {
 
   @BaSConverter()
   @JsonKey(name: 'semester')
-  final BulanAndSemester BaS;
+  BulanAndSemester BaS;
 
   @JsonKey(name: 'year')
-  final String tahunAjaran;
+  String tahunAjaran;
 
   @JsonKey(name: 'student')
-  final Santri santri;
+  Santri santri;
 
   List<NHB> nhb;
   List<NK> nk;
@@ -33,8 +33,25 @@ class Nilai {
 
   Nilai(this.id, this.BaS, this.tahunAjaran, this.santri, {this.nhb=const [], this.nk=const [], this.npb=const []});
 
+  Nilai.empty() : id = -1, BaS = BulanAndSemester(0,0), tahunAjaran = '2021/2022',
+        santri = Santri(0, ''), nhb=const [], nk=const [], npb=const [];
+
   factory Nilai.fromJson(Map<String, dynamic> json) => _$NilaiFromJson(json);
   Map<String, dynamic> toJson() => _$NilaiToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Nilai &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          BaS == other.BaS &&
+          tahunAjaran == other.tahunAjaran &&
+          santri == other.santri;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ BaS.hashCode ^ tahunAjaran.hashCode ^ santri.hashCode;
 }
 
 class NilaiConverter implements JsonConverter<Nilai, Map<String, dynamic>> {

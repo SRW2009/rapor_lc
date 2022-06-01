@@ -16,11 +16,28 @@ class BulanAndSemester implements Comparable {
   BulanAndSemester(this.bulan, this.semester);
 
   factory BulanAndSemester.fromString(String initial) {
-    final list = initial.split('-');
-    int? bulan = int.tryParse(list[0]);
-    int? semester;
-    if (list[1].startsWith('s')) semester = int.tryParse(list[1].substring(1));
-    if (bulan != null && semester != null) return BulanAndSemester(bulan, semester);
+    int? bulan, semester;
+
+    // default format : <Month Number>-s<Semester Number> | 1-s1
+    final strings = initial.split('-');
+    if (strings.length > 1) {
+      bulan = int.tryParse(strings[0]);
+      if (strings[1].startsWith('s')) semester = int.tryParse(strings[1].substring(1));
+      if (bulan != null && semester != null) return BulanAndSemester(bulan, semester);
+    }
+
+    // excel format : <Month Name>, Semester <Semester Number> | Juli, Semester 1
+    final strings2 = initial.split(',');
+    if (strings2.length > 1) {
+      for (var month in Month.values) {
+        if (month.name == strings2[0]) {
+          bulan = month.index+1;
+          break;
+        }
+      }
+      semester = int.tryParse(strings2[1].replaceAll('Semester', '').replaceAll(' ', ''));
+      if (bulan != null && semester != null) return BulanAndSemester(bulan, semester);
+    }
     throw const FormatException('Bad String format.');
   }
 
@@ -46,6 +63,17 @@ class BulanAndSemester implements Comparable {
     final otherVal = double.tryParse('${other.semester}.${other.bulanFormatted()}') ?? 0;
     return thisVal.compareTo(otherVal);
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BulanAndSemester &&
+          runtimeType == other.runtimeType &&
+          bulan == other.bulan &&
+          semester == other.semester;
+
+  @override
+  int get hashCode => bulan.hashCode ^ semester.hashCode;
 }
 
 class BaSConverter implements JsonConverter<BulanAndSemester, String> {

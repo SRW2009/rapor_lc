@@ -1,6 +1,35 @@
 
 import 'package:flutter/material.dart';
 
+Dialog logsDialog({required BuildContext context, required String title, required List<Widget> contents}) => Dialog(
+  elevation: 0,
+  backgroundColor: Colors.transparent,
+  child: Container(
+    constraints: const BoxConstraints(
+      maxWidth: 600.0,
+    ),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      shape: BoxShape.rectangle,
+      borderRadius: BorderRadius.circular(16.0),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(title, style: Theme.of(context).textTheme.headline5!.copyWith(color: Colors.black), textAlign: TextAlign.start),
+            const SizedBox(height: 24.0),
+            for (var content in contents) content,
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+
 class BaseDialog extends StatelessWidget {
   final String title;
   final List<Widget> contents;
