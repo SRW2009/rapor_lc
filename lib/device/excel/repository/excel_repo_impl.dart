@@ -677,10 +677,6 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
       var count = 0;
       final max = nilaiList.length;
       for (var nilai in nilaiList) {
-        if (nilai.nk.isNotEmpty)
-          print(
-              '${nilai.BaS.toReadableString()} - ${nilai.nk.first.nama_variabel}');
-
         var status = await NilaiRepositoryImpl().createNilai(nilai);
         if (status == RequestStatus.success) {
           yield 'Berhasil menambah nilai (${++count}/$max)';

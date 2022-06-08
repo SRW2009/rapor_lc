@@ -37,21 +37,21 @@ class ChartDatasetsFactory {
     }
 
     // process value of each divisi
-    Map<String, int> divValueMap = {};
+    Map<String, double> divValueMap = {};
     processedNilaiList.forEach((nilai) {
       for (var e in nilai.nhb) {
         // update divisi value
         divValueMap.update(
           e.pelajaran.divisi!.name,
-              (value) => ((e.akumulasi+value)/2).round(),
-          ifAbsent: () => e.akumulasi,
+              (value) => (e.akumulasi+value)/2,
+          ifAbsent: () => e.akumulasi.toDouble(),
         );
       }
     });
 
     // sum every value for each divisi
     final totalValue = divValueMap.values
-        .fold<int>(0, (previousValue, element) => previousValue+element);
+        .fold<double>(0, (previousValue, element) => previousValue+element);
 
     // counter for color variation in chart
     var colorI = 0;
@@ -61,7 +61,7 @@ class ChartDatasetsFactory {
         .map<PieDataSet>((e) => PieDataSet(
       value: divValueMap[e] ?? 0,
       color: _Colors[colorI++],
-      legend: '$e\n${((divValueMap[e] ?? 0)/totalValue*100).round()}%',
+      legend: '$e\n${((divValueMap[e] ?? 0)/totalValue*100).toStringAsFixed(1)}%',
       legendPosition: PieLegendPosition.none,
     ),).toList();
     return datasets;
@@ -166,7 +166,7 @@ class ChartDatasetsFactory {
 
   static List<LineDataSet> buildNKDatasets(List<Nilai> nilaiList, int semester) {
     // process value of each variable
-    Map<String, List<int?>> varValuesMap = {};
+    Map<String, List<double?>> varValuesMap = {};
     for (var nilai in nilaiList) {
       // only take nilai that match requested semester
       if (semester != nilai.BaS.semester) continue;
@@ -181,11 +181,11 @@ class ChartDatasetsFactory {
               (list) {
             var value = (list[monthIndex] == null)
                 ? o.akumulatif
-                : ((list[monthIndex]! + o.akumulatif)/2).round();
-            return list..replaceRange(monthIndex, monthIndex+1, [value]);
+                : ((list[monthIndex]! + o.akumulatif)/2);
+            return list..replaceRange(monthIndex, monthIndex+1, [value.toDouble()]);
           },
           ifAbsent: () => [null,null,null,null,null,null]
-            ..replaceRange(monthIndex, monthIndex+1, [o.akumulatif]),
+            ..replaceRange(monthIndex, monthIndex+1, [o.akumulatif.toDouble()]),
         );
       }
     }
@@ -201,7 +201,7 @@ class ChartDatasetsFactory {
       lineWidth: 3.2,
       pointSize: 4.0,
       data: List<LineChartValue>.generate(6, (index) =>
-          LineChartValue(index.toDouble(), e.value[index]?.toDouble() ?? 0.0),
+          LineChartValue(index.toDouble(), e.value[index] ?? 0.0),
     ))).toList();
     return datasets;
   }
@@ -210,7 +210,7 @@ class ChartDatasetsFactory {
 class TableContentsFactory {
   static  Map<int, NHB> buildNHBContents(List<Nilai> nilaiList, int semester) {
     // key of this map is mapel id
-    Map<int, NHB> nhbValueMap = {};
+    Map<MataPelajaran, Map<String, ItemFrequency<double>>> nhbValueMap = {};
 
     // process nhb to match parameters
     for (var nilai in nilaiList) {
@@ -220,23 +220,68 @@ class TableContentsFactory {
       for (var o in nilai.nhb) {
         // update value
         nhbValueMap.update(
-          o.pelajaran.id,
+          o.pelajaran,
           (v) {
             // calculate average of both value
-            var harian = NilaiCalculation.accumulate([v.nilai_harian, o.nilai_harian]);
-            var bulanan = NilaiCalculation.accumulate([v.nilai_bulanan, o.nilai_bulanan]);
-            var projek = NilaiCalculation.accumulate([v.nilai_projek, o.nilai_projek]);
-            var akhir = NilaiCalculation.accumulate([v.nilai_akhir, o.nilai_akhir]);
-            var acc = NilaiCalculation.accumulate([v.akumulasi, o.akumulasi]);
-            var pred = NilaiCalculation.toPredicate(acc);
-            return NHB(o.no, o.pelajaran, harian.round(), bulanan.round(), projek.round(), akhir.round(), acc.round(), pred);
+            v.update(
+              'harian',
+              (value) =>
+                (o.nilai_harian!=-1)
+                  ? (value..item+=o.nilai_harian..n+=1)
+                  : value,
+            );
+            v.update(
+              'bulanan',
+              (value) =>
+                (o.nilai_bulanan!=-1)
+                  ? (value..item+=o.nilai_bulanan..n+=1)
+                  : value,
+            );
+            v.update(
+              'projek',
+              (value) =>
+                (o.nilai_projek!=-1)
+                  ? (value..item+=o.nilai_projek..n+=1)
+                  : value,
+            );
+            v.update(
+              'akhir',
+              (value) =>
+                (o.nilai_akhir!=-1)
+                  ? (value..item+=o.nilai_akhir..n+=1)
+                  : value,
+            );
+            return v;
           },
-          ifAbsent: () => o,
+          ifAbsent: () => {
+            'harian': (o.nilai_harian!=-1)
+                ? ItemFrequency(o.nilai_harian.toDouble(), n: 1)
+                : ItemFrequency(0),
+            'bulanan': (o.nilai_bulanan!=-1)
+                ? ItemFrequency(o.nilai_bulanan.toDouble(), n: 1)
+                : ItemFrequency(0),
+            'projek': (o.nilai_projek!=-1)
+                ? ItemFrequency(o.nilai_projek.toDouble(), n: 1)
+                : ItemFrequency(0),
+            'akhir': (o.nilai_akhir!=-1)
+                ? ItemFrequency(o.nilai_akhir.toDouble(), n: 1)
+                : ItemFrequency(0),
+          },
         );
       }
     }
 
-    return nhbValueMap;
+    var i = 0;
+    return nhbValueMap.map<int, NHB>((key, value) {
+      var harian = value['harian']!.item/value['harian']!.n;
+      var bulanan = value['bulanan']!.item/value['bulanan']!.n;
+      var projek = value['projek']!.item/value['projek']!.n;
+      var akhir = value['akhir']!.item/value['akhir']!.n;
+      var acc = NilaiCalculation.accumulate([harian, bulanan, projek, akhir]);
+      var pred = NilaiCalculation.toPredicate(acc);
+
+      return MapEntry(key.id, NHB(++i, key, harian.toInt(), bulanan.toInt(), projek.toInt(), akhir.toInt(), acc.toInt(), pred));
+    });
   }
 
   static Map<String, NK> buildNKContents(List<Nilai> nilaiList, int semester) {

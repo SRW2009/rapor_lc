@@ -1,8 +1,8 @@
 
 class NilaiCalculation {
-  static double accumulate(List<int> grades) {
+  static double accumulate(List<num> grades) {
     int skipped = 0;
-    num total = (grades.fold<int>(0, (x, y) {
+    double total = (grades.fold<double>(0, (x, y) {
       if (y==-1) skipped++;
       return (y==-1) ? x : x+y;
     })/(grades.length-skipped));
