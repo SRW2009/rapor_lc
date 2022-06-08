@@ -444,7 +444,6 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
 
         // declare local variables
         var currentNilai = Nilai.empty();
-        bool createNewNilai = false;
 
         // iterate excel rows, skip row 1 to 3
         for (var row in (excel.tables[sheetName]?.rows?..removeRange(0, 3)) ??
@@ -467,12 +466,10 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
               // identify student
               case 0:
                 currentNilai.santri = Santri(-1, '', nis: value.toString());
-                createNewNilai = true;
                 break;
               // identify Bulan and Semester
               case 1:
                 currentNilai.BaS = BulanAndSemester.fromString(value);
-                createNewNilai = true;
                 break;
               // identify tahun ajaran
               case 2:
@@ -539,6 +536,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
           }
 
           // assign current nilai to nilai list
+          bool createNewNilai = !nilaiList.contains(currentNilai);
           if (createNewNilai) {
             createNewNilai = false;
 

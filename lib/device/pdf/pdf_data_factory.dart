@@ -11,7 +11,10 @@ import 'package:rapor_lc/domain/entities/npb.dart';
 
 int _presensiToInt(String presensi) => int.tryParse(presensi.replaceAll('%', '')) ?? 0;
 
-const _Colors = [PdfColors.blue, PdfColors.orange, PdfColors.grey, PdfColors.yellow, PdfColors.green];
+const _Colors = [
+  PdfColors.blue, PdfColors.orange, PdfColors.grey, PdfColors.yellow, PdfColors.green,
+  PdfColors.red, PdfColors.black, PdfColors.teal, PdfColors.brown, PdfColors.purple,
+];
 
 class _NPBData {
   final List<MataPelajaran> mapels;
@@ -113,13 +116,21 @@ class ChartDatasetsFactory {
         // if this mapel is not listed in mapel list, skip
         if (!mapelList.contains(e.pelajaran)) continue;
 
-        // update mapel value, if nilai semester is greater than requested semester, fill 0 as value
-        mapelValueMap[e.pelajaran.name] = (nilai.BaS.semester <= semester)
-            // if presensi is greater than current presensi, replace presensi with the greater one
-            ? (_presensiToInt(e.presensi) > mapelValueMap[e.pelajaran.name]!)
-              ? _presensiToInt(e.presensi)
-              : mapelValueMap[e.pelajaran.name]!
-            : 0;
+        // update mapel presensi value
+        mapelValueMap.update(
+          e.pelajaran.name,
+          (value) {
+            if (nilai.BaS.semester <= semester
+                && _presensiToInt(e.presensi) > value)
+              return _presensiToInt(e.presensi);
+            return value;
+          },
+          ifAbsent: () {
+            if (nilai.BaS.semester <= semester)
+              return _presensiToInt(e.presensi);
+            return 0;
+          }
+        );
       }
     });
 
