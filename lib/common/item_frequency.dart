@@ -1,7 +1,7 @@
 
 class ItemFrequency<Entity> {
   int n;
-  final Entity item;
+  Entity item;
 
   ItemFrequency(this.item, {this.n=0});
 }

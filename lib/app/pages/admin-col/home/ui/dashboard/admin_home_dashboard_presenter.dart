@@ -6,6 +6,7 @@ import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
+import 'package:rapor_lc/domain/usecases/excel/export_nilai.dart';
 import 'package:rapor_lc/domain/usecases/excel/import_nilai.dart';
 import 'package:rapor_lc/domain/usecases/nilai/get_nilai_list.dart';
 import 'package:rapor_lc/domain/usecases/printing/print.dart';
@@ -18,18 +19,21 @@ class AdminHomeDashboardPresenter extends Presenter {
   late Function(List<Nilai>) getNilaiList;
   late Function(RequestState) getNilaiListState;
   late Function(String) printExceptionMessage;
+  late Function(List<int>?) getExportNilai;
 
   final GetSantriListUseCase _getSantriListUseCase;
   final GetNilaiListUseCase _getNilaiListUseCase;
   final PrintUseCase _printUseCase;
   final PrintDummyUseCase _printDummyUseCase;
   final ImportNilaiUseCase _importNilaiUseCase;
+  final ExportNilaiUseCase _exportNilaiUseCase;
   AdminHomeDashboardPresenter(santriRepo, nilaiRepo, printingRepo, excelRepo)
       : _getSantriListUseCase = GetSantriListUseCase(santriRepo),
         _getNilaiListUseCase = GetNilaiListUseCase(nilaiRepo),
         _printUseCase = PrintUseCase(printingRepo),
         _printDummyUseCase = PrintDummyUseCase(printingRepo),
-        _importNilaiUseCase = ImportNilaiUseCase(excelRepo);
+        _importNilaiUseCase = ImportNilaiUseCase(excelRepo),
+        _exportNilaiUseCase = ExportNilaiUseCase(excelRepo);
 
   void doGetSantriList() {
     getSantriListState(RequestState.loading);
@@ -43,6 +47,7 @@ class AdminHomeDashboardPresenter extends Presenter {
       _printUseCase.execute(_LogsObserver(this), PrintUseCaseParams(santriList, nilaiList, printSettings));
   void doPrintDummy() => _printDummyUseCase.execute(_PrintDummyObserver(this));
   void doImport(List<File> files) => _importNilaiUseCase.execute(_LogsObserver(this), files);
+  void doExport() => _exportNilaiUseCase.execute(_ExportObserver(this));
 
   @override
   void dispose() {
@@ -51,6 +56,7 @@ class AdminHomeDashboardPresenter extends Presenter {
     _printUseCase.dispose();
     _printDummyUseCase.dispose();
     _importNilaiUseCase.dispose();
+    _exportNilaiUseCase.dispose();
   }
 }
 
@@ -87,7 +93,7 @@ class _GetNilaiListObserver extends Observer<UseCaseResponse<List<Nilai>>> {
   @override
   void onError(e) {
     print(e);
-    _presenter.getNilaiListState(e);
+    _presenter.getNilaiListState(RequestState.error);
   }
 
   @override
@@ -139,5 +145,26 @@ class _PrintDummyObserver extends Observer<UseCaseResponse<void>> {
   @override
   void onNext(UseCaseResponse<void>? response) {
     // TODO: implement onNext
+  }
+}
+
+class _ExportObserver extends Observer<UseCaseResponse<List<int>?>> {
+  AdminHomeDashboardPresenter _presenter;
+
+  _ExportObserver(this._presenter);
+
+  @override
+  void onComplete() {
+    // TODO: implement onComplete
+  }
+
+  @override
+  void onError(e) {
+    print(e);
+  }
+
+  @override
+  void onNext(UseCaseResponse<List<int>?>? response) {
+    _presenter.getExportNilai(response?.response);
   }
 }

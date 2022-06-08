@@ -49,8 +49,8 @@ class BulanAndSemester implements Comparable {
   String bulanToString() => Month.values[bulan-1].name;
 
   String bulanFormatted() {
-    var length = '$bulan';
-    if (length == 1) return '0$bulan';
+    var str = '$bulan';
+    if (str.length == 1) return '0$bulan';
     return '$bulan';
   }
 

@@ -80,10 +80,10 @@ class _NHBUpdateDialogState extends State<NHBUpdateDialog> {
             var nh = int.tryParse(_nilaiHarianCon.text)!;
             var nb = int.tryParse(_nilaiBulananCon.text)!;
             var na = _nilaiAkhirCon.text.isNotEmpty ? int.tryParse(_nilaiAkhirCon.text)! : -1;
-            var ak = NilaiCalculation.accumulate([nh,nb,if(na!=-1)na]);
+            var ak = NilaiCalculation.accumulate([nh,nb,na]);
             var pr = NilaiCalculation.toPredicate(ak);
             return widget.onSave(
-              NHB(widget.nhb.no, _mapelCon!, nh, nb, -1, na, ak, pr),
+              NHB(widget.nhb.no, _mapelCon!, nh, nb, -1, na, ak.toInt(), pr),
             );
           },
         ),

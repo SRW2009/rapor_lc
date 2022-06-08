@@ -60,14 +60,14 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
               ),
             ),
             persistentFooterButtons: [
-              TextButton(
+              /*TextButton(
                 child: const Text('IMPORT'),
                 onPressed: () {},
               ),
               TextButton(
                 child: const Text('EXPORT'),
                 onPressed: controller.doExportNilai,
-              ),
+              ),*/
               TextButton(
                 child: const Text('NEW'),
                 onPressed: controller.tableOnAdd,

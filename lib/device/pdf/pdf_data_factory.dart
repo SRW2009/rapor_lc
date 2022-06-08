@@ -9,6 +9,8 @@ import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
 
+int _presensiToInt(String presensi) => int.tryParse(presensi.replaceAll('%', '')) ?? 0;
+
 const _Colors = [PdfColors.blue, PdfColors.orange, PdfColors.grey, PdfColors.yellow, PdfColors.green];
 
 class _NPBData {
@@ -19,90 +21,6 @@ class _NPBData {
 }
 
 class ChartDatasetsFactory {
-  static int _presensiToInt(String presensi) => int.tryParse(presensi.replaceAll('%', '')) ?? 0;
-
-  static _NPBData buildNPBDatasets(List<Nilai> nilaiList, int semester, bool isIT) {
-    var divisiList = <String>[];
-    var mapelList = <MataPelajaran>[];
-    var processedNilaiList = <Nilai>[];
-
-    // process nilai list to match parameters
-    for (var nilai in nilaiList) {
-      // if requested semester is even, take every nilai where their semester is less than or equal to requested semester.
-      if (semester.isEven && nilai.BaS.semester > semester) continue;
-      // if requested semester is odd, take every nilai that match the conditions above, AND every nilai where their semester is equal to requested semester + 1.
-      if (semester.isOdd && nilai.BaS.semester > semester+1) continue;
-
-      var npbList = <NPB>[];
-      for (var e in nilai.npb) {
-        // separate npb by IT division or not
-        if (isIT && e.pelajaran.divisi!.name != 'IT') continue;
-        if (!isIT && e.pelajaran.divisi!.name == 'IT') continue;
-
-        // add this npb to npb list
-        npbList.add(e);
-
-        // collect and process every mapel that appear
-        if (!mapelList.contains(e.pelajaran)) {
-          /// if semester is odd, take mapel of said semester AND the semester after.
-          /// if semester is even, take mapel of said semester AND the semester before.
-          if (semester.isOdd
-              && (nilai.BaS.semester==semester || nilai.BaS.semester==semester+1)) mapelList.add(e.pelajaran);
-          if (semester.isEven
-              && (nilai.BaS.semester==semester || nilai.BaS.semester==semester-1)) mapelList.add(e.pelajaran);
-
-          // collect every divisi that appeared
-          if (!divisiList.contains(e.pelajaran.divisi?.name)) divisiList.add(e.pelajaran.divisi!.name);
-        }
-      }
-
-      // add processed nilai to data
-      processedNilaiList.add(Nilai.fromJson(nilai.toJson())..npb=npbList);
-    }
-
-    // sort the list from older to newer, so the recent value will replace the old one
-    processedNilaiList.sort((a, b) => a.BaS.compareTo(b.BaS));
-
-    // process mapel and always take the recent value
-    Map<String, int> mapelValueMap = {};
-    processedNilaiList.forEach((nilai) {
-      bool nilaiSemesterisOdd = nilai.BaS.semester.isOdd;
-      for (var e in nilai.npb) {
-        // if this mapel is not listed in mapel list, skip
-        if (!mapelList.contains(e.pelajaran)) continue;
-
-        // update mapel value
-        if (semester.isOdd)
-          mapelValueMap[e.pelajaran.name] = nilaiSemesterisOdd ? _presensiToInt(e.presensi) : 0;
-        else
-          mapelValueMap[e.pelajaran.name] = _presensiToInt(e.presensi);
-      }
-    });
-
-    // counter for color variation in chart
-    var colorI = 0;
-
-    // process datasets
-    final datasets = divisiList
-        .map<BarDataSet>((e) => BarDataSet(
-      color: _Colors[colorI++],
-      axis: Axis.vertical,
-      legend: e,
-      width: 8,
-      data: [
-        for (var i=0;i<mapelValueMap.entries.length;i++)
-          LineChartValue(
-            (mapelList.elementAt(i).divisi!.name == e
-                && mapelList.elementAt(i).name==mapelValueMap.keys.elementAt(i))
-                ? mapelValueMap.values.elementAt(i).toDouble()
-                : 0.0,
-            i.toDouble(),
-          )
-      ],
-    )).toList();
-    return _NPBData(mapelList, datasets);
-  }
-
   static List<PieDataSet> buildNHBDatasets(List<Nilai> nilaiList, int semester) {
     var processedNilaiList = <Nilai>[];
 
@@ -122,7 +40,7 @@ class ChartDatasetsFactory {
         // update divisi value
         divValueMap.update(
           e.pelajaran.divisi!.name,
-          (value) => ((e.akumulasi+value)/2).round(),
+              (value) => ((e.akumulasi+value)/2).round(),
           ifAbsent: () => e.akumulasi,
         );
       }
@@ -144,6 +62,95 @@ class ChartDatasetsFactory {
       legendPosition: PieLegendPosition.none,
     ),).toList();
     return datasets;
+  }
+
+  static _NPBData buildNPBDatasets(List<Nilai> nilaiList, int semester, bool isIT) {
+    var divisiList = <String>[];
+    var mapelList = <MataPelajaran>[];
+    var processedNilaiList = <Nilai>[];
+
+    // process nilai list to match parameters
+    for (var nilai in nilaiList) {
+
+      var npbList = <NPB>[];
+      for (var e in nilai.npb) {
+        // separate npb by IT division or not
+        if (isIT && e.pelajaran.divisi!.name != 'IT') continue;
+        if (!isIT && e.pelajaran.divisi!.name == 'IT') continue;
+
+        npbList.add(e);
+
+        // collect every mapel and divisi that appeared
+        if (!mapelList.contains(e.pelajaran)) {
+
+          mapelList.add(e.pelajaran);
+          if (!divisiList.contains(e.pelajaran.divisi!.name)) divisiList.add(e.pelajaran.divisi!.name);
+        }
+      }
+
+      // add processed nilai to data
+      processedNilaiList.add(nilai.clone()..npb=npbList);
+    }
+
+    // ( Bug Workaround ) if mapelList only contain 1 or 2,
+    // add dummy data so their bar in chart will go to center
+    bool createDummy = false;
+    if (mapelList.length <= 2) {
+      createDummy = true;
+
+      final divisi = mapelList.first.divisi!;
+      mapelList.insert(0, MataPelajaran(-1, ':::', divisi: divisi));
+      mapelList.add(MataPelajaran(-2, '::::', divisi: divisi));
+    }
+
+    // sort the list from older to newer, so the recent value will replace the old one
+    processedNilaiList.sort((a, b) => a.BaS.compareTo(b.BaS));
+
+    // process mapel and always take the recent value
+    Map<String, int> mapelValueMap = {};
+    processedNilaiList.forEach((nilai) {
+      for (var e in nilai.npb) {
+        // if this mapel is not listed in mapel list, skip
+        if (!mapelList.contains(e.pelajaran)) continue;
+
+        // update mapel value, if nilai semester is greater than requested semester, fill 0 as value
+        mapelValueMap[e.pelajaran.name] = (nilai.BaS.semester <= semester)
+            // if presensi is greater than current presensi, replace presensi with the greater one
+            ? (_presensiToInt(e.presensi) > mapelValueMap[e.pelajaran.name]!)
+              ? _presensiToInt(e.presensi)
+              : mapelValueMap[e.pelajaran.name]!
+            : 0;
+      }
+    });
+
+    // create dummy in mapelValueMap
+    if (createDummy) {
+      mapelValueMap[':::'] = 0;
+      mapelValueMap['::::'] = 0;
+    }
+
+
+    // counter for color variation in chart
+    var colorI = 0;
+
+    // process datasets
+    final datasets = divisiList
+        .map<BarDataSet>((e) => BarDataSet(
+      color: _Colors[colorI++],
+      axis: Axis.vertical,
+      legend: e,
+      width: 8,
+      data: [
+        for (var i=0;i<mapelValueMap.entries.length;i++)
+          LineChartValue(
+            (mapelList.elementAt(i).divisi!.name == e)
+                ? mapelValueMap[mapelList.elementAt(i).name]!.toDouble()
+                : 0.0,
+            i.toDouble(),
+          ),
+      ],
+    )).toList();
+    return _NPBData(mapelList, datasets);
   }
 
   static List<LineDataSet> buildNKDatasets(List<Nilai> nilaiList, int semester) {
@@ -203,16 +210,15 @@ class TableContentsFactory {
         // update value
         nhbValueMap.update(
           o.pelajaran.id,
-              (v) {
-            // calculate mean of both value
-            num harian = NilaiCalculation.accumulate([v.nilai_harian, o.nilai_harian]);
-            num bulanan = NilaiCalculation.accumulate([v.nilai_bulanan, o.nilai_bulanan]);
-            num projek = o.nilai_projek==-1 ? v.nilai_projek : NilaiCalculation.accumulate([v.nilai_projek, o.nilai_projek]);
-            num akhir = o.nilai_akhir==-1 ? v.nilai_akhir : NilaiCalculation.accumulate([v.nilai_akhir, o.nilai_akhir]);
-
-            var acc = NilaiCalculation.accumulate([harian.round(), bulanan.round(), if (projek != -1) projek.round(), if (akhir != -1) akhir.round()]);
+          (v) {
+            // calculate average of both value
+            var harian = NilaiCalculation.accumulate([v.nilai_harian, o.nilai_harian]);
+            var bulanan = NilaiCalculation.accumulate([v.nilai_bulanan, o.nilai_bulanan]);
+            var projek = NilaiCalculation.accumulate([v.nilai_projek, o.nilai_projek]);
+            var akhir = NilaiCalculation.accumulate([v.nilai_akhir, o.nilai_akhir]);
+            var acc = NilaiCalculation.accumulate([v.akumulasi, o.akumulasi]);
             var pred = NilaiCalculation.toPredicate(acc);
-            return NHB(o.no, o.pelajaran, harian.round(), bulanan.round(), projek.round(), akhir.round(), acc, pred);
+            return NHB(o.no, o.pelajaran, harian.round(), bulanan.round(), projek.round(), akhir.round(), acc.round(), pred);
           },
           ifAbsent: () => o,
         );
@@ -233,13 +239,14 @@ class TableContentsFactory {
       for (var o in nilai.nk) {
         nkValueMap.update(
           o.nama_variabel,
-              (v) {
-            var asrama = NilaiCalculation.accumulate([v.nilai_asrama, o.nilai_asrama]);
-            var kelas = NilaiCalculation.accumulate([v.nilai_kelas, o.nilai_kelas]);
-            var mesjid = NilaiCalculation.accumulate([v.nilai_mesjid, o.nilai_mesjid]);
-            var acc = NilaiCalculation.accumulate([asrama, kelas, mesjid]);
+          (v) {
+            // calculate average of both value
+            var asrama = NilaiCalculation.accumulate([v.nilai_asrama, o.nilai_asrama]).toInt();
+            var kelas = NilaiCalculation.accumulate([v.nilai_kelas, o.nilai_kelas]).toInt();
+            var mesjid = NilaiCalculation.accumulate([v.nilai_mesjid, o.nilai_mesjid]).toInt();
+            var acc = NilaiCalculation.accumulate([v.akumulatif, o.akumulatif]);
             var pred = NilaiCalculation.toPredicate(acc);
-            return NK(v.no, v.nama_variabel, mesjid, kelas, asrama, acc, pred);
+            return NK(v.no, v.nama_variabel, mesjid, kelas, asrama, acc.toInt(), pred);
           },
           ifAbsent: () => o,
         );
@@ -250,27 +257,40 @@ class TableContentsFactory {
   }
 
   static List<ItemFrequency<NPB>> buildNPBContents(List<Nilai> nilaiList, int semester, bool isIT) {
-    List<int> ids = [];
+    Map<String, List<int>> mapelAndSemesterAppeared = {};
     List<ItemFrequency<NPB>> processedNPB = [];
 
     // process npb to match parameters
     for (var nilai in nilaiList) {
-      // only take nilai that match requested semester
-      if (nilai.BaS.semester != semester) continue;
+      // only take nilai where semester is not greater than requested semester
+      if (nilai.BaS.semester > semester) continue;
 
       for (var o in nilai.npb) {
         // separate npb by IT division or not
         if (isIT && o.pelajaran.divisi!.name != 'IT') continue;
         if (!isIT && o.pelajaran.divisi!.name == 'IT') continue;
 
-        // if item exist, update item frequency
-        if (ids.contains(o.no)) {
-          processedNPB.firstWhere((element) => element.item.no==o.no).n++;
-          continue;
+        // if mapel already listed here, check its semester list
+        if (mapelAndSemesterAppeared.containsKey(o.pelajaran.name)) {
+          var npbRef = processedNPB.firstWhere((e) => e.item.pelajaran.name==o.pelajaran.name);
+
+          // if presensi is greater than current presensi, replace presensi with the greater one
+          if (_presensiToInt(o.presensi) > _presensiToInt(npbRef.item.presensi)) {
+            final newNPB = NPB(npbRef.item.no, npbRef.item.pelajaran, o.presensi);
+            npbRef.item = newNPB;
+          }
+
+          // if semester is not listed, add item to data
+          if (!mapelAndSemesterAppeared[o.pelajaran.name]!.contains(nilai.BaS.semester)) {
+            mapelAndSemesterAppeared[o.pelajaran.name]!.add(nilai.BaS.semester);
+            npbRef.n+=1;
+          }
         }
         // otherwise add item to data
-        ids.add(o.no);
-        processedNPB.add(ItemFrequency(o, n: 1));
+        else {
+          mapelAndSemesterAppeared[o.pelajaran.name] = [nilai.BaS.semester];
+          processedNPB.add(ItemFrequency(o, n: 1));
+        }
       }
     }
 

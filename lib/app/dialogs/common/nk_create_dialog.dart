@@ -82,7 +82,7 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
             var ak = NilaiCalculation.accumulate([nm,nk,na]);
             var pr = NilaiCalculation.toPredicate(ak);
             return widget.onSave(
-              NK(widget.lastIndex, _variabelCon.text, nm, nk, na, ak, pr, note: _noteCon.text)
+              NK(widget.lastIndex, _variabelCon.text, nm, nk, na, ak.toInt(), pr, note: _noteCon.text)
             );
           },
         ),

@@ -1,6 +1,5 @@
 
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +53,22 @@ class AdminHomeDashboardController extends Controller {
       dialogKey.currentState!.addLine(message);
     refreshUI();
   }
+  void _onExportNilai(List<int>? fileBytes) async {
+    if (fileBytes == null) {
+      ScaffoldMessenger.of(getContext()).showSnackBar(SnackBar(content: Text('Terjadi masalah.')));
+      return;
+    }
+
+    String? selectedDirectory = await FilePicker.platform.saveFile(
+      fileName: 'export-nilai.xlsx',
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+    );
+
+    if (selectedDirectory != null) {
+      await File(selectedDirectory).writeAsBytes(fileBytes);
+    }
+  }
 
   @override
   void initListeners() {
@@ -62,6 +77,7 @@ class AdminHomeDashboardController extends Controller {
     _presenter.getNilaiList = _getNilaiList;
     _presenter.getNilaiListState = _getNilaiListState;
     _presenter.printExceptionMessage = _printExceptionMessage;
+    _presenter.getExportNilai = _onExportNilai;
   }
 
   void getSantriList() {
@@ -131,6 +147,7 @@ class AdminHomeDashboardController extends Controller {
       await File(selectedDirectory).writeAsBytes(bytes);
     }
   }
+  void export() async => _presenter.doExport();
 
   @override
   void onInitState() {

@@ -193,7 +193,23 @@ class AdminHomeDashboardUIView
                   icon: Icons.output,
                   title: 'Expor Nilai',
                   columnItems: [
-
+                    // Action Button
+                    SizedBox(
+                      height: 45.0,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              style: dashboardBtnStyle,
+                              icon: Icon(Icons.output),
+                              label: Text('Expor Nilai'),
+                              onPressed: controller.export,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ],

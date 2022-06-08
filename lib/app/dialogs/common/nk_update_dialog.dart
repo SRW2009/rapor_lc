@@ -96,7 +96,7 @@ class _NKUpdateDialogState extends State<NKUpdateDialog> {
             var ak = NilaiCalculation.accumulate([nm,nk,na]);
             var pr = NilaiCalculation.toPredicate(ak);
             return widget.onSave(
-                NK(widget.nk.no, _variabelCon.text, nm, nk, na, ak, pr, note: _noteCon.text)
+                NK(widget.nk.no, _variabelCon.text, nm, nk, na, ak.toInt(), pr, note: _noteCon.text)
             );
           },
         ),

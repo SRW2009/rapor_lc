@@ -86,7 +86,13 @@ class MyPDFChart {
           divisions: true,
         ),
         yAxis: FixedAxis.fromStrings(
-          data.mapels.map<String>((e) => e.name).toList(),
+          data.mapels.map<String>((e) {
+            // if dummy exist
+            if (e.name == ':::') return '';
+            if (e.name == '::::') return '';
+
+            return e.name;
+          }).toList(),
           marginStart: 20,
           marginEnd: 20,
           ticks: true,

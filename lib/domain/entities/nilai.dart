@@ -14,7 +14,7 @@ part 'nilai.g.dart';
 @NHBConverter()
 @NKConverter()
 @NPBConverter()
-class Nilai {
+class Nilai implements Comparable {
   final int id;
 
   @BaSConverter()
@@ -52,6 +52,16 @@ class Nilai {
   @override
   int get hashCode =>
       id.hashCode ^ BaS.hashCode ^ tahunAjaran.hashCode ^ santri.hashCode;
+
+  Nilai clone() => Nilai.fromJson(this.toJson());
+
+  @override
+  int compareTo(other) {
+    if (other is! Nilai) throw TypeError();
+    final thisVal = double.tryParse('${tahunAjaran.split('/')[0]}.${BaS.semester}${BaS.bulanFormatted()}') ?? 0;
+    final otherVal = double.tryParse('${tahunAjaran.split('/')[0]}.${other.BaS.semester}${other.BaS.bulanFormatted()}') ?? 0;
+    return thisVal.compareTo(otherVal);
+  }
 }
 
 class NilaiConverter implements JsonConverter<Nilai, Map<String, dynamic>> {

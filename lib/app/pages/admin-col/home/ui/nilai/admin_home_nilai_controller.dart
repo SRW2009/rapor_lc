@@ -29,6 +29,7 @@ class AdminHomeNilaiController extends DataTableController<Nilai> {
   }
 
   void _getNilaiList(List<Nilai> list) {
+    list.sort();
     normalList = list;
     filteredList = list;
     selectedMap.addEntries(list.map<MapEntry<String, bool>>

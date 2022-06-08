@@ -27,14 +27,9 @@ Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semeste
               MyPDFTable.buildIdentityTable(nilaiList.firstWhere((e) => e.BaS.semester==semester)),
               SizedBox(height: 12.0),
               Expanded(
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: MyPDFChart.buildNPBBarChart(nilaiList, semester, isIT),
-                  ),
-                ),
+                child: MyPDFChart.buildNPBBarChart(nilaiList, semester, isIT),
               ),
-              SizedBox(height: 12.0),
+              /*SizedBox(height: 12.0),
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(),
@@ -48,8 +43,8 @@ Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semeste
                     fontSize: 12.0,
                   ),
                 ),
-              ),
-              SizedBox(height: 12.0),
+              ),*/
+              SizedBox(height: 16.0),
               buildPageNumber(1),
             ],
           ),
