@@ -9,11 +9,12 @@ import 'package:rapor_lc/app/pages/admin-col/home/ui/mapel/admin_home_mapel_view
 import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_view.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/relation/admin_home_relation_view.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/santri/admin_home_santri_view.dart';
+import 'package:rapor_lc/app/pages/admin-col/home/ui/setting/admin_home_setting_view.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/teacher/admin_home_teacher_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/domain/entities/abstract/user.dart';
 
-enum AdminHomeState { dashboard, santri, teacher, admin, mapel, divisi, nilai, relasi }
+enum AdminHomeState { dashboard, santri, teacher, admin, mapel, divisi, nilai, relasi, setting }
 
 class AdminHomeController extends Controller {
   AdminHomeState state = AdminHomeState.dashboard;
@@ -91,6 +92,8 @@ class AdminHomeController extends Controller {
         return AdminHomeNilaiUI();
       case AdminHomeState.relasi:
         return AdminHomeRelationUI();
+      case AdminHomeState.setting:
+        return AdminHomeSettingUI();
       default:
         return Container();
     }

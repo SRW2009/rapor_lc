@@ -10,8 +10,9 @@ import 'package:rapor_lc/domain/repositories/teacher_repo.dart';
 import 'package:http/http.dart' as http;
 
 class TeacherRepositoryImpl extends TeacherRepository {
+
   @override
-  String get url => Urls.adminTeacher;
+  String url = Urls.adminTeacher;
 
   @override
   Future<List<Teacher>> getTeacherList() async {
@@ -23,7 +24,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
     );
     if (response.statusCode == StatusCode.getSuccess) {
       return (jsonDecode(response.body) as List)
-          .map<Teacher>((e) => TeacherModel.fromJsonToEntity(e)).toList();
+          .map<Teacher>((e) => Teacher.fromJson(e)).toList();
     }
     throw Exception();
   }
@@ -35,7 +36,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
     final response = await http.post(
       createUri(),
       headers: DataConstant.headers(token),
-      body: jsonEncode(TeacherModel.fromEntityToJson(teacher)),
+      body: jsonEncode(TeacherModel.toJsonRequest(teacher)),
     );
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
@@ -50,7 +51,7 @@ class TeacherRepositoryImpl extends TeacherRepository {
     final response = await http.put(
       updateUri(teacher.id),
       headers: DataConstant.headers(token),
-      body: jsonEncode(TeacherModel.fromEntityToJson(teacher)),
+      body: jsonEncode(TeacherModel.toJsonRequest(teacher)),
     );
     if (response.statusCode == StatusCode.putSuccess) {
       return RequestStatus.success;

@@ -1,5 +1,4 @@
 
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:rapor_lc/domain/entities/abstract/user.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
@@ -7,14 +6,14 @@ import 'package:rapor_lc/domain/entities/divisi.dart';
 part 'teacher.g.dart';
 
 @JsonSerializable()
-@NullableDivisiConverter()
 class Teacher extends User {
   final int id;
   @JsonKey(name: 'is_leader')
   final bool? isLeader;
-  final Divisi? divisi;
+  @JsonKey(name: 'divisi_detail')
+  final Divisi divisi;
 
-  Teacher(this.id, String name, {String? email, String? password, this.isLeader, this.divisi})
+  Teacher(this.id, String name, {required this.divisi, String? email, String? password, this.isLeader})
       : super(name, email: email, password: password);
 
   factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
@@ -34,14 +33,4 @@ class Teacher extends User {
 
   @override
   int get hashCode => id.hashCode ^ name.hashCode;
-}
-
-class TeacherConverter implements JsonConverter<Teacher, Map<String, dynamic>> {
-  const TeacherConverter();
-
-  @override
-  Teacher fromJson(Map<String, dynamic> json) => Teacher.fromJson(json);
-
-  @override
-  Map<String, dynamic> toJson(Teacher object) => object.toJson();
 }

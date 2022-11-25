@@ -25,13 +25,3 @@ class Santri {
   @override
   int get hashCode => id.hashCode ^ name.hashCode;
 }
-
-class SantriConverter implements JsonConverter<Santri, Map<String, dynamic>> {
-  const SantriConverter();
-
-  @override
-  Santri fromJson(Map<String, dynamic> json) => Santri.fromJson(json);
-
-  @override
-  Map<String, dynamic> toJson(Santri object) => object.toJson();
-}

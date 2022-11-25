@@ -20,8 +20,6 @@ class NilaiRepositoryImplTest extends NilaiRepository {
         final item = Nilai.fromJson(nilai.toJson()..['id']=nilaiList.length);
         nilaiList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class NilaiRepositoryImplTest extends NilaiRepository {
       Future.delayed(DataConstant.test_duration, () async {
         nilaiList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<Nilai>> getNilaiList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return nilaiList.toList();
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,10 +43,8 @@ class NilaiRepositoryImplTest extends NilaiRepository {
           index, index+1, [nilai]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

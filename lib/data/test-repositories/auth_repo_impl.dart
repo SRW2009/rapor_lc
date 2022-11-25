@@ -13,13 +13,11 @@ class AuthenticationRepositoryImplTest extends AuthenticationRepository {
   @override
   Future<int> authenticateTeacher({required String email, required String password}) {
     return Future.delayed(DataConstant.test_duration, () async {
-      final user = Teacher(0, 'Guruku', email: email, isLeader: true, divisi: Divisi(0, 'IT'));
+      final user = Teacher(0, 'Guruku', email: email, isLeader: true, divisi: Divisi(0, 'IT', false));
       await SharedPrefs().setCurrentUser(user);
       await SharedPrefs().setToken(_testToken);
 
       return user.status;
-      // failed
-      return 0;
     });
   }
 
@@ -31,8 +29,6 @@ class AuthenticationRepositoryImplTest extends AuthenticationRepository {
         await SharedPrefs().setToken(_testToken);
 
         return user.status;
-        // failed
-        return 0;
       });
 
   @override
@@ -59,5 +55,5 @@ class AuthenticationRepositoryImplTest extends AuthenticationRepository {
       await SharedPrefs().logout();
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

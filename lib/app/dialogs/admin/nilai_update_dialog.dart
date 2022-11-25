@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
-import 'package:rapor_lc/app/widgets/form_field/form_input_bas.dart';
-import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field_checkbox.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_timeline.dart';
+import 'package:rapor_lc/domain/entities/timeline.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
@@ -24,16 +25,18 @@ class NilaiUpdateDialog extends StatefulWidget {
 class _NilaiUpdateDialogState extends State<NilaiUpdateDialog> {
   final _key = GlobalKey<FormState>();
   late final TextEditingController _idCon;
-  late BulanAndSemester _BaSCon;
+  late Timeline _timelineCon;
   late final TextEditingController _tahunAjaranCon;
   Santri? _santriCon;
+  bool _isObservationCon = false;
 
   @override
   void initState() {
     _idCon = TextEditingController(text: widget.nilai.id.toString());
-    _BaSCon = widget.nilai.BaS;
+    _timelineCon = widget.nilai.timeline;
     _tahunAjaranCon = TextEditingController(text: widget.nilai.tahunAjaran);
     _santriCon = widget.nilai.santri;
+    _isObservationCon = widget.nilai.isObservation;
     super.initState();
   }
 
@@ -54,11 +57,11 @@ class _NilaiUpdateDialogState extends State<NilaiUpdateDialog> {
                   controller: _idCon,
                   isDisabled: true,
                 ),
-                FormInputBaS(
-                  BaS: _BaSCon,
+                FormInputTimeline(
+                  timeline: _timelineCon,
                   onChanged: (val) {
                     setState(() {
-                      _BaSCon = val;
+                      _timelineCon = val;
                     });
                   },
                 ),
@@ -84,6 +87,18 @@ class _NilaiUpdateDialogState extends State<NilaiUpdateDialog> {
                   onPick: (val) => _santriCon = val,
                   selectedItem: () => _santriCon,
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: FormInputFieldCheckBox(
+                    'Is Observation',
+                    _isObservationCon,
+                        (val) {
+                      setState(() {
+                        _isObservationCon = val;
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -91,7 +106,7 @@ class _NilaiUpdateDialogState extends State<NilaiUpdateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            Nilai(widget.nilai.id, _BaSCon, _tahunAjaranCon.text, _santriCon!),
+            Nilai(widget.nilai.id, _timelineCon, _tahunAjaranCon.text, _santriCon!, isObservation: _isObservationCon),
           ),
         ),
       ],

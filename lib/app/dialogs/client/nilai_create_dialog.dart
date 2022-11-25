@@ -1,9 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/widgets/form_field/form_input_bas.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field_checkbox.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_timeline.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
-import 'package:rapor_lc/domain/entities/bulan_and_semester.dart';
+import 'package:rapor_lc/domain/entities/timeline.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
@@ -20,13 +21,14 @@ class ClientNilaiCreateDialog extends StatefulWidget {
 
 class _ClientNilaiCreateDialogState extends State<ClientNilaiCreateDialog> {
   final _key = GlobalKey<FormState>();
-  late BulanAndSemester _BaSCon;
+  late Timeline _timelineCon;
   late final TextEditingController _tahunAjaranCon;
   late final TextEditingController _santriCon;
+  bool _isObservationCon = false;
 
   @override
   void initState() {
-    _BaSCon = BulanAndSemester(0, 0);
+    _timelineCon = Timeline(0, 0, 0, 0);
     _tahunAjaranCon = TextEditingController();
     _santriCon =TextEditingController(text: widget.santri.name);
     super.initState();
@@ -44,11 +46,11 @@ class _ClientNilaiCreateDialogState extends State<ClientNilaiCreateDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FormInputBaS(
-                  BaS: _BaSCon,
+                FormInputTimeline(
+                  timeline: _timelineCon,
                   onChanged: (val) {
                     setState(() {
-                      _BaSCon = val;
+                      _timelineCon = val;
                     });
                   },
                 ),
@@ -71,6 +73,18 @@ class _ClientNilaiCreateDialogState extends State<ClientNilaiCreateDialog> {
                   controller: _santriCon,
                   isDisabled: true,
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: FormInputFieldCheckBox(
+                    'Is Observation',
+                    _isObservationCon,
+                        (val) {
+                      setState(() {
+                        _isObservationCon = val;
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -78,7 +92,7 @@ class _ClientNilaiCreateDialogState extends State<ClientNilaiCreateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            Nilai(0, _BaSCon, _tahunAjaranCon.text, widget.santri),
+            Nilai(0, _timelineCon, _tahunAjaranCon.text, widget.santri, isObservation: _isObservationCon),
           ),
         ),
       ],

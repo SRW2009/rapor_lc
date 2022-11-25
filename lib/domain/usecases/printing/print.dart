@@ -11,9 +11,8 @@ class PrintUseCase extends UseCase<String, PrintUseCaseParams> {
   PrintUseCase(this.repository);
 
   @override
-  Future<Stream<String?>> buildUseCaseStream(PrintUseCaseParams? e) async {
-    return repository.print(e!.santriList, e.nilaiList, e.printSettings);
-  }
+  Future<Stream<String?>> buildUseCaseStream(PrintUseCaseParams? e) async =>
+      repository.print(e!.santriList, e.nilaiList, e.printSettings);
 }
 
 class PrintUseCaseParams {

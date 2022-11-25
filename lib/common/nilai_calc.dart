@@ -1,12 +1,17 @@
 
 class NilaiCalculation {
   static double accumulate(List<num> grades) {
+    final total = accumulateNaN(grades);
+    return total.isNaN ? 0 : (double.tryParse(total.toStringAsFixed(2)) ?? 0);
+  }
+
+  static num accumulateNaN(List<num> grades) {
     int skipped = 0;
-    double total = (grades.fold<double>(0, (x, y) {
+    num total = (grades.fold<double>(0, (x, y) {
       if (y==-1) skipped++;
       return (y==-1) ? x : x+y;
     })/(grades.length-skipped));
-    return total.isNaN ? 0 : (double.tryParse(total.toStringAsFixed(2)) ?? 0);
+    return total;
   }
 
   static String toPredicate(double accumulation) {
@@ -21,5 +26,12 @@ class NilaiCalculation {
     if (accumulation > 25) return 'D+';
     if (accumulation > 0) return 'D';
     return 'D-';
+  }
+
+  static String toNKPredicate(double accumulation) {
+    if (accumulation < 60) return 'BA';
+    if (accumulation < 70) return 'MB';
+    if (accumulation < 80) return 'BB';
+    return 'BSB';
   }
 }

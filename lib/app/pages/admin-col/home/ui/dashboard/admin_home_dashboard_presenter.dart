@@ -133,19 +133,15 @@ class _PrintDummyObserver extends Observer<UseCaseResponse<void>> {
   _PrintDummyObserver(this.presenter);
 
   @override
-  void onComplete() {
-    // TODO: implement onComplete
-  }
+  void onComplete() {}
 
   @override
   void onError(e) {
-    // TODO: implement onError
+    print(e);
   }
 
   @override
-  void onNext(UseCaseResponse<void>? response) {
-    // TODO: implement onNext
-  }
+  void onNext(UseCaseResponse<void>? response) {}
 }
 
 class _ExportObserver extends Observer<UseCaseResponse<List<int>?>> {
@@ -154,9 +150,7 @@ class _ExportObserver extends Observer<UseCaseResponse<List<int>?>> {
   _ExportObserver(this._presenter);
 
   @override
-  void onComplete() {
-    // TODO: implement onComplete
-  }
+  void onComplete() {}
 
   @override
   void onError(e) {

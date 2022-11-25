@@ -49,7 +49,7 @@ class _MataPelajaranCreateDialogState extends State<MataPelajaranCreateDialog> {
                   label: 'Divisi',
                   compareFn: (o1, o2) => o1 == o2,
                   onFind: widget.controller.dialogOnFindDivisi,
-                  showItem: (e) => '${e.id} - ${e.name}',
+                  showItem: (e) => '${e.id} - ${e.name} ${e.isBlock?'(Block System)':''}',
                   onPick: (val) {
                     setState(() {
                       _divisiCon = val;
@@ -64,7 +64,7 @@ class _MataPelajaranCreateDialogState extends State<MataPelajaranCreateDialog> {
           formKey: _key,
           onSave: () => widget.onSave(
             MataPelajaran(0, _nameCon.text,
-              divisi: _divisiCon,
+              divisi: _divisiCon!,
             ),
           ),
         ),

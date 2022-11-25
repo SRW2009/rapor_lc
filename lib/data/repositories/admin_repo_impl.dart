@@ -9,8 +9,9 @@ import 'package:rapor_lc/domain/repositories/admin_repo.dart';
 import 'package:http/http.dart' as http;
 
 class AdminRepositoryImpl extends AdminRepository {
+
   @override
-  String get url => Urls.adminAdmin;
+  String url = Urls.adminAdmin;
 
   @override
   Future<List<Admin>> getAdminList() async {

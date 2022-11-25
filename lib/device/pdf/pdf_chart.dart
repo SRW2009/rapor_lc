@@ -1,8 +1,10 @@
 
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/device/pdf/pdf_data_factory.dart';
+import 'package:rapor_lc/device/pdf/pdf_object.dart';
+import 'package:rapor_lc/device/pdf/pdf_widget.dart';
+import 'package:rapor_lc/domain/entities/nilai.dart';
+import 'package:rapor_lc/domain/entities/timeline.dart';
 
 class MyPDFChart {
   static Widget _buildTitle(String title) {
@@ -10,33 +12,26 @@ class MyPDFChart {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Text(
         title,
-        style: TextStyle(
-          color: PdfColors.grey700,
-          font: Font.times(),
-          fontSize: 18.0,
-        ),
+        style: headerTextStyle(),
       ),
     );
   }
 
-  static Chart buildNKLineChart(List<Nilai> nilaiList, int semester) {
+  static Chart buildNKLineChart(NKDatasets datasets, Timeline timeline) {
     final _months = ['Januari', 'Februari', 'Maret', 'April', 'Mei',
       'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-    var datasets = ChartDatasetsFactory.buildNKDatasets(nilaiList, semester);
     return Chart(
-      title: _buildTitle('Analisa Aspek Kemadirian Santri'),
+      title: _buildTitle('Analisa Aspek Kemandirian Santri'),
       bottom: ChartLegend(
+        padding: EdgeInsets.all(5).copyWith(top: 10),
         position: Alignment.center,
         direction: Axis.horizontal,
-        textStyle: TextStyle(
-          fontSize: 12.0,
-          font: Font.times(),
-        ),
+        textStyle: bodyTextStyle(),
       ),
       grid: CartesianGrid(
         xAxis: FixedAxis.fromStrings(
-          List.generate(6, (i) => _months[semester.isOdd ? i+6 : i]),
+          List.generate(6, (i) => _months[timeline.semester.isOdd ? i+6 : i]),
           marginStart: 30,
           marginEnd: 30,
           ticks: true,
@@ -46,25 +41,41 @@ class MyPDFChart {
           divisions: true,
         ),
       ),
-      datasets: datasets,
+      datasets: datasets.datasets,
     );
   }
 
-  static Chart buildNHBPieChart(List<Nilai> nilaiList, int semester) {
-    var datasets = ChartDatasetsFactory.buildNHBDatasets(nilaiList, semester);
+  static Chart buildNHBBarChart(NHBDatasets datasets) {
     return Chart(
-      title: _buildTitle('Analisa Dominasi Santri'),
-      grid: PieGrid(),
-      right: ChartLegend(
-        direction: Axis.vertical,
-        position: Alignment.centerRight,
-        padding: const EdgeInsets.only(left: 16.0),
-        textStyle: TextStyle(
-          fontSize: 12.0,
-          font: Font.times(),
+      title: _buildTitle('Grafik NHB'),
+      bottom: ChartLegend(
+        padding: EdgeInsets.all(5).copyWith(top: 10),
+        position: Alignment.center,
+        direction: Axis.horizontal,
+        textStyle: bodyTextStyle(),
+      ),
+      grid: CartesianGrid(
+        xAxis: FixedAxis.fromStrings(
+          (datasets.mapels).map<String>((e) {
+            // if dummy exist
+            if (e.name == ':::') return '';
+            if (e.name == '::::') return '';
+
+            return e.name;
+          }).toList(),
+          marginStart: 12,
+          marginEnd: 12,
+          ticks: true,
+          angle: 0,
+          textStyle: bodyTextStyle(size: 10),
+        ),
+        yAxis: FixedAxis(
+          <num>[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+          divisions: true,
+          textStyle: bodyTextStyle(size: 12),
         ),
       ),
-      datasets: datasets,
+      datasets: datasets.datasets,
     );
   }
 
@@ -73,12 +84,10 @@ class MyPDFChart {
     return Chart(
       title: _buildTitle('Analisa Proses Belajar Santri'),
       bottom: ChartLegend(
+        padding: EdgeInsets.all(5).copyWith(top: 10),
         position: Alignment.center,
         direction: Axis.horizontal,
-        textStyle: TextStyle(
-          fontSize: 12.0,
-          font: Font.times(),
-        ),
+        textStyle: bodyTextStyle(),
       ),
       grid: CartesianGrid(
         xAxis: FixedAxis(
@@ -97,9 +106,7 @@ class MyPDFChart {
           marginEnd: 20,
           ticks: true,
           angle: 0,
-          textStyle: const TextStyle(
-            fontSize: 9.0,
-          ),
+          textStyle: bodyTextStyle(size: 9),
         ),
       ),
       datasets: data.datasets,

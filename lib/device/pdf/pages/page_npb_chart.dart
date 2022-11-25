@@ -3,7 +3,7 @@ import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 
 import 'package:rapor_lc/device/pdf/pdf_chart.dart';
-import 'package:rapor_lc/device/pdf/pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_widget.dart';
 import 'package:rapor_lc/device/pdf/pdf_table.dart';
 
 Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1, bool isIT=false}) {
@@ -17,14 +17,14 @@ Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semeste
           child: Image(headerImage),
         ),
         Padding(
-          padding: const EdgeInsets.all(80.0),
+          padding: pagePadding,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildPageTitle('NILAI PROSES BELAJAR ${isIT ? '(IT)' : ''}'),
+              buildPageTitle('Nilai Proses Belajar ${isIT ? '(IT)' : ''}'),
               SizedBox(height: 12.0),
-              MyPDFTable.buildIdentityTable(nilaiList.firstWhere((e) => e.BaS.semester==semester)),
+              MyPDFTable.buildIdentityTable(nilaiList.firstWhere((e) => e.timeline.semester==semester)),
               SizedBox(height: 12.0),
               Expanded(
                 child: MyPDFChart.buildNPBBarChart(nilaiList, semester, isIT),
@@ -44,8 +44,6 @@ Page page_npb_chart(MemoryImage headerImage, List<Nilai> nilaiList, {int semeste
                   ),
                 ),
               ),*/
-              SizedBox(height: 16.0),
-              buildPageNumber(1),
             ],
           ),
         ),

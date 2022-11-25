@@ -53,7 +53,7 @@ class SharedPrefs with _SharedPrefsKey implements _SharedPrefsMainFunction {
       final divId = pref.getInt(USER_DIVISI_ID)!;
       final divName = pref.getString(USER_DIVISI_NAME)!;
       final divIsLeader = pref.getBool(USER_DIVISI_ISLEADER)!;
-      user = Teacher(0, name, email: email, divisi: Divisi(divId, divName), isLeader: divIsLeader);
+      user = Teacher(0, name, email: email, divisi: Divisi(divId, divName, false), isLeader: divIsLeader);
     } else if (status == 2) {
       user = Admin(0, name, email: email);
     }
@@ -70,8 +70,8 @@ class SharedPrefs with _SharedPrefsKey implements _SharedPrefsMainFunction {
     final status = await pref.setInt(USER_STATUS, user.status);
 
     if (user is Teacher) {
-      final divId = await pref.setInt(USER_DIVISI_ID, user.divisi!.id);
-      final divName = await pref.setString(USER_DIVISI_NAME, user.divisi!.name);
+      final divId = await pref.setInt(USER_DIVISI_ID, user.divisi.id);
+      final divName = await pref.setString(USER_DIVISI_NAME, user.divisi.name);
       final divIsLeader = await pref.setBool(USER_DIVISI_ISLEADER, user.isLeader!);
 
       if (!divId || !divName || !divIsLeader) {

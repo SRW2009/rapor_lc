@@ -7,8 +7,10 @@ part 'divisi.g.dart';
 class Divisi {
   final int id;
   final String name;
+  @JsonKey(name: 'is_block')
+  final bool isBlock;
 
-  const Divisi(this.id, this.name);
+  const Divisi(this.id, this.name, this.isBlock);
 
   factory Divisi.fromJson(Map<String, dynamic> json) => _$DivisiFromJson(json);
   Map<String, dynamic> toJson() => _$DivisiToJson(this);
@@ -23,24 +25,4 @@ class Divisi {
 
   @override
   int get hashCode => id.hashCode ^ name.hashCode;
-}
-
-class DivisiConverter implements JsonConverter<Divisi, Map<String, dynamic>> {
-  const DivisiConverter();
-
-  @override
-  Divisi fromJson(Map<String, dynamic> json) => Divisi.fromJson(json);
-
-  @override
-  Map<String, dynamic> toJson(Divisi object) => object.toJson();
-}
-
-class NullableDivisiConverter implements JsonConverter<Divisi?, Map<String, dynamic>?> {
-  const NullableDivisiConverter();
-
-  @override
-  Divisi? fromJson(Map<String, dynamic>? json) => json != null ? Divisi.fromJson(json) : null;
-
-  @override
-  Map<String, dynamic>? toJson(Divisi? object) => object?.toJson();
 }

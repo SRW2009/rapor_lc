@@ -38,17 +38,17 @@ class ManageNPBPageView extends ViewState<ManageNPBPage, ManageNPBController> {
             child: Card(
               child: CustomDataTable<NPB>(
                 controller: controller,
-                title: 'NPB ${widget.nilai.BaS.toReadableString()}',
+                title: 'NPB ${widget.nilai.timeline.toExcelString()}',
                 tableHeaders: const [
                   'No',
                   'Nama Mapel',
-                  'Presensi',
+                  'N',
                   'Action',
                 ],
                 tableContentBuilder: (item) => [
                   DataCell(Text(item.no.toString())),
                   DataCell(Text(item.pelajaran.name)),
-                  DataCell(Text(item.presensi)),
+                  DataCell(Text(item.n.toString())),
                   DataCell(IconButton(
                     onPressed: () => controller.tableOnEdit(item),
                     icon: const Icon(Icons.edit),

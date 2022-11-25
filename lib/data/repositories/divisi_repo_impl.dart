@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:rapor_lc/app/utils/loaded_settings.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs.dart';
@@ -9,8 +10,9 @@ import 'package:rapor_lc/domain/repositories/divisi_repo.dart';
 import 'package:http/http.dart' as http;
 
 class DivisiRepositoryImpl extends DivisiRepository {
+
   @override
-  String get url => Urls.adminDivisi;
+  String url = Urls.adminDivisi;
 
   @override
   Future<List<Divisi>> getDivisiList() async {
@@ -21,8 +23,12 @@ class DivisiRepositoryImpl extends DivisiRepository {
       headers: DataConstant.headers(token),
     );
     if (response.statusCode == StatusCode.getSuccess) {
-      return (jsonDecode(response.body) as List)
+      final list = (jsonDecode(response.body) as List)
           .map<Divisi>((e) => Divisi.fromJson(e)).toList();
+      try {
+        LoadedSettings.divisiKesantrian = list.firstWhere((element) => element.name=='Kesantrian');
+      } on StateError {}
+      return list;
     }
     throw Exception();
   }

@@ -20,8 +20,6 @@ class TeacherRepositoryImplTest extends TeacherRepository {
         final item = Teacher.fromJson(user.toJson()..['id']=teacherList.length);
         teacherList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class TeacherRepositoryImplTest extends TeacherRepository {
       Future.delayed(DataConstant.test_duration, () async {
         teacherList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<Teacher>> getTeacherList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return teacherList;
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,10 +43,8 @@ class TeacherRepositoryImplTest extends TeacherRepository {
           index, index+1, [user]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

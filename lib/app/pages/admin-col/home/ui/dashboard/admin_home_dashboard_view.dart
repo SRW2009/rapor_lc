@@ -10,7 +10,7 @@ import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
 import 'package:rapor_lc/device/excel/repository/excel_repo_impl.dart';
-import 'package:rapor_lc/device/pdf/repositories/printing_repo_impl.dart';
+import 'package:rapor_lc/device/pdf/repository/printing_repo_impl.dart';
 
 class AdminHomeDashboardUI extends View {
   AdminHomeDashboardUI({Key? key}) : super(key: key);
@@ -124,32 +124,29 @@ class AdminHomeDashboardUIView
                         ),
 
                         // Action Button
-                        SizedBox(
-                          height: 45.0,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: ElevatedButton.icon(
-                                  style: dashboardBtnStyle,
-                                  icon: Icon(Icons.print),
-                                  label: Text('Print Rapor'),
-                                  onPressed: () => controller.print(controller.getAllSelectedSantri(), controller.nilaiList ?? []),
-                                ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: ElevatedButton.icon(
+                                style: dashboardBtnStyle,
+                                icon: Icon(Icons.print),
+                                label: Text('Print Rapor'),
+                                onPressed: () => controller.print(controller.getAllSelectedSantri(), controller.nilaiList ?? []),
                               ),
-                              SizedBox(width: 24.0),
-                              Expanded(
-                                flex: 1,
-                                child: OutlinedButton.icon(
-                                  style: dashboardBtnStyle,
-                                  icon: Icon(Icons.print),
-                                  label: Text('Print Dummy Rapor'),
-                                  onPressed: controller.printDummy,
-                                ),
+                            ),
+                            SizedBox(width: 24.0),
+                            Expanded(
+                              flex: 1,
+                              child: OutlinedButton.icon(
+                                style: dashboardBtnStyle,
+                                icon: Icon(Icons.print),
+                                label: Text('Print Dummy Rapor'),
+                                onPressed: controller.printDummy,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

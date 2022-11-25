@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/admin/mapel_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/mapel_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
-import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
@@ -46,7 +46,7 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
       return;
     }
 
-    ScaffoldMessenger.of(getContext()).showSnackBar(const SnackBar(content: Text('Gagal membuat MataPelajaran.')));
+    ScaffoldMessenger.of(getContext()).showSnackBar(const SnackBar(content: Text('Gagal membuat Mata Pelajaran.')));
   }
 
   void _updateMataPelajaranStatus(RequestStatus status) {
@@ -59,7 +59,7 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
       return;
     }
 
-    ScaffoldMessenger.of(getContext()).showSnackBar(const SnackBar(content: Text('Gagal mengubah MataPelajaran.')));
+    ScaffoldMessenger.of(getContext()).showSnackBar(const SnackBar(content: Text('Gagal mengubah Mata Pelajaran.')));
   }
 
   void _deleteMataPelajaranStatus(RequestStatus status) {
@@ -129,7 +129,7 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
   bool searchWhereClause(MataPelajaran e) {
     if (e.id.toString().contains(currentQuery)) return true;
     if (e.name.toLowerCase().contains(currentQuery)) return true;
-    if (e.divisi?.name.toLowerCase().contains(currentQuery) ?? false) return true;
+    if (e.divisi.name.toLowerCase().contains(currentQuery)) return true;
     return false;
   }
 }

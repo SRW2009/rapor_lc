@@ -4,7 +4,8 @@ import 'package:rapor_lc/app/pages/admin-col/home/admin_home_view.dart';
 import 'package:rapor_lc/app/pages/client-col/home/home_view.dart';
 import 'package:rapor_lc/app/pages/client-col/manage-nilai/manage_nilai_view.dart';
 import 'package:rapor_lc/app/pages/login/login_view.dart';
-import 'package:rapor_lc/app/pages/manage-nhb/manage_nhb_view.dart';
+import 'package:rapor_lc/app/pages/manage-nhb/manage_nhb_block_view.dart';
+import 'package:rapor_lc/app/pages/manage-nhb/manage_nhb_semester_view.dart';
 import 'package:rapor_lc/app/pages/manage-nk/manage_nk_view.dart';
 import 'package:rapor_lc/app/pages/manage-npb/manage_npb_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
@@ -21,15 +22,19 @@ class Router {
       case Pages.splash:
         return _buildRoute(settings, SplashPage());
       case Pages.login:
-        return _buildRoute(settings, LoginPage());
+        final arg = settings.arguments as String?;
+        return _buildRoute(settings, LoginPage(errorMessage: arg));
       case Pages.home:
         return _buildRoute(settings, HomePage());
       case Pages.manage_nilai:
         final arg = settings.arguments! as List;
         return _buildRoute(settings, ManageNilaiPage(arg[0], arg[1]));
-      case Pages.manage_nhb:
+      case Pages.manage_nhb_semester:
         final arg = settings.arguments! as Nilai;
-        return _buildRoute(settings, ManageNHBPage(nilai: arg));
+        return _buildRoute(settings, ManageNHBSemesterPage(nilai: arg));
+      case Pages.manage_nhb_block:
+        final arg = settings.arguments! as Nilai;
+        return _buildRoute(settings, ManageNHBBlockPage(nilai: arg));
       case Pages.manage_nk:
         final arg = settings.arguments! as Nilai;
         return _buildRoute(settings, ManageNKPage(nilai: arg));

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:rapor_lc/app/utils/loaded_settings.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs.dart';
@@ -11,31 +12,31 @@ import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/repositories/mapel_repo.dart';
 
 class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
+
   @override
-  String get url => Urls.adminMapel;
+  String url = Urls.adminMapel;
+
+  @override
+  String altUrl = Urls.teacherGetMapel;
 
   @override
   Future<List<MataPelajaran>> getMataPelajaranList() async {
     final token = await SharedPrefs().getToken;
 
-    // check request privilege
-    final user = await SharedPrefs().getCurrentUser;
-    if (user == null) throw Exception();
-    Uri uri;
-    if (user is Teacher) uri = Uri.parse(Urls.teacherGetMapel);
-    else uri = readUri();
+    await checkPrivilege();
 
     final response = await http.get(
-      uri,
+      readUri(),
       headers: DataConstant.headers(token),
     );
     if (response.statusCode == StatusCode.getSuccess) {
       var iterable =(jsonDecode(response.body) as List)
-          .map<MataPelajaran>((e) => MataPelajaranModel.fromJsonToEntity(e))
-          .where((element) => element.divisi?.name != 'Kesantrian');
+          .map<MataPelajaran>((e) => MataPelajaran.fromJson(e))
+          .where((element) => element.divisi.name != 'Kesantrian');
 
+      final user = repUser;
       if (user is Teacher) return iterable
-          .where((element) => element.divisi?.id == user.divisi?.id)
+          .where((element) => element.divisi.id == user.divisi.id)
           .toList();
       return iterable.toList();
     }
@@ -46,10 +47,12 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   Future<RequestStatus> createMataPelajaran(MataPelajaran mapel) async {
     final token = await SharedPrefs().getToken;
 
+    await checkPrivilege();
+
     final response = await http.post(
       createUri(),
       headers: DataConstant.headers(token),
-      body: jsonEncode(MataPelajaranModel.fromEntityToJson(mapel)),
+      body: jsonEncode(MataPelajaranModel.toJsonRequest(mapel)),
     );
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
@@ -61,10 +64,12 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   Future<RequestStatus> updateMataPelajaran(MataPelajaran mapel) async {
     final token = await SharedPrefs().getToken;
 
+    await checkPrivilege();
+
     final response = await http.put(
       updateUri(mapel.id),
       headers: DataConstant.headers(token),
-      body: jsonEncode(MataPelajaranModel.fromEntityToJson(mapel)),
+      body: jsonEncode(MataPelajaranModel.toJsonRequest(mapel)),
     );
     if (response.statusCode == StatusCode.putSuccess) {
       return RequestStatus.success;
@@ -75,6 +80,8 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   @override
   Future<RequestStatus> deleteMataPelajaran(List<String> ids) async {
     final token = await SharedPrefs().getToken;
+
+    await checkPrivilege();
 
     bool success = true;
     for (var id in ids) {
@@ -96,23 +103,19 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   Future<List<MataPelajaran>> getNKVariables() async {
     final token = await SharedPrefs().getToken;
 
-    // check request privilege
-    final user = await SharedPrefs().getCurrentUser;
-    if (user == null) throw Exception();
-    Uri uri;
-    if (user is Teacher) uri = Uri.parse(Urls.teacherGetMapel);
-    else uri = readUri();
+    await checkPrivilege();
 
     final response = await http.get(
-      uri,
+      readUri(),
       headers: DataConstant.headers(token),
     );
     if (response.statusCode == StatusCode.getSuccess) {
-      var iterable =(jsonDecode(response.body) as List)
-          .map<MataPelajaran>((e) => MataPelajaranModel.fromJsonToEntity(e))
-          .where((element) => element.divisi?.name == 'Kesantrian');
+      final list =(jsonDecode(response.body) as List)
+          .map<MataPelajaran>((e) => MataPelajaran.fromJson(e))
+          .where((element) => element.divisi.name == 'Kesantrian').toList();
+      LoadedSettings.nkVariables = list.toList();
 
-      return iterable.toList();
+      return list;
     }
     throw Exception();
   }

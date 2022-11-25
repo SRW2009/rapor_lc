@@ -55,7 +55,7 @@ class HomeRecordController extends Controller {
   void onTapItem(Santri item) async {
     if (nilaiListState == RequestState.loaded || nilaiListState == RequestState.none) {
       final santriNilaiList = nilaiList.where((element) => element.santri == item).toList();
-      santriNilaiList.sort((a, b) => a.BaS.compareTo(b.BaS));
+      santriNilaiList.sort((a, b) => a.timeline.compareTo(b.timeline));
       final result = ((await Navigator.of(getContext())
           .pushNamed(Pages.manage_nilai, arguments: [item, santriNilaiList])) as List<Nilai>?)?.toList();
       if (result != null) {

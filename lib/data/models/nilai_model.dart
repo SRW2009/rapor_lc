@@ -2,12 +2,17 @@
 import 'package:rapor_lc/domain/entities/nilai.dart';
 
 class NilaiModel {
-  static Map<String, dynamic> fromEntityToJson(Nilai e)  => {
-    'semester': e.BaS.toString(),
-    'year': e.tahunAjaran,
-    'student_id': e.santri.id,
-    'npb': e.npb,
-    'nhb': e.nhb,
-    'nk': e.nk
+  static Map<String, dynamic> toJsonRequest(Nilai instance)  => {
+    'id': instance.id,
+    'semester': instance.timeline.toString(),
+    'year': instance.tahunAjaran,
+    'student_id': instance.santri.id,
+    'is_observation': instance.isObservation,
+    'nhb': {
+      'semester': instance.nhbSemester.map((e) => e.toJson()).toList(),
+      'block': instance.nhbBlock.map((e) => e.toJson()).toList(),
+    },
+    'nk': instance.nk.map((e) => e.toJson()).toList(),
+    'npb': instance.npb.map((e) => e.toJson()).toList(),
   };
 }

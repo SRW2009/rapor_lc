@@ -10,8 +10,12 @@ import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/repositories/santri_repo.dart';
 
 class SantriRepositoryImpl extends SantriRepository {
+
   @override
-  String get url => Urls.adminStudent;
+  String url = Urls.adminStudent;
+
+  @override
+  String altUrl = Urls.teacherGetStudent;
 
   @override
   Future<List<Santri>> getSantriList() async {

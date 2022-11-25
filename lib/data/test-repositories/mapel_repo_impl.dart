@@ -20,8 +20,6 @@ class MataPelajaranRepositoryImplTest extends MataPelajaranRepository {
         final item = MataPelajaran.fromJson(mapel.toJson()..['id']=mapelList.length);
         mapelList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class MataPelajaranRepositoryImplTest extends MataPelajaranRepository {
       Future.delayed(DataConstant.test_duration, () async {
         mapelList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<MataPelajaran>> getMataPelajaranList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return mapelList;
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,15 +43,13 @@ class MataPelajaranRepositoryImplTest extends MataPelajaranRepository {
           index, index+1, [mapel]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<MataPelajaran>> getNKVariables() async =>
       Future.delayed(DataConstant.test_duration, () async =>
-          mapelList.where((element) => element.divisi?.id == 4).toList());
+          mapelList.where((element) => element.divisi.id == 4).toList());
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

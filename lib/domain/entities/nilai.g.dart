@@ -8,12 +8,16 @@ part of 'nilai.dart';
 
 Nilai _$NilaiFromJson(Map<String, dynamic> json) => Nilai(
       json['id'] as int,
-      const BaSConverter().fromJson(json['semester'] as String),
+      const TimelineConverter().fromJson(json['semester'] as String),
       json['year'] as String,
-      const SantriConverter().fromJson(json['student'] as Map<String, dynamic>),
-      nhb: (json['nhb'] as List<dynamic>?)
-              ?.map((e) =>
-                  const NHBConverter().fromJson(e as Map<String, dynamic>))
+      Santri.fromJson(json['student'] as Map<String, dynamic>),
+      nhbSemester:
+          (Nilai._readJsonNHBSemester(json, 'nhbSemester') as List<dynamic>?)
+                  ?.map((e) => NHBSemester.fromJson(e as Map<String, dynamic>))
+                  .toList() ??
+              const [],
+      nhbBlock: (Nilai._readJsonNHBBlock(json, 'nhbBlock') as List<dynamic>?)
+              ?.map((e) => NHBBlock.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       nk: (json['nk'] as List<dynamic>?)
@@ -22,18 +26,8 @@ Nilai _$NilaiFromJson(Map<String, dynamic> json) => Nilai(
               .toList() ??
           const [],
       npb: (json['npb'] as List<dynamic>?)
-              ?.map((e) =>
-                  const NPBConverter().fromJson(e as Map<String, dynamic>))
+              ?.map((e) => NPB.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      isObservation: json['is_observation'] as bool? ?? false,
     );
-
-Map<String, dynamic> _$NilaiToJson(Nilai instance) => <String, dynamic>{
-      'id': instance.id,
-      'semester': const BaSConverter().toJson(instance.BaS),
-      'year': instance.tahunAjaran,
-      'student': const SantriConverter().toJson(instance.santri),
-      'nhb': instance.nhb.map(const NHBConverter().toJson).toList(),
-      'nk': instance.nk.map(const NKConverter().toJson).toList(),
-      'npb': instance.npb.map(const NPBConverter().toJson).toList(),
-    };

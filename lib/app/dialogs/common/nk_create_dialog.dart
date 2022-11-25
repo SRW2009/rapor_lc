@@ -1,21 +1,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/manage-nk/manage_nk_controller.dart';
-import 'package:rapor_lc/common/nilai_calc.dart';
+import 'package:rapor_lc/app/utils/loaded_settings.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_number.dart';
+import 'package:rapor_lc/common/nilai_calc.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 
 class NKCreateDialog extends StatefulWidget {
   final int lastIndex;
   final Function(NK) onSave;
-  final ManageNKController controller;
+  final Future<List<MataPelajaran>> Function(String?) onFindVariables;
 
   const NKCreateDialog({Key? key, 
-    required this.onSave, required this.controller, required this.lastIndex,
+    required this.onSave, required this.onFindVariables, required this.lastIndex,
   }) : super(key: key);
 
   @override
@@ -55,13 +55,16 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
                 FormDropdownSearch<MataPelajaran>(
                   label: 'Nama Variabel',
                   compareFn: (o1, o2) => o1?.id == o2?.id,
-                  onFind: widget.controller.dialogOnFindNKVars,
+                  onFind: widget.onFindVariables,
                   showItem: (e) => e.name,
                   onPick: (val) => setState(() => _variabelCon.text = val.name),
                 ),
-                FormInputFieldNumber('Nilai Mesjid', _nilaiMesjidCon),
-                FormInputFieldNumber('Nilai Kelas', _nilaiKelasCon),
-                FormInputFieldNumber('Nilai Asrama', _nilaiAsramaCon),
+                if (LoadedSettings.nkEnabledGrade?[_variabelCon.text]?['mesjid'] ?? true)
+                  FormInputFieldNumberNullable('Nilai Mesjid', _nilaiMesjidCon),
+                if (LoadedSettings.nkEnabledGrade?[_variabelCon.text]?['kelas'] ?? true)
+                  FormInputFieldNumberNullable('Nilai Kelas', _nilaiKelasCon),
+                if (LoadedSettings.nkEnabledGrade?[_variabelCon.text]?['asrama'] ?? true)
+                  FormInputFieldNumberNullable('Nilai Asrama', _nilaiAsramaCon),
                 FormInputField(
                   label: 'Catatan',
                   controller: _noteCon,
@@ -76,11 +79,11 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () {
-            var nm = int.tryParse(_nilaiMesjidCon.text)!;
-            var nk = int.tryParse(_nilaiKelasCon.text)!;
-            var na = int.tryParse(_nilaiAsramaCon.text)!;
+            var nm = int.tryParse(_nilaiMesjidCon.text) ?? -1;
+            var nk = int.tryParse(_nilaiKelasCon.text) ?? -1;
+            var na = int.tryParse(_nilaiAsramaCon.text) ?? -1;
             var ak = NilaiCalculation.accumulate([nm,nk,na]);
-            var pr = NilaiCalculation.toPredicate(ak);
+            var pr = NilaiCalculation.toNKPredicate(ak);
             return widget.onSave(
               NK(widget.lastIndex, _variabelCon.text, nm, nk, na, ak.toInt(), pr, note: _noteCon.text)
             );

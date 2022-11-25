@@ -6,10 +6,11 @@ import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
-import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
+import 'package:rapor_lc/domain/entities/nhb_block.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
@@ -109,9 +110,13 @@ class AdminHomeNilaiController extends DataTableController<Nilai> {
   }
 
   tableOnMore(Nilai nilai, Type arg) {
-    if (arg == NHB) {
+    if (arg == NHBSemester) {
       Navigator.of(getContext())
-          .pushNamed(Pages.manage_nhb, arguments: nilai);
+          .pushNamed(Pages.manage_nhb_semester, arguments: nilai);
+    }
+    if (arg == NHBBlock) {
+      Navigator.of(getContext())
+          .pushNamed(Pages.manage_nhb_block, arguments: nilai);
     }
     if (arg == NK) {
       Navigator.of(getContext())
@@ -148,7 +153,7 @@ class AdminHomeNilaiController extends DataTableController<Nilai> {
   @override
   bool searchWhereClause(Nilai e) {
     if (e.id.toString().contains(currentQuery)) return true;
-    if (e.BaS.toReadableString().toLowerCase().contains(currentQuery)) return true;
+    if (e.timeline.toExcelString().toLowerCase().contains(currentQuery)) return true;
     if (e.tahunAjaran.toLowerCase().contains(currentQuery)) return true;
     if (e.santri.name.toLowerCase().contains(currentQuery)) return true;
     return false;

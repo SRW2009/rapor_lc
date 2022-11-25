@@ -3,43 +3,83 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_presenter.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 
 class SplashController extends Controller {
   bool isLoading = false;
+  bool isError = false;
   final SplashPresenter _splashPresenter;
+  late String page;
 
-  SplashController(authRepo)
-      : _splashPresenter = SplashPresenter(authRepo),
+  int _authStatus = -1;
+  int _retryCount = 0;
+
+  SplashController(authRepo, settingRepo)
+      : _splashPresenter = SplashPresenter(authRepo, settingRepo),
         super();
 
-  @override
-  void onInitState() {
-    getAuthStatus();
-  }
-
-  void authStatusOnNext(int authStatus) {
-    String page;
+  void _authStatusOnNext(int authStatus) {
+    _authStatus = authStatus;
     if (authStatus == 2) {
       page = Pages.admin_home;
+      getSettingList();
     } else if (authStatus == 1) {
       page = Pages.home;
+      getSettingList();
     } else {
       page = Pages.login;
+      Navigator.of(getContext()).pushReplacementNamed(page);
     }
-
-    Navigator.of(getContext()).pushReplacementNamed(page);
   }
 
-  void getAuthStatus() async {
-    isLoading = true;
-    // so the animation can be seen
-    Future.delayed(const Duration(seconds: 3), _splashPresenter.getAuthStatus);
+  void _getSettingListState(RequestState state) {
+    if (state == RequestState.loaded) {
+      isLoading = false;
+      Navigator.of(getContext()).pushReplacementNamed(page);
+    }
+    else if (state == RequestState.error) {
+      _retryCount++;
+      if (_authStatus > 0 && _retryCount == 2) {
+        _splashPresenter.doLogout();
+        return;
+      }
+
+      isLoading = false;
+      isError = true;
+      refreshUI();
+      Future.delayed(const Duration(seconds: 5), () {
+        isLoading = true;
+        isError = false;
+        refreshUI();
+        getSettingList();
+      });
+    }
   }
 
   @override
   void initListeners() {
-    _splashPresenter.getAuthStatusOnNext = authStatusOnNext;
-    _splashPresenter.getAuthStatusOnComplete = () => isLoading = false;
+    _splashPresenter.getAuthStatusOnNext = _authStatusOnNext;
+    _splashPresenter.getSettingListState = _getSettingListState;
+    _splashPresenter.logoutOnComplete = () {
+      page = Pages.login;
+      Navigator.of(getContext()).pushReplacementNamed(page, arguments: 'Session expired. Please login again.');
+    };
+  }
+
+  void getAuthStatus() {
+    // so the animation can be seen
+    Future.delayed(const Duration(seconds: 2), () {
+      isLoading = true;
+      refreshUI();
+      _splashPresenter.getAuthStatus();
+    });
+  }
+
+  void getSettingList() => _splashPresenter.getSettingList();
+
+  @override
+  void onInitState() {
+    getAuthStatus();
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:rapor_lc/app/dialogs/common/nk_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/manage-nk/manage_nk_presenter.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
-import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -23,7 +23,7 @@ class ManageNKController extends DataTableController<NK> {
       );
 
   Future<List<MataPelajaran>>? varList;
-  Future<List<MataPelajaran>> dialogOnFindNKVars(String? query) async {
+  Future<List<MataPelajaran>> dialogOnFindNKVariables(String? query) async {
     varList ??= _presenter.futureGetNKVariables();
     return await varList!;
   }
@@ -138,14 +138,14 @@ class ManageNKController extends DataTableController<NK> {
   @override
   Widget? createDialog() => NKCreateDialog(
     lastIndex: (normalList.isEmpty) ? 0 : normalList.last.no+1,
-    controller: this,
+    onFindVariables: dialogOnFindNKVariables,
     onSave: (NK item) => _doCreateNK(item),
   );
 
   @override
   Widget? updateDialog(NK? e) => NKUpdateDialog(
     nk: e!,
-    controller: this,
+    onFindVariables: dialogOnFindNKVariables,
     onSave: (NK item) => _doUpdateNK(item),
   );
 

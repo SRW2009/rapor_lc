@@ -1,6 +1,6 @@
 
 class Urls {
-  static const _hostUrl = 'https://raporsi.sekolahimpian.com';//'http://10.50.50.2:1421';
+  static const _hostUrl = 'http://localhost:8000';//'https://raporsi2.sekolahimpian.com';
   static const loginAdminUrl = '$_hostUrl/v1/admin/login/';
   static const loginTeacherUrl = '$_hostUrl/v1/teacher/login/';
 
@@ -12,12 +12,14 @@ class Urls {
   static const adminMapel = '$_hostUrl/v1/admin/mapel/';
   static const adminRelation = '$_hostUrl/v1/admin/relation/';
   static const adminNilai = '$_hostUrl/v1/admin/nilai/';
+  static const adminSetting = '$_hostUrl/v1/admin/setting/';
 
   // TEACHER
   static const teacherGetStudent = '$_hostUrl/v1/teacher/student';
   static const teacherGetMapel = '$_hostUrl/v1/teacher/mapel';
   static const teacherGetNKVariables = '$_hostUrl/v1/teacher/nk';
   static const teacherNilai = '$_hostUrl/v1/teacher/nilai/';
+  static const teacherGetSetting = '$_hostUrl/v1/teacher/setting';
 }
 
 class DataConstant {

@@ -5,7 +5,7 @@ import 'package:rapor_lc/app/dialogs/common/npb_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/manage-npb/manage_npb_presenter.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
-import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
@@ -138,14 +138,14 @@ class ManageNPBController extends DataTableController<NPB> {
   @override
   Widget? createDialog() => NPBCreateDialog(
     lastIndex: (normalList.isEmpty) ? 0 : normalList.last.no+1,
-    controller: this,
+    onFindMapel: dialogOnFindMapel,
     onSave: (NPB item) => _doCreateNPB(item),
   );
 
   @override
   Widget? updateDialog(NPB? e) => NPBUpdateDialog(
     npb: e!,
-    controller: this,
+    onFindMapel: dialogOnFindMapel,
     onSave: (NPB item) => _doUpdateNPB(item),
   );
 
@@ -161,5 +161,5 @@ class ManageNPBController extends DataTableController<NPB> {
   @override
   bool searchWhereClause(NPB e) => e.no.toString().contains(currentQuery)
       || e.pelajaran.name.toLowerCase().contains(currentQuery)
-      || e.presensi.toLowerCase().contains(currentQuery);
+      || e.n.toString().contains(currentQuery);
 }

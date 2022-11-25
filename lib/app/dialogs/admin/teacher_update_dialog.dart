@@ -104,7 +104,7 @@ class _TeacherUpdateDialogState extends State<TeacherUpdateDialog> {
               email: _emailCon.text,
               password: _passwordCon.text,
               isLeader: _isLeaderCon,
-              divisi: _divisiCon,
+              divisi: _divisiCon!,
             ),
           ),
         ),

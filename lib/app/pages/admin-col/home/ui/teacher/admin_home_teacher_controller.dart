@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/admin/teacher_create_dialog.dart';
 import 'package:rapor_lc/app/dialogs/admin/teacher_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
-import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
@@ -16,12 +16,12 @@ class AdminHomeTeacherController extends DataTableController<Teacher> {
       : _presenter = AdminHomeTeacherPresenter(teacherRepo, divisiRepo),
         super();
 
-  Future<List<Divisi>>? divisiList;
+  List<Divisi>? divisiList;
   Future<List<Divisi>> dialogOnFindDivisi(String? query) async {
-    divisiList ??= _presenter.futureGetDivisiList();
+    divisiList ??= (await _presenter.futureGetDivisiList()).where((element) => !element.isBlock).toList();
     if (query == null || query == '') return divisiList!;
 
-    return (await divisiList!).toList();
+    return divisiList!.toList();
   }
 
   void _getTeacherList(List<Teacher> list) {
@@ -130,7 +130,7 @@ class AdminHomeTeacherController extends DataTableController<Teacher> {
     if (e.id.toString().contains(currentQuery)) return true;
     if (e.name.toLowerCase().contains(currentQuery)) return true;
     if (e.email?.toLowerCase().contains(currentQuery) ?? false) return true;
-    if (e.divisi?.name.toLowerCase().contains(currentQuery) ?? false) return true;
+    if (e.divisi.name.toLowerCase().contains(currentQuery)) return true;
     return false;
   }
 }

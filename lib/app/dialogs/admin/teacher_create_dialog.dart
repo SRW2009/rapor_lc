@@ -93,7 +93,7 @@ class _TeacherCreateDialogState extends State<TeacherCreateDialog> {
               email: _emailCon.text,
               password: _passwordCon.text,
               isLeader: _isLeaderCon,
-              divisi: _divisiCon,
+              divisi: _divisiCon!,
             ),
           ),
         ),

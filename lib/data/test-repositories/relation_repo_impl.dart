@@ -20,8 +20,6 @@ class RelationRepositoryImplTest extends RelationRepository {
         final item = Relation.fromJson(relation.toJson()..['id']=relationList.length);
         relationList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class RelationRepositoryImplTest extends RelationRepository {
       Future.delayed(DataConstant.test_duration, () async {
         relationList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<Relation>> getRelationList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return relationList;
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,10 +43,8 @@ class RelationRepositoryImplTest extends RelationRepository {
           index, index+1, [relation]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

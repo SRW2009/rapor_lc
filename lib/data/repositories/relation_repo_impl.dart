@@ -10,8 +10,9 @@ import 'package:rapor_lc/domain/repositories/relation_repo.dart';
 import 'package:http/http.dart' as http;
 
 class RelationRepositoryImpl extends RelationRepository {
+
   @override
-  String get url => Urls.adminRelation;
+  String url = Urls.adminRelation;
 
   @override
   Future<List<Relation>> getRelationList() async {
@@ -35,7 +36,7 @@ class RelationRepositoryImpl extends RelationRepository {
     final response = await http.post(
       createUri(),
       headers: DataConstant.headers(token),
-      body: jsonEncode(RelationModel.fromEntityToJson(relation)),
+      body: jsonEncode(RelationModel.toJsonRequest(relation)),
     );
     if (response.statusCode == StatusCode.postSuccess) {
       return RequestStatus.success;
@@ -50,7 +51,7 @@ class RelationRepositoryImpl extends RelationRepository {
     final response = await http.put(
       updateUri(relation.id),
       headers: DataConstant.headers(token),
-      body: jsonEncode(RelationModel.fromEntityToJson(relation)),
+      body: jsonEncode(RelationModel.toJsonRequest(relation)),
     );
     if (response.statusCode == StatusCode.putSuccess) {
       return RequestStatus.success;

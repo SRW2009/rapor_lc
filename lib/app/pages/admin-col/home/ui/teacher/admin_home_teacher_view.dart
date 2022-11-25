@@ -36,7 +36,7 @@ class AdminHomeTeacherUIView extends ViewState<AdminHomeTeacherUI, AdminHomeTeac
             tableContentBuilder: (item) => [
               DataCell(Text(item.email ?? '')),
               DataCell(Text(item.name)),
-              DataCell(Text(item.divisi?.name ?? '')),
+              DataCell(Text(item.divisi.name)),
               DataCell(IconButton(
                 onPressed: () => controller.tableOnEdit(item),
                 icon: const Icon(Icons.edit),

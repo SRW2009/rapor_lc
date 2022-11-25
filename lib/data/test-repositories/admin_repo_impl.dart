@@ -20,8 +20,6 @@ class AdminRepositoryImplTest extends AdminRepository {
         final item = Admin.fromJson(user.toJson()..['id']=adminList.length);
         adminList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class AdminRepositoryImplTest extends AdminRepository {
       Future.delayed(DataConstant.test_duration, () async {
         adminList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<Admin>> getAdminList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return adminList;
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,10 +43,8 @@ class AdminRepositoryImplTest extends AdminRepository {
           index, index+1, [user]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

@@ -4,6 +4,7 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/login/login_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
+import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 
 enum LoginFormState { login, forgotPass }
@@ -24,12 +25,12 @@ class LoginController extends Controller {
     isLoading = false;
     refreshUI();
 
-    // if teacher logged in as admin-col
+    // if user logged in as admin
     if (e == 2) {
       Navigator.of(getContext()).pushReplacementNamed(Pages.admin_home);
       return;
     }
-    // if teacher logged in as teacher
+    // if user logged in as teacher
     if (e == 1) {
       Navigator.of(getContext()).pushReplacementNamed(Pages.home);
       return;
@@ -87,7 +88,7 @@ class LoginController extends Controller {
       isLoading = true;
       refreshUI();
       if (loginAs == LoginAs.teacher) {
-        final user = Teacher(0, '', email: email, password: password);
+        final user = Teacher(0, '', email: email, password: password, divisi: Divisi(0,'',false));
         _loginPresenter.doLoginTeacher(user);
       } else {
         final user = Admin(0, '', email: email, password: password);

@@ -5,7 +5,7 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/domain/repositories/excel_repo.dart';
 
 class ImportNilaiUseCase extends UseCase<String, List<File>> {
-  ExcelRepository repository;
+  final ExcelRepository repository;
 
   ImportNilaiUseCase(this.repository);
 

@@ -20,8 +20,6 @@ class DivisiRepositoryImplTest extends DivisiRepository {
         final item = Divisi.fromJson(divisi.toJson()..['id']=divisiList.length);
         divisiList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class DivisiRepositoryImplTest extends DivisiRepository {
       Future.delayed(DataConstant.test_duration, () async {
         divisiList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<Divisi>> getDivisiList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return divisiList;
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,10 +43,8 @@ class DivisiRepositoryImplTest extends DivisiRepository {
           index, index+1, [divisi]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

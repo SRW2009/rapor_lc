@@ -22,7 +22,7 @@ class LogsDialogState extends State<LogsDialog> {
   }
 
   void addLine(String s) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         _messageCon.text += s;
       });

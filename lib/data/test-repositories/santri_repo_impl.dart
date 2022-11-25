@@ -20,8 +20,6 @@ class SantriRepositoryImplTest extends SantriRepository {
         final item = Santri.fromJson(santri.toJson()..['id']=santriList.length);
         santriList.add(item);
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
@@ -29,16 +27,12 @@ class SantriRepositoryImplTest extends SantriRepository {
       Future.delayed(DataConstant.test_duration, () async {
         santriList.removeWhere((element) => ids.contains(element.id.toString()));
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
   Future<List<Santri>> getSantriList() async =>
       Future.delayed(DataConstant.test_duration, () async {
         return santriList;
-        //failed
-        throw Exception();
       });
 
   @override
@@ -49,10 +43,8 @@ class SantriRepositoryImplTest extends SantriRepository {
           index, index+1, [santri]
         );
         return RequestStatus.success;
-        //failed
-        return RequestStatus.failed;
       });
 
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 }

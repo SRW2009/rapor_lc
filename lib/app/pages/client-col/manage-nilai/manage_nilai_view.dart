@@ -129,22 +129,22 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
             ),
             const SizedBox(height: 10),
             Text(
-              item.BaS.toReadableString(),
+              item.timeline.toExcelString(),
               style: const TextStyle(
                 fontSize: 18.0,
               ),
             ),
             const SizedBox(height: 10),
             ExpansionTile(
-              title: const Text('NHB'),
+              title: const Text('NHB Semester'),
               childrenPadding: const EdgeInsets.all(16.0),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (item.nhb.isNotEmpty) Padding(
+                if (item.nhbSemester.isNotEmpty) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
-                      text: 'First NHB\n',
+                      text: 'First NHB Semester\n',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         height: 1.4,
@@ -152,28 +152,28 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Pelajaran: '),
                         TextSpan(
-                          text: item.nhb.first.pelajaran.name,
+                          text: item.nhbSemester.first.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nAkumulasi: '),
                         TextSpan(
-                          text: item.nhb.first.akumulasi.toString(),
+                          text: item.nhbSemester.first.akumulasi.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPredikat: '),
                         TextSpan(
-                          text: item.nhb.first.predikat,
+                          text: item.nhbSemester.first.predikat,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
                   ),
                 ),
-                if (item.nhb.length > 1) Padding(
+                if (item.nhbSemester.length > 1) Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text.rich(
                     TextSpan(
-                      text: 'Last NHB\n',
+                      text: 'Last NHB Semester\n',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         height: 1.4,
@@ -181,17 +181,17 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                       children: [
                         TextSpan(text: 'Nama Pelajaran: '),
                         TextSpan(
-                          text: item.nhb.last.pelajaran.name,
+                          text: item.nhbSemester.last.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nAkumulasi: '),
                         TextSpan(
-                          text: item.nhb.last.akumulasi.toString(),
+                          text: item.nhbSemester.last.akumulasi.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                         TextSpan(text: '\nPredikat: '),
                         TextSpan(
-                          text: item.nhb.last.predikat,
+                          text: item.nhbSemester.last.predikat,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
@@ -201,8 +201,80 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
-                    child: const Text('Manage NHB'),
-                    onPressed: () => controller.onTapNHB(item),
+                    child: const Text('Manage NHB Semester'),
+                    onPressed: () => controller.onTapNHBSemester(item),
+                  ),
+                ),
+              ],
+            ),
+            ExpansionTile(
+              title: const Text('NHB Block'),
+              childrenPadding: const EdgeInsets.all(16.0),
+              expandedCrossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (item.nhbBlock.isNotEmpty) Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'First NHB Block\n',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        height: 1.4,
+                      ),
+                      children: [
+                        TextSpan(text: 'Nama Pelajaran: '),
+                        TextSpan(
+                          text: item.nhbBlock.first.pelajaran.name,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(text: '\nAkumulasi: '),
+                        TextSpan(
+                          text: item.nhbBlock.first.akumulasi.toString(),
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(text: '\nPredikat: '),
+                        TextSpan(
+                          text: item.nhbBlock.first.predikat,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                if (item.nhbBlock.length > 1) Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Last NHB Block\n',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        height: 1.4,
+                      ),
+                      children: [
+                        TextSpan(text: 'Nama Pelajaran: '),
+                        TextSpan(
+                          text: item.nhbBlock.last.pelajaran.name,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(text: '\nAkumulasi: '),
+                        TextSpan(
+                          text: item.nhbBlock.last.akumulasi.toString(),
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                        TextSpan(text: '\nPredikat: '),
+                        TextSpan(
+                          text: item.nhbBlock.last.predikat,
+                          style: TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    child: const Text('Manage NHB Block'),
+                    onPressed: () => controller.onTapNHBBlock(item),
                   ),
                 ),
               ],
@@ -299,9 +371,9 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                           text: item.npb.first.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
-                        TextSpan(text: '\nPresensi: '),
+                        TextSpan(text: '\nN: '),
                         TextSpan(
-                          text: item.npb.first.presensi.toString(),
+                          text: item.npb.first.n.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],
@@ -323,9 +395,9 @@ class ManageNilaiPageView extends ViewState<ManageNilaiPage, ManageNilaiControll
                           text: item.npb.last.pelajaran.name,
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
-                        TextSpan(text: '\nPresensi: '),
+                        TextSpan(text: '\nN: '),
                         TextSpan(
-                          text: item.npb.last.presensi,
+                          text: item.npb.last.n.toString(),
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
                       ],

@@ -4,14 +4,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs.dart';
+import 'package:rapor_lc/data/models/teacher_model.dart';
 import 'package:rapor_lc/domain/entities/abstract/user.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
-import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/repositories/auth_repo.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
+
   @override
-  String get url => throw UnimplementedError();
+  String url = '';
 
   @override
   Future<int> authenticateTeacher({required String email, required String password}) async {
@@ -28,7 +29,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       final data = jsonDecode(response.body)['data'];
       final token = data['token'];
 
-      final user = Teacher.fromJson(data);
+      final user = TeacherModel.fromJsonLoginRequest(data);
       await SharedPrefs().setCurrentUser(user);
       await SharedPrefs().setToken(token);
 

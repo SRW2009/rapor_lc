@@ -38,7 +38,7 @@ class ManageNKPageView extends ViewState<ManageNKPage, ManageNKController> {
             child: Card(
               child: CustomDataTable<NK>(
                 controller: controller,
-                title: 'NK ${widget.nilai.BaS.toReadableString()}',
+                title: 'NK ${widget.nilai.timeline.toExcelString()}',
                 tableHeaders: const [
                   'No',
                   'Nama Variabel',

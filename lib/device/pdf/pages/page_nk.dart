@@ -1,13 +1,14 @@
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rapor_lc/domain/entities/nilai.dart';
-
 import 'package:rapor_lc/device/pdf/pdf_chart.dart';
-import 'package:rapor_lc/device/pdf/pdf_common.dart';
+import 'package:rapor_lc/device/pdf/pdf_object.dart';
 import 'package:rapor_lc/device/pdf/pdf_table.dart';
+import 'package:rapor_lc/device/pdf/pdf_widget.dart';
+import 'package:rapor_lc/domain/entities/nilai.dart';
+import 'package:rapor_lc/domain/entities/timeline.dart';
 
-Page page_nk(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1}) {
+Page page_nk(MemoryImage headerImage, NKDatasets datasets, NKContents contents, Nilai firstNilai, Timeline timeline) {
   return Page(
     margin: const EdgeInsets.all(0),
     pageFormat: PdfPageFormat.a4,
@@ -18,27 +19,22 @@ Page page_nk(MemoryImage headerImage, List<Nilai> nilaiList, {int semester=1}) {
           child: Image(headerImage),
         ),
         Padding(
-          padding: const EdgeInsets.all(80.0),
+          padding: pagePadding,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildPageTitle('NILAI KEMANDIRIAN'),
+              buildPageTitle('Nilai Kemandirian'),
               SizedBox(height: 12.0),
-              MyPDFTable.buildIdentityTable(nilaiList.firstWhere((e) => e.BaS.semester==semester)),
+              MyPDFTable.buildIdentityTable(firstNilai),
               SizedBox(height: 12.0),
               Expanded(
                 child: Center(
-                  child:
-                  SizedBox(
-                    width: 500.0,
-                    height: 400.0,
-                    child: MyPDFChart.buildNKLineChart(nilaiList, semester),
-                  ),
+                  child: MyPDFChart.buildNKLineChart(datasets, timeline),
                 ),
               ),
               SizedBox(height: 12.0),
-              MyPDFTable.buildNKTable(nilaiList, semester),
+              MyPDFTable.buildNKTable(contents),
             ],
           ),
         ),

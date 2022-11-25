@@ -1,12 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/app/pages/client-col/home/home_presenter.dart';
-import 'package:rapor_lc/app/pages/client-col/home/ui/dashboard/home_dashboard_view.dart';
-import 'package:rapor_lc/app/pages/client-col/home/ui/record/home_record_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/domain/entities/abstract/user.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
+
+import 'ui/record/home_record_view.dart';
+import 'ui/account/home_account_view.dart';
+import 'home_presenter.dart';
 
 class HomeController extends Controller {
   int navIndex = 0;
@@ -82,7 +83,7 @@ class HomeController extends Controller {
       case 0:
         return HomeRecordUI();
       case 1:
-        return HomeDashboardUI(homeController: this);
+        return HomeAccountUI(homeController: this);
       default:
         return Container();
     }

@@ -5,7 +5,7 @@ import 'package:rapor_lc/app/dialogs/client/nilai_update_dialog.dart';
 import 'package:rapor_lc/app/dialogs/dialogs.dart';
 import 'package:rapor_lc/app/pages/client-col/manage-nilai/manage_nilai_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
-import 'package:rapor_lc/app/widgets/custom_datatable_controller.dart';
+import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
@@ -64,12 +64,17 @@ class ManageNilaiController extends DataTableController<Nilai> {
   }
 
   Widget getNHBChart(Nilai item) {
-    return chartRepository.nhbChart(item.nhb);
+    return chartRepository.nhbChart(item.nhbSemester);
   }
 
-  void onTapNHB(Nilai item) async {
+  void onTapNHBSemester(Nilai item) async {
     Navigator.of(getContext())
-        .pushNamed(Pages.manage_nhb, arguments: item);
+        .pushNamed(Pages.manage_nhb_semester, arguments: item);
+  }
+
+  void onTapNHBBlock(Nilai item) async {
+    Navigator.of(getContext())
+        .pushNamed(Pages.manage_nhb_block, arguments: item);
   }
 
   void onTapNK(Nilai item) {
@@ -113,7 +118,7 @@ class ManageNilaiController extends DataTableController<Nilai> {
 
   @override
   bool searchWhereClause(Nilai e) {
-    return e.BaS.toReadableString().toLowerCase().contains(currentQuery)
+    return e.timeline.toExcelString().toLowerCase().contains(currentQuery)
         || e.tahunAjaran.toLowerCase().contains(currentQuery);
   }
 }

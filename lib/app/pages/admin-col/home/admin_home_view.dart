@@ -44,6 +44,7 @@ class AdminHomePageView extends ViewState<AdminHomePage, AdminHomeController> {
             _drawerItem('Divisi', AdminHomeState.divisi, controller),
             _drawerItem('Nilai', AdminHomeState.nilai, controller),
             _drawerItem('Relasi', AdminHomeState.relasi, controller),
+            _drawerItem('Pengaturan', AdminHomeState.setting, controller),
             _drawerItemLogout(controller),
           ],
         ),

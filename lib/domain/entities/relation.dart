@@ -6,8 +6,6 @@ import 'package:rapor_lc/domain/entities/teacher.dart';
 part 'relation.g.dart';
 
 @JsonSerializable()
-@TeacherConverter()
-@SantriConverter()
 class Relation {
   final int id;
   final Teacher teacher;

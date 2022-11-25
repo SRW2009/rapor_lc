@@ -8,7 +8,9 @@ import 'package:rapor_lc/app/widgets/form_field/form_input_field_radios.dart';
 import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
 
 class LoginPage extends View {
-  LoginPage({Key? key}) : super(key: key);
+  final String? errorMessage;
+
+  LoginPage({Key? key, this.errorMessage}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => LoginPageView();
@@ -41,56 +43,56 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
         child: Card(
           child: ControlledWidgetBuilder<LoginController>(
               builder: (context, controller) {
-              return Container(
-                width: 400.0,
-                height: 500.0,
-                padding: const EdgeInsets.all(32.0),
-                child: Stack(
-                  children: [
-                    IgnorePointer(
-                      ignoring: controller.isLoading,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Center(
-                            child: Image.asset(
-                              Resources.logo,
-                              height: 180.0,
-                              fit: BoxFit.contain,
+                return Container(
+                  width: 400.0,
+                  height: 570.0,
+                  padding: const EdgeInsets.all(32.0),
+                  child: Stack(
+                    children: [
+                      IgnorePointer(
+                        ignoring: controller.isLoading,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Center(
+                              child: Image.asset(
+                                Resources.logo,
+                                height: 180.0,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                IgnorePointer(
-                                  ignoring: controller.formState != LoginFormState.login,
-                                  child: AnimatedOpacity(
-                                    opacity: controller.formState == LoginFormState.login ? 1 : 0,
-                                    duration: _duration,
-                                    child: _loginForm(controller),
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  IgnorePointer(
+                                    ignoring: controller.formState != LoginFormState.login,
+                                    child: AnimatedOpacity(
+                                      opacity: controller.formState == LoginFormState.login ? 1 : 0,
+                                      duration: _duration,
+                                      child: _loginForm(controller),
+                                    ),
                                   ),
-                                ),
-                                IgnorePointer(
-                                  ignoring: controller.formState != LoginFormState.forgotPass,
-                                  child: AnimatedOpacity(
-                                    opacity: controller.formState == LoginFormState.forgotPass ? 1 : 0,
-                                    duration: _duration,
-                                    child: _forgotPasswordForm(controller),
+                                  IgnorePointer(
+                                    ignoring: controller.formState != LoginFormState.forgotPass,
+                                    child: AnimatedOpacity(
+                                      opacity: controller.formState == LoginFormState.forgotPass ? 1 : 0,
+                                      duration: _duration,
+                                      child: _forgotPasswordForm(controller),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    IgnorePointer(
-                      ignoring: !controller.isLoading,
-                      child: _loadingView(controller),
-                    ),
-                  ],
-                ),
-              );
+                      IgnorePointer(
+                        ignoring: !controller.isLoading,
+                        child: _loadingView(controller),
+                      ),
+                    ],
+                  ),
+                );
             }
           ),
         ),
@@ -142,7 +144,11 @@ class LoginPageView extends ViewState<LoginPage, LoginController> {
             ),
           ],
         ),
-        const SizedBox(),
+        if (widget.errorMessage!=null) Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(widget.errorMessage!, style: TextStyle(color: Colors.redAccent),),
+        ),
+        if (widget.errorMessage==null) const SizedBox(),
         ElevatedButton(
           onPressed: () => controller.doLogin(_loginFormKey, _emailCon.text, _passwordCon.text),
           child: const Text('Login'),

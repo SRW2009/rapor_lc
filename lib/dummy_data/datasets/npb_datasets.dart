@@ -11,17 +11,17 @@ final Random random = Random();
 List<BarDataSet> getDatasets({isObservation=false}) => <BarDataSet>[
   BarDataSet(
     color: PdfColors.blue,
-    legend: 'Tahfiz',
+    legend: 'Tahfizh',
     width: 8,
     data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (mapelList[i].divisi?.name == 'Tahfiz') {
+      if (mapelList[i].divisi.name == 'Tahfizh') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue(i.toDouble(), y);
     })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && mapelList[i].divisi?.name == 'Tahfiz') {
+      if (!isObservation && mapelList[i].divisi.name == 'Tahfizh') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue((i+mapelList.length).toDouble(), y);
@@ -33,13 +33,13 @@ List<BarDataSet> getDatasets({isObservation=false}) => <BarDataSet>[
     width: 8,
     data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (mapelList[i].divisi?.name == 'IT') {
+      if (mapelList[i].divisi.name == 'IT') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue(i.toDouble(), y);
     })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && mapelList[i].divisi?.name == 'IT') {
+      if (!isObservation && mapelList[i].divisi.name == 'IT') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue((i+mapelList.length).toDouble(), y);
@@ -51,13 +51,13 @@ List<BarDataSet> getDatasets({isObservation=false}) => <BarDataSet>[
     width: 8,
     data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (mapelList[i].divisi?.name == 'Bahasa') {
+      if (mapelList[i].divisi.name == 'Bahasa') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue(i.toDouble(), y);
     })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && mapelList[i].divisi?.name == 'Bahasa') {
+      if (!isObservation && mapelList[i].divisi.name == 'Bahasa') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue((i+mapelList.length).toDouble(), y);
@@ -69,13 +69,13 @@ List<BarDataSet> getDatasets({isObservation=false}) => <BarDataSet>[
     width: 8,
     data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (mapelList[i].divisi?.name == 'MPP') {
+      if (mapelList[i].divisi.name == 'MPP') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue(i.toDouble(), y);
     })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && mapelList[i].divisi?.name == 'MPP') {
+      if (!isObservation && mapelList[i].divisi.name == 'MPP') {
         y = random.nextInt(70).toDouble()+30;
       }
       return LineChartValue((i+mapelList.length).toDouble(), y);

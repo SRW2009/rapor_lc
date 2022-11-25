@@ -1,7 +1,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 
 class ChartRepository {
   final colorsCollection = [
@@ -95,10 +95,10 @@ class ChartRepository {
     );
   }
 
-  Widget nhbChart(List<NHB> list) {
+  Widget nhbChart(List<NHBSemester> list) {
     var data = <String, double>{};
     for (var o in list) {
-      var key = o.pelajaran.divisi?.name;
+      var key = o.pelajaran.divisi.name;
       if (key == null) continue;
       if (data.containsKey(key)) {
         final double = data[key]!;

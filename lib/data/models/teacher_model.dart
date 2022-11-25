@@ -3,19 +3,18 @@ import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
 
 class TeacherModel {
-  static Teacher fromJsonToEntity(Map<String, dynamic> e) => Teacher(
-    e['id'],
-    e['name'],
-    email: e['email'],
-    password: e['password'],
-    isLeader: e['is_leader'],
-    divisi: Divisi.fromJson(e['divisi_detail']),
+  static Teacher fromJsonLoginRequest(Map<String, dynamic> json) => Teacher(
+    json['id'] as int,
+    json['name'] as String,
+    divisi: Divisi.fromJson(json['divisi'] as Map<String, dynamic>),
+    email: json['email'] as String?,
+    isLeader: json['is_leader'] as bool?,
   );
-  static Map<String, dynamic> fromEntityToJson(Teacher e)  => {
+  static Map<String, dynamic> toJsonRequest(Teacher e)  => {
     "name": e.name,
     "email": e.email,
     "password": e.password,
     "is_leader": e.isLeader,
-    "divisi_id": e.divisi?.id
+    "divisi_id": e.divisi.id
   };
 }

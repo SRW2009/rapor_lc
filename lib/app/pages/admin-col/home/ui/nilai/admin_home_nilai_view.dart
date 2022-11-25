@@ -5,8 +5,9 @@ import 'package:rapor_lc/app/pages/admin-col/home/ui/nilai/admin_home_nilai_cont
 import 'package:rapor_lc/app/widgets/custom_datatable.dart';
 import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
 import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
+import 'package:rapor_lc/domain/entities/nhb_block.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
-import 'package:rapor_lc/domain/entities/nhb.dart';
+import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 
@@ -39,7 +40,7 @@ class AdminHomeNilaiUIView extends ViewState<AdminHomeNilaiUI, AdminHomeNilaiCon
             ],
             tableContentBuilder: (item) => [
               DataCell(Text(item.id.toString())),
-              DataCell(Text(item.BaS.toReadableString())),
+              DataCell(Text(item.timeline.toExcelString())),
               DataCell(Text(item.tahunAjaran)),
               DataCell(Text(item.santri.name)),
               DataCell(Row(
@@ -53,8 +54,12 @@ class AdminHomeNilaiUIView extends ViewState<AdminHomeNilaiUI, AdminHomeNilaiCon
                     onSelected: (arg) => controller.tableOnMore(item, arg),
                     itemBuilder: (context) => <PopupMenuItem<Type>>[
                       const PopupMenuItem(
-                        value: NHB,
-                        child: Text('NHB'),
+                        value: NHBSemester,
+                        child: Text('NHB Semester'),
+                      ),
+                      const PopupMenuItem(
+                        value: NHBBlock,
+                        child: Text('NHB Block'),
                       ),
                       const PopupMenuItem(
                         value: NK,
