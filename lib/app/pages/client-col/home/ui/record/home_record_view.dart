@@ -2,10 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/client-col/home/ui/record/home_record_controller.dart';
-import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/app/widgets/searchbar.dart';
-import 'package:rapor_lc/data/repositories/nilai_repo_impl.dart';
-import 'package:rapor_lc/data/repositories/santri_repo_impl.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
+import 'package:rapor_lc/data/repositories/relation_repo_impl.dart';
 
 class HomeRecordUI extends View {
   HomeRecordUI({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class HomeRecordUI extends View {
 
 class HomeSantriUIView extends ViewState<HomeRecordUI, HomeRecordController> {
   HomeSantriUIView()
-      : super(HomeRecordController(SantriRepositoryImpl(), NilaiRepositoryImpl()));
+      : super(HomeRecordController(RelationRepositoryImpl()));
 
   @override
   Widget get view => Container(
@@ -39,7 +38,7 @@ class HomeSantriUIView extends ViewState<HomeRecordUI, HomeRecordController> {
         }
         if (controller.santriListState == RequestState.none) {
           return Center(
-            child: Text('Belum ada Santri. \nHubungi Admin untuk menginput Santri.'),
+            child: Text('Belum ada santri. \nHubungi Admin untuk menginput relasi anda dan santri anda.'),
           );
         }
         if (controller.santriListState == RequestState.error) {
@@ -48,7 +47,7 @@ class HomeSantriUIView extends ViewState<HomeRecordUI, HomeRecordController> {
               children: [
                 const Text('Terjadi Masalah.'),
                 ElevatedButton(
-                  onPressed: controller.doGetSantriList,
+                  onPressed: controller.doGetMySantriList,
                   child: const Text('Reload'),
                 ),
               ],
@@ -67,25 +66,44 @@ class HomeSantriUIView extends ViewState<HomeRecordUI, HomeRecordController> {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => controller.onTapItem(item),
+        onTap: () => controller.onTapItem(item.santri),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.nis ?? '',
-                style: const TextStyle(
-                  fontSize: 12.0,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.santri.nis ?? '',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      item.santri.name,
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                item.name,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                ),
-              ),
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 5,
+                    backgroundColor: item.isActive ? Colors.green : Colors.red,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(item.name ?? (item.isActive ? 'Aktif' : 'Nonaktif')),
+                  ),
+                ],
+              )
             ],
           ),
         ),

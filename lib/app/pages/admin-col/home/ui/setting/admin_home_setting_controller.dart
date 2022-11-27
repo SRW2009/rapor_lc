@@ -19,9 +19,7 @@ class AdminHomeSettingController extends Controller with LazyControllerMethod {
     refreshUI();
   }
 
-  void reload() {
-    getSettingList();
-  }
+  void reload() => getSettingList();
 
   @override
   void initListeners() {
@@ -44,9 +42,6 @@ class AdminHomeSettingController extends Controller with LazyControllerMethod {
   void createSetting(Setting s) => _presenter.doCreateSetting(s);
   void updateSetting(Setting s) => _presenter.doUpdateSetting(s);
   void deleteSetting(String id) => _presenter.doDeleteSetting([id]);
-
-  @override
-  void onInitState() {}
 
   @override
   void onDisposed() {

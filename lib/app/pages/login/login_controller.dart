@@ -84,6 +84,7 @@ class LoginController extends Controller {
   }
 
   void doLogin(GlobalKey<FormState> key, String email, String password) {
+
     if (key.currentState!.validate()) {
       isLoading = true;
       refreshUI();

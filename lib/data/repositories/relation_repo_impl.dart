@@ -15,8 +15,13 @@ class RelationRepositoryImpl extends RelationRepository {
   String url = Urls.adminRelation;
 
   @override
+  String altUrl = Urls.teacherRelation;
+
+  @override
   Future<List<Relation>> getRelationList() async {
     final token = await SharedPrefs().getToken;
+
+    await checkPrivilege();
 
     final response = await http.get(
       readUri(),

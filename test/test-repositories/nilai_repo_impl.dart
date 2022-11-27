@@ -30,7 +30,7 @@ class NilaiRepositoryImplTest extends NilaiRepository {
       });
 
   @override
-  Future<List<Nilai>> getNilaiList() async =>
+  Future<List<Nilai>> getNilaiList(int? studentId) async =>
       Future.delayed(DataConstant.test_duration, () async {
         return nilaiList.toList();
       });

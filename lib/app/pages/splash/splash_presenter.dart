@@ -9,8 +9,8 @@ import 'package:rapor_lc/domain/usecases/setting/get_setting_list.dart';
 
 class SplashPresenter extends Presenter {
   late Function(int) getAuthStatusOnNext;
-  late Function(RequestState) getSettingListState;
   late Function() logoutOnComplete;
+  late Function(RequestState) getSettingListState;
 
   final GetAuthStatusUseCase _getAuthStatusUseCase;
   final LogoutUseCase _logoutUseCase;
@@ -21,8 +21,8 @@ class SplashPresenter extends Presenter {
         _getSettingListUseCase = GetSettingListUseCase(settingRepo);
 
   void getAuthStatus() => _getAuthStatusUseCase.execute(_GetAuthStatusObserver(this));
-  void getSettingList() => _getSettingListUseCase.execute(_GetSettingListObserver(this));
   void doLogout() => _logoutUseCase.execute(_LogoutObserver(this));
+  void getSettingList() => _getSettingListUseCase.execute(_GetSettingListObserver(this));
 
   @override
   void dispose() => _getAuthStatusUseCase.dispose();

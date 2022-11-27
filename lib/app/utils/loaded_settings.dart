@@ -4,12 +4,22 @@ import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 import 'package:rapor_lc/domain/entities/setting.dart';
 
+// Define aliases
+typedef NKEnabledGradeType = Map<_VariableName, Map<_GradeType, _IsEnabled>>;
+typedef NKEnabledGradeTypeEntry = MapEntry<_VariableName, Map<_GradeType, _IsEnabled>>;
+typedef _VariableName = String;
+typedef _GradeType = String;
+typedef _IsEnabled = bool;
+
 class LoadedSettings {
   static Divisi? divisiKesantrian;
   static List<MataPelajaran>? nkVariables;
 
   static int nkEnabledGradeId = -1;
   static NKEnabledGradeType? nkEnabledGrade;
+
+  static int nkAdviceId = -1;
+  static String? nkAdvice;
 
   LoadedSettings.load(List<Setting> settings) {
     for (var s in settings) {
@@ -21,6 +31,10 @@ class LoadedSettings {
               MapEntry(key, (value as Map<String, dynamic>).map<_GradeType, _IsEnabled>((key, value) =>
                   MapEntry(key, value)),
           ));
+          break;
+        case SettingVariables.nkAdvice:
+          nkAdviceId = s.id;
+          nkAdvice = s.value;
           break;
       }
     }
@@ -60,10 +74,3 @@ class LoadedSettings {
     }
   };
 }
-
-// Define aliases
-typedef NKEnabledGradeType = Map<_VariableName, Map<_GradeType, _IsEnabled>>;
-typedef NKEnabledGradeTypeEntry = MapEntry<_VariableName, Map<_GradeType, _IsEnabled>>;
-typedef _VariableName = String;
-typedef _GradeType = String;
-typedef _IsEnabled = bool;

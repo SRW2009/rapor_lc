@@ -22,10 +22,11 @@ class ManageNPBController extends DataTableController<NPB> {
           (_nilai.npb..sort((a, b) => a.no.compareTo(b.no))).toList()
       );
 
-  Future<List<MataPelajaran>>? mapelList;
+  List<MataPelajaran>? mapelList;
   Future<List<MataPelajaran>> dialogOnFindMapel(String? query) async {
-    mapelList ??= _presenter.futureGetMapelList();
-    return await mapelList!;
+    mapelList ??= (await _presenter.futureGetMapelList())
+        .where((element) => !element.divisi.isBlock).toList();
+    return mapelList!;
   }
 
   void _updateNilaiStatus(RequestStatus status, String actionMessage) {

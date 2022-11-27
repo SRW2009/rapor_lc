@@ -20,15 +20,15 @@ class ManageNilaiPresenter extends Presenter {
   final CreateNilaiUseCase _createNilaiUseCase;
   final UpdateNilaiUseCase _updateNilaiUseCase;
   final DeleteNilaiUseCase _deleteNilaiUseCase;
-  ManageNilaiPresenter(nilaiRepo, excelRepo)
+  ManageNilaiPresenter(nilaiRepo)
       : _getNilaiListUseCase = GetNilaiListUseCase(nilaiRepo),
         _createNilaiUseCase = CreateNilaiUseCase(nilaiRepo),
         _updateNilaiUseCase = UpdateNilaiUseCase(nilaiRepo),
         _deleteNilaiUseCase = DeleteNilaiUseCase(nilaiRepo);
   
-  void doGetNilaiList() {
+  void doGetNilaiList(int id) {
     getNilaiListState(RequestState.loading);
-    _getNilaiListUseCase.execute(_GetNilaiListObserver(this));
+    _getNilaiListUseCase.execute(_GetNilaiListObserver(this), UseCaseParams(id));
   }
   void doCreateNilai(Nilai item) {
     createNilaiStatus(RequestStatus.loading);

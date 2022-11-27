@@ -18,13 +18,15 @@ class NilaiRepositoryImpl extends NilaiRepository {
   String altUrl = Urls.teacherNilai;
 
   @override
-  Future<List<Nilai>> getNilaiList() async {
+  Future<List<Nilai>> getNilaiList(int? studentId) async {
     final token = await SharedPrefs().getToken;
 
     await checkPrivilege();
 
     final response = await http.get(
-      readUri(),
+        (studentId==null)
+            ? readUri()
+            : readUri()..replace(queryParameters: {'student_id':studentId.toString()}),
       headers: DataConstant.headers(token),
     );
     if (response.statusCode == StatusCode.getSuccess) {

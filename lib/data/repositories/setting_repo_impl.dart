@@ -15,7 +15,7 @@ class SettingRepositoryImpl extends SettingRepository {
   String url = Urls.adminSetting;
 
   @override
-  String altUrl = Urls.teacherGetSetting;
+  String altUrl = Urls.teacherSetting;
 
   @override
   Future<List<Setting>> getSettingList() async {

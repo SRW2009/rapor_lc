@@ -15,7 +15,6 @@ import 'package:rapor_lc/dummy_data/dummies.dart' as d;
 
 class PrintingRepositoryImpl extends PrintingRepository {
 
-  //TODO: sync printed pages with print dummy
   Stream<String> print(List<Santri> selectedSantriList, List<Nilai> nilaiList, PrintSettings printSettings) async* {
     final headerImage = pw.MemoryImage(
       (await rootBundle.load(printSettings.imageAssetPath)).buffer.asUint8List(),
@@ -87,17 +86,6 @@ class PrintingRepositoryImpl extends PrintingRepository {
             errorCount++;
           }
         }
-        /*if (printSettings.npbITPage) {
-          try {
-            final p1 = page_npb_chart(headerImage, santriNilaiList, semester: i, isIT: true);
-            final p2 = page_npb_table(headerImage, santriNilaiList, semester: i);
-            doc.addPage(p1);
-            doc.addPage(p2);
-          } catch (e) {
-            yield '${santri.name} - Semester $i : Nilai NPB IT tidak lengkap.';
-            errorCount++;
-          }
-        }*/
         if (printSettings.nkPage || printSettings.nkAdvicePage) {
           try {
             final datasets = ChartDatasetsFactory.buildNKDatasets(santriNilaiList, i);

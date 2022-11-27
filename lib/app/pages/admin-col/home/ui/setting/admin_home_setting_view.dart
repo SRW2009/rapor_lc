@@ -4,9 +4,12 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/setting/admin_home_setting_controller.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/setting/ui/nk-enabled-grade/setting_nk_enabled_grade_view.dart';
 import 'package:rapor_lc/app/pages/admin-col/home/ui/setting/ui/nk-variable/setting_nk_variable_view.dart';
+import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/app/widgets/style.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/data/repositories/setting_repo_impl.dart';
+
+import 'ui/nk-advice/setting_nk_advice_view.dart';
 
 class AdminHomeSettingUI extends View {
   AdminHomeSettingUI({Key? key}) : super(key: key);
@@ -72,6 +75,25 @@ class AdminHomeSettingUIView
           ),
         ),
         Divider(),
+
+        // NK Advice
+        _title('Pengaturan Nasehat Dewan Guru'),
+        _desc('Atur bagaimana format pesan dari "Nasehat Dewan Guru" di rapor.\n\n'
+            'Variabel:\n'
+            '{[variable name]:val} = Tampilkan nilai akumulasi. (contoh: 76, 80, dll)\n'
+            '{[variable name]:inpred} = Tampilkan nilai inisial predikat. (contoh: "BSB", "BA", dll)\n'
+            '{[variable name]:pred} = Tampilkan nilai predikat. (contoh: "belum ada", dll)\n'
+            '\n'
+            'Contoh:\n'
+            'input: "Inisiatif ananda dinilai {Inisiatif:pred}".\n'
+            'output: "Inisiatif ananda dinilai belum ada."\n'
+            '\n'
+            'PENTING: [variable name] huruf kapital harus sesuai.'
+        ),
+        ControlledWidgetBuilder<AdminHomeSettingController>(
+          builder: (context, controller) => SettingNKAdviceUI(parentController: controller),
+        ),
+        Divider(),
       ],
     );
   }
@@ -102,18 +124,18 @@ class AdminHomeSettingUIView
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Terjadi Masalah.'),
+              Text(Strings.errorMessage),
               const SizedBox(height: 8.0),
               ElevatedButton(
                 onPressed: refresh,
-                child: const Text('Muat ulang'),
+                child: const Text(Strings.reloadMessage),
               ),
             ],
           ),
         );
       case RequestState.none:
         return Center(
-          child: Text('Tidak ada apa apa di sini.'),
+          child: Text(Strings.noDataMessage),
         );
     }
   }

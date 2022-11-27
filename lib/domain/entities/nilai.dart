@@ -1,13 +1,12 @@
 
+import 'package:json_annotation/json_annotation.dart';
 import 'package:rapor_lc/data/models/nilai_model.dart';
-import 'package:rapor_lc/domain/entities/npb.dart';
-import 'package:rapor_lc/domain/entities/timeline.dart';
+import 'package:rapor_lc/domain/entities/nhb_block.dart';
 import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
+import 'package:rapor_lc/domain/entities/npb.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/nhb_block.dart';
-
-import 'package:json_annotation/json_annotation.dart';
+import 'package:rapor_lc/domain/entities/timeline.dart';
 
 part 'nilai.g.dart';
 
@@ -42,10 +41,15 @@ class Nilai implements Comparable {
       {this.nhbSemester=const [], this.nhbBlock=const [], this.nk=const [], this.npb=const [], this.isObservation=false});
 
   Nilai.empty() : id = -1, timeline = Timeline(0,0,0,0), tahunAjaran = '2021/2022',
-        santri = Santri(0, ''), nhbSemester=const [], this.nhbBlock=const [], nk=const [], npb=const [], isObservation=false;
+        santri = Santri(0, ''), nhbSemester=const [], nhbBlock=const [], nk=const [], npb=const [], isObservation=false {
+    nhbSemester = [];
+    nhbBlock = [];
+    nk = [];
+    npb = [];
+  }
 
   factory Nilai.fromJson(Map<String, dynamic> json) => _$NilaiFromJson(json);
-  Map<String, dynamic> toJson() => NilaiModel.toJsonRequest(this);
+  Map<String, dynamic> toJson() => NilaiModel.toJson(this);
 
   @override
   bool operator ==(Object other) =>
@@ -61,7 +65,17 @@ class Nilai implements Comparable {
   int get hashCode =>
       id.hashCode ^ timeline.hashCode ^ tahunAjaran.hashCode ^ santri.hashCode;
 
-  Nilai clone() => Nilai.fromJson(this.toJson());
+  Nilai cloneWithoutData() => Nilai(
+    this.id.toInt(),
+    Timeline.fromInt(this.timeline.toInt()),
+    this.tahunAjaran.toString(),
+    Santri.fromJson(this.santri.toJson()),
+    isObservation: bool.fromEnvironment('$isObservation'),
+    nhbSemester: [],
+    nhbBlock: [],
+    nk: [],
+    npb: []
+  );
 
   @override
   int compareTo(other) {

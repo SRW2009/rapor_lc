@@ -8,7 +8,8 @@ part of 'relation.dart';
 
 Relation _$RelationFromJson(Map<String, dynamic> json) => Relation(
       json['id'] as int,
-      Teacher.fromJson(json['teacher'] as Map<String, dynamic>),
+      const _TeacherConverter()
+          .fromJson(json['teacher'] as Map<String, dynamic>),
       Santri.fromJson(json['student'] as Map<String, dynamic>),
       name: json['name'] as String?,
       isActive: json['is_active'] as bool? ?? false,
@@ -16,7 +17,7 @@ Relation _$RelationFromJson(Map<String, dynamic> json) => Relation(
 
 Map<String, dynamic> _$RelationToJson(Relation instance) => <String, dynamic>{
       'id': instance.id,
-      'teacher': instance.teacher,
+      'teacher': const _TeacherConverter().toJson(instance.teacher),
       'student': instance.santri,
       'name': instance.name,
       'is_active': instance.isActive,

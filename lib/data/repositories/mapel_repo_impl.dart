@@ -17,7 +17,7 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
   String url = Urls.adminMapel;
 
   @override
-  String altUrl = Urls.teacherGetMapel;
+  String altUrl = Urls.teacherMapel;
 
   @override
   Future<List<MataPelajaran>> getMataPelajaranList() async {

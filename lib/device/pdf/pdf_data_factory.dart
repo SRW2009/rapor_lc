@@ -13,7 +13,6 @@ import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
 import 'package:rapor_lc/domain/entities/timeline.dart';
 
-
 class ChartDatasetsFactory {
   static NHBDatasets buildNHBDatasets(Map<int, NHBSemester> contents) {
     var divisiList = <String>[];
@@ -340,9 +339,8 @@ class TableContentsFactory {
       // only take nilai that match requested timeline
       if (!nilai.timeline.isTimelineMatch(timeline)) continue;
 
-      // decide which period this nilai belong to
-      String period = 'po';
-      if (nilai.isObservation) period = 'mo';
+      // decide which period this nilai belongs to
+      String period = (nilai.isObservation) ? 'mo' : 'po';
 
       for (var o in nilai.nhbSemester) {
         // update value

@@ -6,7 +6,6 @@ import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
 import 'package:rapor_lc/data/helpers/shared_prefs.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
-import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/repositories/santri_repo.dart';
 
 class SantriRepositoryImpl extends SantriRepository {
@@ -15,21 +14,11 @@ class SantriRepositoryImpl extends SantriRepository {
   String url = Urls.adminStudent;
 
   @override
-  String altUrl = Urls.teacherGetStudent;
-
-  @override
   Future<List<Santri>> getSantriList() async {
     final token = await SharedPrefs().getToken;
 
-    // check request privilege
-    final user = await SharedPrefs().getCurrentUser;
-    if (user == null) throw Exception();
-    Uri uri;
-    if (user is Teacher) uri = Uri.parse(Urls.teacherGetStudent);
-    else uri = readUri();
-
     final response = await http.get(
-      uri,
+      readUri(),
       headers: DataConstant.headers(token),
     );
     if (response.statusCode == StatusCode.getSuccess) {

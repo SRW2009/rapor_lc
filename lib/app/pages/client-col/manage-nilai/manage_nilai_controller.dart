@@ -8,25 +8,20 @@ import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/subclasses/custom_datatable_controller.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/common/enum/request_status.dart';
-import 'package:rapor_lc/data/helpers/chart/chart_repo.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 
 class ManageNilaiController extends DataTableController<Nilai> {
   final Santri santri;
-  final ChartRepository chartRepository;
 
   final ManageNilaiPresenter _presenter;
-  ManageNilaiController(nilaiRepo, excelRepo, this.santri, List<Nilai> initialList, this.chartRepository)
-      : _presenter = ManageNilaiPresenter(nilaiRepo, excelRepo),
-        super.initial(initialList);
+  ManageNilaiController(nilaiRepo, this.santri)
+      : _presenter = ManageNilaiPresenter(nilaiRepo);
 
   void _getNilaiList(List<Nilai> list) {
-    // TODO: remove processed list if query is implemented in request `get my students nilai`
-    final processedList = list.where((element) => element.santri == santri).toList();
-    normalList = processedList;
-    filteredList = processedList;
-    selectedMap.addEntries(processedList.map<MapEntry<String, bool>>
+    normalList = list;
+    filteredList = list;
+    selectedMap.addEntries(list.map<MapEntry<String, bool>>
       ((e) => MapEntry(getSelectedKey(e), false)));
   }
 
@@ -58,42 +53,47 @@ class ManageNilaiController extends DataTableController<Nilai> {
   }
 
   @override
+  void onInitState() {
+    refresh();
+  }
+
+  @override
   void onDisposed() {
     _presenter.dispose();
     super.onDisposed();
   }
 
-  Widget getNHBChart(Nilai item) {
-    return chartRepository.nhbChart(item.nhbSemester);
-  }
-
-  void onTapNHBSemester(Nilai item) async {
-    Navigator.of(getContext())
-        .pushNamed(Pages.manage_nhb_semester, arguments: item);
-  }
-
-  void onTapNHBBlock(Nilai item) async {
-    Navigator.of(getContext())
-        .pushNamed(Pages.manage_nhb_block, arguments: item);
-  }
-
-  void onTapNK(Nilai item) {
-    Navigator.of(getContext())
-        .pushNamed(Pages.manage_nk, arguments: item);
-  }
-
-  void onTapNPB(Nilai item) {
-    Navigator.of(getContext())
-        .pushNamed(Pages.manage_npb, arguments: item);
-  }
-
   @override
   void refresh() => doGetNilaiList();
 
-  void doGetNilaiList() => _presenter.doGetNilaiList();
+  void doGetNilaiList() => _presenter.doGetNilaiList(santri.id);
   void doCreateNilai(Nilai item) => _presenter.doCreateNilai(item);
   void doUpdateNilai(Nilai item) => _presenter.doUpdateNilai(item);
   void doDeleteNilai(List<String> nis) => _presenter.doDeleteNilai(nis);
+
+  void onTapNHBSemester(Nilai item) async {
+    await Navigator.of(getContext())
+        .pushNamed(Pages.manage_nhb_semester, arguments: item);
+    refresh();
+  }
+
+  void onTapNHBBlock(Nilai item) async {
+    await Navigator.of(getContext())
+        .pushNamed(Pages.manage_nhb_block, arguments: item);
+    refresh();
+  }
+
+  void onTapNK(Nilai item) async {
+    await Navigator.of(getContext())
+        .pushNamed(Pages.manage_nk, arguments: item);
+    refresh();
+  }
+
+  void onTapNPB(Nilai item) async {
+    await Navigator.of(getContext())
+        .pushNamed(Pages.manage_npb, arguments: item);
+    refresh();
+  }
 
   @override
   Widget? createDialog() => ClientNilaiCreateDialog(

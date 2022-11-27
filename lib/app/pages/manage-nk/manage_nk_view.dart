@@ -1,4 +1,6 @@
 
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/manage-nk/manage_nk_controller.dart';
@@ -65,12 +67,16 @@ class ManageNKPageView extends ViewState<ManageNKPage, ManageNKController> {
               ),
             ),
           ),
-          persistentFooterButtons: [
+          floatingActionButton: (Platform.isAndroid) ? FloatingActionButton(
+            child: const Icon(Icons.save),
+            onPressed: controller.onSave,
+          ) : null,
+          persistentFooterButtons: (Platform.isWindows) ? [
             TextButton(
               child: const Text('SIMPAN'),
               onPressed: controller.onSave,
             ),
-          ],
+          ] : null,
         ),
       ),
     ),

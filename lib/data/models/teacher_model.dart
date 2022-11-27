@@ -10,6 +10,11 @@ class TeacherModel {
     email: json['email'] as String?,
     isLeader: json['is_leader'] as bool?,
   );
+  static Teacher fromJsonRelationRequest(Map<String, dynamic> json) => Teacher(
+    json['id'] as int,
+    json['name'] as String,
+    divisi: Divisi(0,'',false),
+  );
   static Map<String, dynamic> toJsonRequest(Teacher e)  => {
     "name": e.name,
     "email": e.email,

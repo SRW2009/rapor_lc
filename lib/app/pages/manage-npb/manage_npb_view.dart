@@ -1,4 +1,6 @@
 
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/manage-npb/manage_npb_controller.dart';
@@ -57,12 +59,16 @@ class ManageNPBPageView extends ViewState<ManageNPBPage, ManageNPBController> {
               ),
             ),
           ),
-          persistentFooterButtons: [
+          floatingActionButton: (Platform.isAndroid) ? FloatingActionButton(
+            child: const Icon(Icons.save),
+            onPressed: controller.onSave,
+          ) : null,
+          persistentFooterButtons: (Platform.isWindows) ? [
             TextButton(
               child: const Text('SIMPAN'),
               onPressed: controller.onSave,
             ),
-          ],
+          ] : null,
         ),
       ),
     ),

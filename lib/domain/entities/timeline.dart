@@ -48,7 +48,7 @@ class Timeline implements Comparable {
       }
       semester = int.tryParse(strings2[1].replaceAll('Semester', '').replaceAll(' ', ''));
       kelas = int.tryParse(strings2[2].replaceAll('Kelas', '').replaceAll(' ', ''));
-      level = int.tryParse(strings2[2].replaceAll('Level', '').replaceAll(' ', ''));
+      level = int.tryParse(strings2[3].replaceAll('Level', '').replaceAll(' ', ''));
       if (bulan!=null && semester!=null && kelas!=null && level!=null) {
         return Timeline(bulan, semester, kelas, level);
       }

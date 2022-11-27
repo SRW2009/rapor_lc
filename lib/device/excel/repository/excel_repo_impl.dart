@@ -23,8 +23,8 @@ typedef SantriNis = String;
 class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
   @override
   Future<List<int>?> exportNilai() async {
-    // collect nilai list
-    var nilaiList = await NilaiRepositoryImpl().getNilaiList();
+    // collect all nilai list
+    var nilaiList = await NilaiRepositoryImpl().getNilaiList(null);
     nilaiList.sort();
 
     // separate nilai list by their mapel name, then santri nis, then timeline
@@ -49,7 +49,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         }
         // otherwise, create new nilai instance and insert nhb record there
         on StateError {
-          final n = nilai.clone()..nhbSemester.clear()..nhbBlock.clear()..npb.clear()..nk.clear();
+          final n = nilai.cloneWithoutData();
           n.nhbSemester.add(o);
           nilaiListRef.add(n);
         }
@@ -71,7 +71,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         }
         // otherwise, create new nilai instance and insert nhb record there
         on StateError {
-          final n = nilai.clone()..nhbSemester.clear()..nhbBlock.clear()..npb.clear()..nk.clear();
+          final n = nilai.cloneWithoutData();
           n.nhbBlock.add(o);
           nilaiListRef.add(n);
         }
@@ -93,7 +93,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         }
         // otherwise, create new nilai instance and insert nhb record there
         on StateError {
-          final n = nilai.clone()..nhbSemester.clear()..nhbBlock.clear()..npb.clear()..nk.clear();
+          final n = nilai.cloneWithoutData();
           n.npb.add(o);
           nilaiListRef.add(n);
         }
@@ -114,7 +114,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         }
         // otherwise, create new nilai instance and insert nk record there
         on StateError {
-          final n = nilai.clone()..nhbSemester.clear()..nhbBlock.clear()..npb.clear()..nk.clear();
+          final n = nilai.cloneWithoutData();
           n.nk.add(o);
           nilaiListRef.add(n);
         }
@@ -122,7 +122,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
     }
 
     // separate NK from NHB and NPB
-    final nkSheetData = sheetsData['NK']!.cast<String, Map<Timeline, List<Nilai>>>();
+    final nkSheetData = sheetsData['NK']!.cast<SantriNis, Map<Timeline, List<Nilai>>>();
     sheetsData.remove('NK');
 
     // create excel
@@ -134,7 +134,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
 
       /// HEADERS ///
       excel.merge(sheetName, CellIndex.indexByString('A1'), CellIndex.indexByString("A3"), customValue: 'Santri');
-      excel.merge(sheetName, CellIndex.indexByString('B1'), CellIndex.indexByString("J1"), customValue: 'Nilai');
+      excel.merge(sheetName, CellIndex.indexByString('B1'), CellIndex.indexByString("P1"), customValue: 'Nilai');
       excel.merge(sheetName, CellIndex.indexByString('B2'), CellIndex.indexByString("B3"), customValue: 'Timeline');
       excel.merge(sheetName, CellIndex.indexByString('C2'), CellIndex.indexByString("C3"), customValue: 'Tahun Ajaran');
       excel.merge(sheetName, CellIndex.indexByString('D2'), CellIndex.indexByString("I2"), customValue: 'NHB Semester');
@@ -297,7 +297,8 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         // append santri
         if (startSantriRow == currentRow-1) {
           sheet.cell(CellIndex.indexByString('A$startSantriRow'))
-              ..value = santriNis;
+            ..value = santriNis
+            ..cellStyle = contentCellStyle;
         }
         else {
           excel.merge(
@@ -352,16 +353,15 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
 
     /// CONTENTS ///
     var currentRow = 4;
-    // santri
     for (var santriNis in nkSheetData.keys) {
       var startSantriRow = currentRow.toInt();
 
-      // Bulan and semester
-      for (var bas in nkSheetData[santriNis]!.keys) {
+      // Timeline
+      for (var timeline in nkSheetData[santriNis]!.keys) {
         var startTimelineRow = currentRow.toInt();
 
         // Nilai
-        final nilaiList = nkSheetData[santriNis]![bas]!;
+        final nilaiList = nkSheetData[santriNis]![timeline]!;
         nilaiList.sort();
         for (var nilai in nilaiList) {
           final maxLength = nilai.nk.length;
@@ -400,7 +400,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         // append timeline
         if (startTimelineRow == currentRow-1) {
           sheetNK.cell(CellIndex.indexByString('B$startTimelineRow'))
-            ..value = bas.toExcelString()
+            ..value = timeline.toExcelString()
             ..cellStyle = contentCellStyle;
         }
         else {
@@ -408,7 +408,7 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
             'NK',
             CellIndex.indexByString('B$startTimelineRow'),
             CellIndex.indexByString('B${currentRow - 1}'),
-            customValue: bas.toExcelString(),
+            customValue: timeline.toExcelString(),
           );
           sheetNK.cell(CellIndex.indexByString('B$startTimelineRow'))
             ..cellStyle = contentCellStyle;
@@ -418,7 +418,8 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
       // append santri
       if (startSantriRow == currentRow-1) {
         sheetNK.cell(CellIndex.indexByString('A$startSantriRow'))
-          ..value = santriNis;
+          ..value = santriNis
+          ..cellStyle = contentCellStyle;
       }
       else {
         excel.merge(
@@ -464,10 +465,16 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
 
         // check mapel existence and update mapel data
         final mapel = updateMapelDetail(mapelList, sheetName);
+        final mapelBlock = updateMapelDetail(mapelList, sheetName, isBlock: true);
         if (mapel == null) {
-          yield 'Tidak menemukan mapel dengan nama yang sesuai ($sheetName).';
-          continue;
+          yield 'Tidak menemukan mapel semester dengan nama yang sesuai ($sheetName).';
+          //continue;
         }
+        if (mapelBlock == null) {
+          yield 'Tidak menemukan mapel block dengan nama yang sesuai ($sheetName).';
+          //continue;
+        }
+        if (mapel == null && mapelBlock == null) continue;
 
         yield 'Memuat nilai untuk mapel $sheetName ...';
 
@@ -566,11 +573,6 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
 
           if (shouldCreateNHBSemester || shouldCreateNHBBlock || shouldCreateNPB) {
 
-            // replace fixed list with a growable one
-            currentNilai.nhbSemester = [];
-            currentNilai.nhbBlock = [];
-            currentNilai.npb = [];
-
             // get nilai index from nilai list that matches current nilai
             final nilaiIndex = nilaiList.indexOf(currentNilai);
 
@@ -578,44 +580,47 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
             if (nilaiIndex == -1) {
 
               // add new value
-              if (shouldCreateNHBSemester) {
-                final nhb = NHBSemester(
-                    1, mapel, sHarian, sBulanan, sProjek, sAkhir, sAkumulasi.toInt(), sPredikat);
-                currentNilai.nhbSemester.add(nhb);
+              if (mapel != null) {
+                if (shouldCreateNHBSemester) {
+                  final nhb = NHBSemester(
+                      1, mapel, sHarian, sBulanan, sProjek, sAkhir, sAkumulasi.toInt(), sPredikat);
+                  currentNilai.nhbSemester.add(nhb);
+                }
+                if (shouldCreateNPB) {
+                  final npb = NPB(1, mapel, n);
+                  currentNilai.npb.add(npb);
+                }
               }
-              if (shouldCreateNHBBlock) {
+              if (mapelBlock != null && shouldCreateNHBBlock) {
                 final nhb = NHBBlock(
-                    1, mapel, bHarian, bProjek, bAkhir, bAkumulasi.toInt(), bPredikat, bDesk);
+                    1, mapelBlock, bHarian, bProjek, bAkhir, bAkumulasi.toInt(), bPredikat, bDesk);
                 currentNilai.nhbBlock.add(nhb);
-              }
-              if (shouldCreateNPB) {
-                final npb = NPB(1, mapel, n);
-                currentNilai.npb.add(npb);
               }
 
               // add nilai
-              nilaiList.add(Nilai.fromJson(currentNilai.toJson()));
+              nilaiList.add(currentNilai);
 
-              currentNilai.nhbSemester.clear();
-              currentNilai.nhbBlock.clear();
-              currentNilai.npb.clear();
+              // clear nilai
+              currentNilai = currentNilai.cloneWithoutData();
             } else {
 
               // add new value and update nilai
-              if (shouldCreateNHBSemester) {
-                final nhb = NHBSemester(nilaiList[nilaiIndex].nhbSemester.length + 1, mapel, sHarian,
-                    sBulanan, sProjek, sAkhir, sAkumulasi.toInt(), sPredikat);
-                nilaiList[nilaiIndex].nhbSemester.add(nhb);
+              if (mapel != null) {
+                if (shouldCreateNHBSemester) {
+                  final nhb = NHBSemester(nilaiList[nilaiIndex].nhbSemester.length + 1, mapel, sHarian,
+                      sBulanan, sProjek, sAkhir, sAkumulasi.toInt(), sPredikat);
+                  nilaiList[nilaiIndex].nhbSemester.add(nhb);
+                }
+                if (shouldCreateNPB) {
+                  final npb = NPB(
+                      nilaiList[nilaiIndex].npb.length + 1, mapel, n);
+                  nilaiList[nilaiIndex].npb.add(npb);
+                }
               }
-              if (shouldCreateNHBBlock) {
-                final nhb = NHBBlock(nilaiList[nilaiIndex].nhbBlock.length + 1, mapel, bHarian,
+              if (mapelBlock != null && shouldCreateNHBBlock) {
+                final nhb = NHBBlock(nilaiList[nilaiIndex].nhbBlock.length + 1, mapelBlock, bHarian,
                     bProjek, bAkhir, bAkumulasi.toInt(), bPredikat, bDesk);
                 nilaiList[nilaiIndex].nhbBlock.add(nhb);
-              }
-              if (shouldCreateNPB) {
-                final npb = NPB(
-                    nilaiList[nilaiIndex].npb.length + 1, mapel, n);
-                nilaiList[nilaiIndex].npb.add(npb);
               }
             }
           }
@@ -697,8 +702,12 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
             final nk = NK(
                 1, namaVariabel, mesjid, kelas, asrama, akumulatif.toInt(), predikat);
             currentNilai.nk = [nk];
-            nilaiList.add(Nilai.fromJson(currentNilai.toJson()));
-            currentNilai.nk.clear();
+
+            // add nilai
+            nilaiList.add(currentNilai);
+
+            // clear nilai
+            currentNilai = currentNilai.cloneWithoutData();
           }
           // otherwise, assign NK to nilai record that matches
           else {
@@ -750,9 +759,12 @@ mixin _ExcelRepositoryMixin {
   }
 
   MataPelajaran? updateMapelDetail(
-      List<MataPelajaran> mapelList, String sheetName) {
+      List<MataPelajaran> mapelList, String sheetName, {bool isBlock=false}) {
     try {
-      final mapel = mapelList.singleWhere((e) => e.name.toLowerCase() == sheetName.toLowerCase());
+      final mapel = mapelList.singleWhere((e) =>
+      e.name.toLowerCase() == sheetName.toLowerCase()
+          && e.divisi.isBlock == isBlock
+      );
       return mapel;
     } on StateError {
       return null;

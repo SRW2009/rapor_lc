@@ -72,6 +72,7 @@ class _NHBBlockUpdateDialogState extends State<NHBBlockUpdateDialog> {
                   label: 'Deskripsi',
                   controller: _descriptionCon,
                   maxLines: 3,
+                  validator: (s)=>null,
                 ),
               ],
             ),

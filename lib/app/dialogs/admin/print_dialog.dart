@@ -125,8 +125,8 @@ class _PrintDialogState extends State<PrintDialog> {
           onSave: () {
             var printSettings = PrintSettings(
               headerPath ?? 'assets/images/rapor_header_qbs.png',
-              fromTimelineCon.toInt(),
-              toTimelineCon.toInt(),
+              fromTimelineCon,
+              toTimelineCon,
               nhbSemesterPage: nhbSemesterPage,
               nhbBlockPage: nhbBlockPage,
               npbPage: npbPage,

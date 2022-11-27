@@ -11,6 +11,7 @@ import 'package:rapor_lc/app/pages/manage-npb/manage_npb_view.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
 import 'package:rapor_lc/app/pages/splash/splash_view.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
+import 'package:rapor_lc/domain/entities/santri.dart';
 
 class Router {
   final RouteObserver<PageRoute> routeObserver;
@@ -27,8 +28,8 @@ class Router {
       case Pages.home:
         return _buildRoute(settings, HomePage());
       case Pages.manage_nilai:
-        final arg = settings.arguments! as List;
-        return _buildRoute(settings, ManageNilaiPage(arg[0], arg[1]));
+        final arg = settings.arguments! as Santri;
+        return _buildRoute(settings, ManageNilaiPage(arg));
       case Pages.manage_nhb_semester:
         final arg = settings.arguments! as Nilai;
         return _buildRoute(settings, ManageNHBSemesterPage(nilai: arg));
