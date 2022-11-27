@@ -1,8 +1,10 @@
 
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
+import 'package:rapor_lc/domain/entities/admin.dart';
+import 'package:rapor_lc/domain/entities/teacher.dart';
 import 'package:rapor_lc/domain/usecases/auth/forgot_password.dart';
-import 'package:rapor_lc/domain/usecases/auth/login.dart';
+import 'package:rapor_lc/domain/usecases/auth/login_admin.dart';
+import 'package:rapor_lc/domain/usecases/auth/login_teacher.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 
 class LoginPresenter extends Presenter {
@@ -11,20 +13,24 @@ class LoginPresenter extends Presenter {
   late Function(bool) forgotPasswordOnNext;
   late Function(dynamic) forgotPasswordOnError;
 
-  final LoginUseCase _loginUseCase;
+  final LoginAdminUseCase _loginAdminUseCase;
+  final LoginTeacherUseCase _loginTeacherUseCase;
   final ForgotPasswordUseCase _forgotPasswordUseCase;
   LoginPresenter(authRepo)
-      : _loginUseCase = LoginUseCase(authRepo),
+      : _loginAdminUseCase = LoginAdminUseCase(authRepo),
+        _loginTeacherUseCase = LoginTeacherUseCase(authRepo),
         _forgotPasswordUseCase = ForgotPasswordUseCase(authRepo);
 
-  void doLogin(User user) => _loginUseCase.execute(
-      _DoLoginObserver(this), UseCaseParams<User>(user));
+  void doLoginTeacher(Teacher user) => _loginTeacherUseCase.execute(
+      _DoLoginObserver(this), UseCaseParams(user));
+  void doLoginAdmin(Admin user) => _loginAdminUseCase.execute(
+      _DoLoginObserver(this), UseCaseParams(user));
   void doForgotPassword(String email) => _forgotPasswordUseCase.execute(
       _DoForgotPasswordObserver(this), UseCaseParams<String>(email));
 
   @override
   void dispose() {
-    _loginUseCase.dispose();
+    _loginAdminUseCase.dispose();
   }
 }
 

@@ -1,6 +1,14 @@
 
 import 'package:flutter/material.dart';
 
+final containerDecoration = BoxDecoration(
+  color: Colors.white,
+  border: Border.all(
+    color: Colors.grey.withOpacity(.20),
+    width: 1.5,
+  ),
+  borderRadius: BorderRadius.circular(12.0),
+);
 
 final inputDecoration = InputDecoration(
   filled: true,

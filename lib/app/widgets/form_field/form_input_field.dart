@@ -9,7 +9,7 @@ class FormInputField extends StatefulWidget {
     this.icon, this.onTap, this.validator, this.maxLength,
     this.isPassword=false, this.isObscured=false, this.isDisabled=false, this.textColor=Colors.black,
     this.fillColor=Colors.white, this.iconColor=Colors.black, this.inputType=TextInputType.text,
-    this.hint='', this.withoutPadding=false, this.maxLines=1,
+    this.hint='', this.withoutPadding=false, this.maxLines=1, this.readOnly=false,
   }) : super(key: key);
 
   final TextInputType inputType;
@@ -25,6 +25,7 @@ class FormInputField extends StatefulWidget {
   final String hint;
   final int? maxLength;
   final int maxLines;
+  final bool readOnly;
 
   @override
   FormInputFieldState createState() => FormInputFieldState();
@@ -38,7 +39,6 @@ class FormInputFieldState extends State<FormInputField> {
     super.initState();
     _validator = (s) {
       if (widget.validator != null) return widget.validator!(s);
-
       if (s == null || s.isEmpty) return 'Harus diisi';
       return null;
     };
@@ -49,6 +49,7 @@ class FormInputFieldState extends State<FormInputField> {
     return Padding(
       padding: EdgeInsets.only(bottom: (widget.withoutPadding) ? 0.0 : 24.0),
       child: TextFormField(
+        readOnly: widget.readOnly,
         enabled: !widget.isDisabled,
         keyboardType: widget.inputType,
         controller: (widget.controller != null) ? widget.controller : null,
@@ -85,8 +86,7 @@ class FormInputFieldState extends State<FormInputField> {
             minWidth: 24,
             minHeight: 24,
           ),
-          fillColor:
-          (widget.isDisabled)
+          fillColor: (widget.isDisabled)
               ? Colors.grey.shade200
               : widget.fillColor,
           labelText: widget.label,

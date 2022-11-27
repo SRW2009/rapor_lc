@@ -1,5 +1,5 @@
 
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/usecases/base_use_case.dart';
 import 'package:rapor_lc/domain/repositories/divisi_repo.dart';

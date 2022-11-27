@@ -1,9 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-
 class FormInputFieldCheckBox extends StatelessWidget {
-  final String label;
+  final String? label;
   final bool value;
   final void Function(bool i)? setState;
 
@@ -15,9 +14,9 @@ class FormInputFieldCheckBox extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
+        if (label != null) Padding(
           padding: const EdgeInsets.only(right: 16.0),
-          child: Text(label, style: Theme.of(context).textTheme.bodyText1,),
+          child: Text(label!, style: Theme.of(context).textTheme.bodyText1),
         ),
         FormField<bool>(
           initialValue: value,

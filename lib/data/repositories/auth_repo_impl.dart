@@ -1,25 +1,23 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/data/helpers/constant.dart';
-import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
-import 'package:rapor_lc/domain/entities/user.dart';
-import 'package:rapor_lc/domain/repositories/auth_repo.dart';
 import 'package:http/http.dart' as http;
+import 'package:rapor_lc/data/helpers/constant.dart';
+import 'package:rapor_lc/data/helpers/shared_prefs.dart';
+import 'package:rapor_lc/data/models/teacher_model.dart';
+import 'package:rapor_lc/domain/entities/abstract/user.dart';
+import 'package:rapor_lc/domain/entities/admin.dart';
+import 'package:rapor_lc/domain/repositories/auth_repo.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
-  final SharedPrefsRepository _sharedPrefsRepository;
-
-  //singleton
-  static final AuthenticationRepositoryImpl _instance = AuthenticationRepositoryImpl._internal();
-  AuthenticationRepositoryImpl._internal()
-      : _sharedPrefsRepository = SharedPrefsRepository();
-  factory AuthenticationRepositoryImpl() => _instance;
 
   @override
-  Future<int> authenticate({required String email, required String password}) async {
+  String url = '';
+
+  @override
+  Future<int> authenticateTeacher({required String email, required String password}) async {
     final response = await http.post(
-      DataConstant.loginUri,
+      Uri.parse(Urls.loginTeacherUrl),
       headers: DataConstant.headers(),
       body: jsonEncode({
         'email': email,
@@ -27,14 +25,38 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
       }),
     );
 
-    if (response.statusCode == StatusCode.postSuccess) {
-      final data = jsonDecode(response.body);
-      final status = data['status'] as int;
+    if (response.statusCode == StatusCode.getSuccess) {
+      final data = jsonDecode(response.body)['data'];
       final token = data['token'];
 
-      final user = User(email, password, status: status);
-      await _sharedPrefsRepository.setCurrentUser(user);
-      await _sharedPrefsRepository.setToken(token);
+      final user = TeacherModel.fromJsonLoginRequest(data);
+      await SharedPrefs().setCurrentUser(user);
+      await SharedPrefs().setToken(token);
+
+      return user.status;
+    }
+
+    return 0;
+  }
+
+  @override
+  Future<int> authenticateAdmin({required String email, required String password}) async {
+    final response = await http.post(
+      Uri.parse(Urls.loginAdminUrl),
+      headers: DataConstant.headers(),
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == StatusCode.getSuccess) {
+      final data = jsonDecode(response.body)['data'];
+      final token = data['token'];
+
+      final user = Admin.fromJson(data);
+      await SharedPrefs().setCurrentUser(user);
+      await SharedPrefs().setToken(token);
 
       return user.status;
     }
@@ -51,17 +73,17 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   @override
   Future<User?> getCurrentUser() async =>
-      await _sharedPrefsRepository.getCurrentUser;
+      await SharedPrefs().getCurrentUser;
 
   @override
   Future<String?> getCurrentToken() async =>
-      await _sharedPrefsRepository.getToken;
+      await SharedPrefs().getToken;
 
   @override
   Future<int> isAuthenticated() async =>
-      await _sharedPrefsRepository.getLoginPrivilege;
+      (await SharedPrefs().getCurrentUser)?.status ?? 0;
 
   @override
   Future<bool> logout() async =>
-      await _sharedPrefsRepository.logout();
+      await SharedPrefs().logout();
 }

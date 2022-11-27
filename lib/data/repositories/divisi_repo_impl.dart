@@ -1,29 +1,63 @@
 
 import 'dart:convert';
 
-import 'package:rapor_lc/common/request_status.dart';
+import 'package:rapor_lc/app/utils/loaded_settings.dart';
+import 'package:rapor_lc/common/enum/request_status.dart';
 import 'package:rapor_lc/data/helpers/constant.dart';
-import 'package:rapor_lc/data/helpers/shared_prefs/shared_prefs_repo.dart';
+import 'package:rapor_lc/data/helpers/shared_prefs.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/repositories/divisi_repo.dart';
 import 'package:http/http.dart' as http;
 
 class DivisiRepositoryImpl extends DivisiRepository {
+
+  @override
+  String url = Urls.adminDivisi;
+
+  @override
+  Future<List<Divisi>> getDivisiList() async {
+    final token = await SharedPrefs().getToken;
+
+    final response = await http.get(
+      readUri(),
+      headers: DataConstant.headers(token),
+    );
+    if (response.statusCode == StatusCode.getSuccess) {
+      final list = (jsonDecode(response.body) as List)
+          .map<Divisi>((e) => Divisi.fromJson(e)).toList();
+      try {
+        LoadedSettings.divisiKesantrian = list.firstWhere((element) => element.name=='Kesantrian');
+      } on StateError {}
+      return list;
+    }
+    throw Exception();
+  }
+
   @override
   Future<RequestStatus> createDivisi(Divisi divisi) async {
-    final token = await SharedPrefsRepository().getToken;
+    final token = await SharedPrefs().getToken;
 
     final response = await http.post(
-      DataConstant.queryUri,
+      createUri(),
       headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_action,
-        'query': '''
-          INSERT INTO tb_divisi (id, nama, kadiv) VALUES (NULL,'${divisi.nama}','${divisi.kadiv}')
-        ''',
-      }),
+      body: jsonEncode(divisi.toJson()),
     );
     if (response.statusCode == StatusCode.postSuccess) {
+      return RequestStatus.success;
+    }
+    return RequestStatus.failed;
+  }
+
+  @override
+  Future<RequestStatus> updateDivisi(Divisi divisi) async {
+    final token = await SharedPrefs().getToken;
+
+    final response = await http.put(
+      updateUri(divisi.id),
+      headers: DataConstant.headers(token),
+      body: jsonEncode(divisi.toJson()),
+    );
+    if (response.statusCode == StatusCode.putSuccess) {
       return RequestStatus.success;
     }
     return RequestStatus.failed;
@@ -31,85 +65,21 @@ class DivisiRepositoryImpl extends DivisiRepository {
 
   @override
   Future<RequestStatus> deleteDivisi(List<String> ids) async {
-    final token = await SharedPrefsRepository().getToken;
+    final token = await SharedPrefs().getToken;
 
-    final deleteQuery = ids.map<String>((e) =>
-    'DELETE FROM tb_divisi WHERE id=$e'
-    ).join(';');
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_action,
-        'query': deleteQuery,
-      }),
-    );
-    if (response.statusCode == StatusCode.postSuccess) {
-      return RequestStatus.success;
+    bool success = true;
+    for (var id in ids) {
+      final response = await http.delete(
+        deleteUri(id),
+        headers: DataConstant.headers(token),
+      );
+
+      if (response.statusCode != StatusCode.deleteSuccess) {
+        success = false;
+        break;
+      }
     }
-    return RequestStatus.failed;
-  }
-
-  @override
-  Future<Divisi> getDivisi(int id) async {
-    final token = await SharedPrefsRepository().getToken;
-
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_get,
-        'query': '''
-          SELECT * FROM tb_divisi WHERE id=$id
-        ''',
-      }),
-    );
-    if (response.statusCode == StatusCode.getSuccess) {
-      return (jsonDecode(response.body) as List)
-          .map<Divisi>((e) => Divisi.fromJson(e)).toList()[0];
-    }
-    throw Exception();
-  }
-
-  @override
-  Future<List<Divisi>> getDivisiList() async {
-    final token = await SharedPrefsRepository().getToken;
-
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_get,
-        'query': '''
-          SELECT * FROM tb_divisi
-        ''',
-      }),
-    );
-    print(response.body);
-    if (response.statusCode == StatusCode.getSuccess) {
-      return (jsonDecode(response.body) as List)
-          .map<Divisi>((e) => Divisi.fromJson(e)).toList();
-    }
-    throw Exception();
-  }
-
-  @override
-  Future<RequestStatus> updateDivisi(Divisi divisi) async {
-    final token = await SharedPrefsRepository().getToken;
-
-    final response = await http.post(
-      DataConstant.queryUri,
-      headers: DataConstant.headers(token),
-      body: jsonEncode({
-        'query_type': DataConstant.queryType_action,
-        'query': '''
-          UPDATE tb_divisi SET nama='${divisi.nama}',kadiv='${divisi.kadiv}' WHERE id=${divisi.id}
-        ''',
-      }),
-    );
-    if (response.statusCode == StatusCode.postSuccess) {
-      return RequestStatus.success;
-    }
+    if (success) return RequestStatus.success;
     return RequestStatus.failed;
   }
 }

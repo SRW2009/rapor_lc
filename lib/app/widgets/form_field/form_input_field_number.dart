@@ -21,3 +21,23 @@ class FormInputFieldNumber extends StatelessWidget {
     );
   }
 }
+
+class FormInputFieldNumberNullable extends StatelessWidget {
+  final String label;
+  final TextEditingController controller;
+
+  const FormInputFieldNumberNullable(this.label, this.controller, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FormInputField(
+      label: label,
+      controller: controller,
+      inputType: TextInputType.number,
+      validator: (s) {
+        if (s == null || s.isEmpty) return null;
+        return (double.tryParse(s) == null) ? 'Harus angka' : null;
+      },
+    );
+  }
+}

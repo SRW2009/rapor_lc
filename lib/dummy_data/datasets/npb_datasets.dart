@@ -2,84 +2,83 @@
 import 'dart:math';
 
 import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:rapor_lc/dummy_data/mata_pelajaran.dart';
+import 'package:pdf/widgets.dart';
+import 'package:rapor_lc/dummy_data/dummies.dart';
 
-final plpsName = pelajaranList.map<String>((e) => e.nama_mapel).toList();
-final plpsName_observation = pelajaranList_observation.map<String>((e) => e.nama_mapel).toList();
+final plpsName = mapelList.map<String>((e) => e.name).toList();
 
 final Random random = Random();
-List<pw.BarDataSet> getDatasets({isObservation=false}) => <pw.BarDataSet>[
-  pw.BarDataSet(
+List<BarDataSet> getDatasets({isObservation=false}) => <BarDataSet>[
+  BarDataSet(
     color: PdfColors.blue,
-    legend: 'Tahfiz',
+    legend: 'Tahfizh',
     width: 8,
-    data: List<pw.LineChartValue>.generate(pelajaranList_observation.length, (i) {
+    data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (pelajaranList_observation[i].divisi.nama == 'Tahfiz') {
+      if (mapelList[i].divisi.name == 'Tahfizh') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue(i.toDouble(), y);
-    })..addAll(List<pw.LineChartValue>.generate(pelajaranList.length, (i) {
+      return LineChartValue(i.toDouble(), y);
+    })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && pelajaranList[i].divisi.nama == 'Tahfiz') {
+      if (!isObservation && mapelList[i].divisi.name == 'Tahfizh') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue((i+pelajaranList_observation.length).toDouble(), y);
+      return LineChartValue((i+mapelList.length).toDouble(), y);
     })),
   ),
-  pw.BarDataSet(
+  BarDataSet(
     color: PdfColors.orange,
     legend: 'IT',
     width: 8,
-    data: List<pw.LineChartValue>.generate(pelajaranList_observation.length, (i) {
+    data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (pelajaranList_observation[i].divisi.nama == 'IT') {
+      if (mapelList[i].divisi.name == 'IT') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue(i.toDouble(), y);
-    })..addAll(List<pw.LineChartValue>.generate(pelajaranList.length, (i) {
+      return LineChartValue(i.toDouble(), y);
+    })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && pelajaranList[i].divisi.nama == 'IT') {
+      if (!isObservation && mapelList[i].divisi.name == 'IT') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue((i+pelajaranList_observation.length).toDouble(), y);
+      return LineChartValue((i+mapelList.length).toDouble(), y);
     })),
   ),
-  pw.BarDataSet(
+  BarDataSet(
     color: PdfColors.grey,
     legend: 'Bahasa',
     width: 8,
-    data: List<pw.LineChartValue>.generate(pelajaranList_observation.length, (i) {
+    data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (pelajaranList_observation[i].divisi.nama == 'Bahasa') {
+      if (mapelList[i].divisi.name == 'Bahasa') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue(i.toDouble(), y);
-    })..addAll(List<pw.LineChartValue>.generate(pelajaranList.length, (i) {
+      return LineChartValue(i.toDouble(), y);
+    })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && pelajaranList[i].divisi.nama == 'Bahasa') {
+      if (!isObservation && mapelList[i].divisi.name == 'Bahasa') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue((i+pelajaranList_observation.length).toDouble(), y);
+      return LineChartValue((i+mapelList.length).toDouble(), y);
     })),
   ),
-  pw.BarDataSet(
+  BarDataSet(
     color: PdfColors.yellow,
     legend: 'MPP',
     width: 8,
-    data: List<pw.LineChartValue>.generate(pelajaranList_observation.length, (i) {
+    data: List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (pelajaranList_observation[i].divisi.nama == 'MPP') {
+      if (mapelList[i].divisi.name == 'MPP') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue(i.toDouble(), y);
-    })..addAll(List<pw.LineChartValue>.generate(pelajaranList.length, (i) {
+      return LineChartValue(i.toDouble(), y);
+    })..addAll(List<LineChartValue>.generate(mapelList.length, (i) {
       double y = 0;
-      if (!isObservation && pelajaranList[i].divisi.nama == 'MPP') {
+      if (!isObservation && mapelList[i].divisi.name == 'MPP') {
         y = random.nextInt(70).toDouble()+30;
       }
-      return pw.LineChartValue((i+pelajaranList_observation.length).toDouble(), y);
+      return LineChartValue((i+mapelList.length).toDouble(), y);
     })),
   ),
 ];
