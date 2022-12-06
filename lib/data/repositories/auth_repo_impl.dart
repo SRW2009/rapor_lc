@@ -11,6 +11,10 @@ import 'package:rapor_lc/domain/repositories/auth_repo.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
+  static final AuthenticationRepositoryImpl _instance = AuthenticationRepositoryImpl._internal();
+  AuthenticationRepositoryImpl._internal();
+  factory AuthenticationRepositoryImpl() => _instance;
+
   @override
   String url = '';
 

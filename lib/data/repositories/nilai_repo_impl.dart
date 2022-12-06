@@ -26,7 +26,7 @@ class NilaiRepositoryImpl extends NilaiRepository {
     final response = await http.get(
         (studentId==null)
             ? readUri()
-            : readUri()..replace(queryParameters: {'student_id':studentId.toString()}),
+            : readUri().replace(queryParameters: {'student_id':studentId.toString()}),
       headers: DataConstant.headers(token),
     );
     if (response.statusCode == StatusCode.getSuccess) {

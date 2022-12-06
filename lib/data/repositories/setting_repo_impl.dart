@@ -11,6 +11,10 @@ import 'package:rapor_lc/domain/repositories/setting_repo.dart';
 
 class SettingRepositoryImpl extends SettingRepository {
 
+  static final SettingRepositoryImpl _instance = SettingRepositoryImpl._internal();
+  SettingRepositoryImpl._internal();
+  factory SettingRepositoryImpl() => _instance;
+
   @override
   String url = Urls.adminSetting;
 

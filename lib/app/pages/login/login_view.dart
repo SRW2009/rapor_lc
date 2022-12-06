@@ -10,6 +10,8 @@ import 'package:rapor_lc/data/repositories/auth_repo_impl.dart';
 
 import 'dart:io' show Platform;
 
+import 'package:rapor_lc/data/repositories/setting_repo_impl.dart';
+
 class LoginPage extends View {
   final String? errorMessage;
 
@@ -21,7 +23,7 @@ class LoginPage extends View {
 
 class LoginPageView extends ViewState<LoginPage, LoginController> {
   LoginPageView()
-      : super(LoginController(AuthenticationRepositoryImpl()));
+      : super(LoginController(AuthenticationRepositoryImpl(), SettingRepositoryImpl()));
 
   final _duration = const Duration(milliseconds: 400);
   final _loginFormKey = GlobalKey<FormState>();

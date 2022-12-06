@@ -8,12 +8,12 @@ import 'package:rapor_lc/common/enum/request_state.dart';
 class SplashController extends Controller {
   bool isLoading = false;
   bool isError = false;
-  final SplashPresenter _splashPresenter;
-  late String page;
 
+  late String page;
   int _authStatus = -1;
   int _retryCount = 0;
 
+  final SplashPresenter _splashPresenter;
   SplashController(authRepo, settingRepo)
       : _splashPresenter = SplashPresenter(authRepo, settingRepo),
         super();

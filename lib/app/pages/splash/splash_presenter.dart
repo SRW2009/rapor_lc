@@ -25,7 +25,11 @@ class SplashPresenter extends Presenter {
   void getSettingList() => _getSettingListUseCase.execute(_GetSettingListObserver(this));
 
   @override
-  void dispose() => _getAuthStatusUseCase.dispose();
+  void dispose() {
+    _getAuthStatusUseCase.dispose();
+    _logoutUseCase.dispose();
+    _getSettingListUseCase.dispose();
+  }
 }
 
 class _GetAuthStatusObserver implements Observer<UseCaseResponse<int>> {

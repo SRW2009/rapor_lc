@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:rapor_lc/app/pages/login/login_presenter.dart';
 import 'package:rapor_lc/app/pages/pages.dart';
+import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/domain/entities/admin.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
@@ -16,25 +17,30 @@ class LoginController extends Controller {
   LoginFormState formState = LoginFormState.login;
   LoginAs loginAs = LoginAs.teacher;
 
+  late String page;
+  int _authStatus = -1;
+  int _retryCount = 0;
+
   final LoginPresenter _loginPresenter;
-  LoginController(authRepo)
-      : _loginPresenter = LoginPresenter(authRepo),
+  LoginController(authRepo, settingRepo)
+      : _loginPresenter = LoginPresenter(authRepo, settingRepo),
         super();
 
   void _authOnNext(int e) {
+    _authStatus = e;
+    if (e == 2) {
+      page = Pages.admin_home;
+      getSettingList();
+      return;
+    }
+    if (e == 1) {
+      page = Pages.home;
+      getSettingList();
+      return;
+    }
+
     isLoading = false;
     refreshUI();
-
-    // if user logged in as admin
-    if (e == 2) {
-      Navigator.of(getContext()).pushReplacementNamed(Pages.admin_home);
-      return;
-    }
-    // if user logged in as teacher
-    if (e == 1) {
-      Navigator.of(getContext()).pushReplacementNamed(Pages.home);
-      return;
-    }
 
     ScaffoldMessenger.of(getContext())
         .showSnackBar(const SnackBar(content: Text('Email atau Password salah.')));
@@ -48,34 +54,32 @@ class LoginController extends Controller {
         .showSnackBar(const SnackBar(content: Text('Terjadi Masalah.')));
   }
 
-  void _forgotPasswordOnNext(bool e) {
-    isLoading = false;
-    refreshUI();
-
-    if (e) {
-      ScaffoldMessenger.of(getContext())
-          .showSnackBar(const SnackBar(content: Text('Berhasil reset password!')));
-      return;
+  void _getSettingListState(RequestState state) {
+    if (state == RequestState.loaded) {
+      Navigator.of(getContext()).pushReplacementNamed(page);
     }
+    else if (state == RequestState.error) {
+      _retryCount++;
+      if (_authStatus > 0 && _retryCount == 2) {
+        ScaffoldMessenger.of(getContext())
+            .showSnackBar(const SnackBar(content: Text('Terjadi Masalah. Tolong restart aplikasi.')));
 
-    ScaffoldMessenger.of(getContext())
-        .showSnackBar(const SnackBar(content: Text('Email tidak ditemukan.')));
-  }
+        isLoading = false;
+        refreshUI();
+        return;
+      }
 
-  void _forgotPasswordOnError(e) {
-    isLoading = false;
-    refreshUI();
-
-    ScaffoldMessenger.of(getContext())
-        .showSnackBar(const SnackBar(content: Text('Terjadi Masalah.')));
+      Future.delayed(const Duration(seconds: 2), () {
+        getSettingList();
+      });
+    }
   }
 
   @override
   void initListeners() {
     _loginPresenter.authOnNext = _authOnNext;
     _loginPresenter.authOnError = _authOnError;
-    _loginPresenter.forgotPasswordOnNext = _forgotPasswordOnNext;
-    _loginPresenter.forgotPasswordOnError = _forgotPasswordOnError;
+    _loginPresenter.getSettingListState = _getSettingListState;
   }
 
   void setLoginAs(int i) {
@@ -84,7 +88,6 @@ class LoginController extends Controller {
   }
 
   void doLogin(GlobalKey<FormState> key, String email, String password) {
-
     if (key.currentState!.validate()) {
       isLoading = true;
       refreshUI();
@@ -98,13 +101,7 @@ class LoginController extends Controller {
     }
   }
 
-  void doForgotPassword(GlobalKey<FormState> key, String email) {
-    if (key.currentState!.validate()) {
-      isLoading = true;
-      refreshUI();
-      _loginPresenter.doForgotPassword(email);
-    }
-  }
+  void getSettingList() => _loginPresenter.getSettingList();
 
   void toLogin() {
     formState = LoginFormState.login;
