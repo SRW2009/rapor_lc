@@ -2,10 +2,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:rapor_lc/app/pages/splash/splash_view.dart';
-import 'package:rapor_lc/app/utils/router.dart' as r;
 
-class MyHttpOverrides extends HttpOverrides{
+import 'app/utils/router.dart' as r;
+import 'app/pages/pages.dart';
+
+class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
@@ -33,9 +34,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Raleway',
       ),
-      home: SplashPage(),
       onGenerateRoute: _router.getRoute,
       navigatorObservers: [_router.routeObserver],
+      initialRoute: Pages.splash,
     );
   }
 }

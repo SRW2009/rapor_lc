@@ -1,6 +1,7 @@
 
+import 'dart:typed_data';
+
 import 'package:pdf/pdf.dart';
-import 'dart:io';
 
 class PDFSetting {
   static const defaultColorsGroup = [
@@ -9,6 +10,6 @@ class PDFSetting {
   ];
   static int npbMaxRow = 24;
 
-  static late final headerFontData = File('fonts/carlito/Carlito-Bold.ttf').readAsBytesSync().buffer.asByteData();
-  static late final bodyFontData = File('fonts/carlito/Carlito-Regular.ttf').readAsBytesSync().buffer.asByteData();
+  static late ByteData headerFontData;
+  static late ByteData bodyFontData;
 }

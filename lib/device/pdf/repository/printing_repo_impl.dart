@@ -7,6 +7,7 @@ import 'package:rapor_lc/common/print_settings.dart';
 import 'package:rapor_lc/device/pdf/pages/page_nhb_block.dart';
 import 'package:rapor_lc/device/pdf/pages/root.dart';
 import 'package:rapor_lc/device/pdf/pdf_data_factory.dart';
+import 'package:rapor_lc/device/pdf/pdf_global_setting.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/entities/timeline.dart';
@@ -16,9 +17,14 @@ import 'package:rapor_lc/dummy_data/dummies.dart' as d;
 class PrintingRepositoryImpl extends PrintingRepository {
 
   Stream<String> print(List<Santri> selectedSantriList, List<Nilai> nilaiList, PrintSettings printSettings) async* {
-    final headerImage = pw.MemoryImage(
-      (await rootBundle.load(printSettings.imageAssetPath)).buffer.asUint8List(),
-    );
+    final headerImage = pw.MemoryImage((await rootBundle.load(printSettings.imageAssetPath)).buffer.asUint8List());
+    try {
+      PDFSetting.headerFontData.toString();
+      PDFSetting.bodyFontData.toString();
+    } on Error {
+      PDFSetting.headerFontData = (await rootBundle.load('fonts/carlito/Carlito-Bold.ttf')).buffer.asByteData();
+      PDFSetting.bodyFontData = (await rootBundle.load('fonts/carlito/Carlito-Regular.ttf')).buffer.asByteData();
+    }
 
     int errorCount = 0;
     final doc = pw.Document();
@@ -118,6 +124,13 @@ class PrintingRepositoryImpl extends PrintingRepository {
     final headerImage = pw.MemoryImage(
         (await rootBundle.load('assets/images/rapor_header_qbs.png')).buffer.asUint8List()
     );
+    try {
+      PDFSetting.headerFontData.toString();
+      PDFSetting.bodyFontData.toString();
+    } on Error {
+      PDFSetting.headerFontData = (await rootBundle.load('fonts/carlito/Carlito-Bold.ttf')).buffer.asByteData();
+      PDFSetting.bodyFontData = (await rootBundle.load('fonts/carlito/Carlito-Regular.ttf')).buffer.asByteData();
+    }
 
     final timeline1 = Timeline(1, 1, 1, 1);
     final timeline2 = Timeline(7, 2, 1, 1);
