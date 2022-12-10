@@ -14,8 +14,8 @@ class NHBDatasets {
 }
 
 class NHBContents {
-  final Map<int, NHBSemester> moContents;
-  final Map<int, NHBSemester> poContents;
+  final List<NHBSemester> moContents;
+  final List<NHBSemester> poContents;
 
   NHBContents(this.moContents, this.poContents);
 }

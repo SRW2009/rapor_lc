@@ -134,11 +134,11 @@ class MyPDFTable {
     );
   }
   
-  static Table buildNHBTable(Map<int, NHBSemester> contents, bool isObservation, {int startFrom=0}) {
+  static Table buildNHBTable(List<NHBSemester> contents, bool isObservation, {int startFrom=0}) {
     List<TableRow> contentRows = [];
     TableRow? normalSituationRow;
     var i = 0;
-    for (var o in contents.values) {
+    for (var o in contents) {
       if (o.pelajaran.name=='Normal Situation') {
         normalSituationRow = _buildContentRow([
           '${(++i) + startFrom}', o.pelajaran.name,

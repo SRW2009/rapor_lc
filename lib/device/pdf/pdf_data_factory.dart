@@ -14,12 +14,12 @@ import 'package:rapor_lc/domain/entities/npb.dart';
 import 'package:rapor_lc/domain/entities/timeline.dart';
 
 class ChartDatasetsFactory {
-  static NHBDatasets buildNHBDatasets(Map<int, NHBSemester> contents) {
+  static NHBDatasets buildNHBDatasets(List<NHBSemester> contents) {
     var divisiList = <String>[];
     var mapelList = <MataPelajaran>[];
 
     // collect every mapel and divisi that appeared
-    for (var nhb in contents.values) {
+    for (var nhb in contents) {
       if (!mapelList.contains(nhb.pelajaran)) {
         mapelList.add(nhb.pelajaran);
         if (!divisiList.contains(nhb.pelajaran.divisi.name)) divisiList.add(
@@ -39,9 +39,8 @@ class ChartDatasetsFactory {
     }
 
     // parse map type to the desired type
-    Map<String, int> mapelValueMap = contents
-        .map<String, int>((key, value) =>
-        MapEntry(value.pelajaran.name, value.akumulasi));
+    Map<String, int> mapelValueMap = contents.asMap()
+        .map<String, int>((key, value) => MapEntry(value.pelajaran.name, value.akumulasi));
 
     // create dummy in mapelValueMap
     if (createDummy) {
@@ -397,11 +396,11 @@ class TableContentsFactory {
 
     var i = 0;
     return NHBContents(
-      nhbMOValueMap.map<int, NHBSemester>((key, value) {
-        var harian = value['harian']!.item/value['harian']!.n;
-        var bulanan = value['bulanan']!.item/value['bulanan']!.n;
-        var projek = value['projek']!.item/value['projek']!.n;
-        var akhir = value['akhir']!.item/value['akhir']!.n;
+      nhbMOValueMap.entries.map<NHBSemester>((entry) {
+        var harian = entry.value['harian']!.item/entry.value['harian']!.n;
+        var bulanan = entry.value['bulanan']!.item/entry.value['bulanan']!.n;
+        var projek = entry.value['projek']!.item/entry.value['projek']!.n;
+        var akhir = entry.value['akhir']!.item/entry.value['akhir']!.n;
 
         // NaN checker
         if (harian.isNaN) harian = -1;
@@ -412,13 +411,13 @@ class TableContentsFactory {
         var acc = NilaiCalculation.accumulate([harian, bulanan, projek, akhir]);
         var pred = NilaiCalculation.toPredicate(acc);
 
-        return MapEntry(key.id, NHBSemester(++i, key, harian.toInt(), bulanan.toInt(), projek.toInt(), akhir.toInt(), acc.toInt(), pred));
-      }),
-      nhbPOValueMap.map<int, NHBSemester>((key, value) {
-        var harian = value['harian']!.item/value['harian']!.n;
-        var bulanan = value['bulanan']!.item/value['bulanan']!.n;
-        var projek = value['projek']!.item/value['projek']!.n;
-        var akhir = value['akhir']!.item/value['akhir']!.n;
+        return NHBSemester(++i, entry.key, harian.toInt(), bulanan.toInt(), projek.toInt(), akhir.toInt(), acc.toInt(), pred);
+      }).toList(),
+      nhbMOValueMap.entries.map<NHBSemester>((entry) {
+        var harian = entry.value['harian']!.item/entry.value['harian']!.n;
+        var bulanan = entry.value['bulanan']!.item/entry.value['bulanan']!.n;
+        var projek = entry.value['projek']!.item/entry.value['projek']!.n;
+        var akhir = entry.value['akhir']!.item/entry.value['akhir']!.n;
 
         // NaN checker
         if (harian.isNaN) harian = -1;
@@ -429,8 +428,8 @@ class TableContentsFactory {
         var acc = NilaiCalculation.accumulate([harian, bulanan, projek, akhir]);
         var pred = NilaiCalculation.toPredicate(acc);
 
-        return MapEntry(key.id, NHBSemester(++i, key, harian.toInt(), bulanan.toInt(), projek.toInt(), akhir.toInt(), acc.toInt(), pred));
-      }),
+        return NHBSemester(++i, entry.key, harian.toInt(), bulanan.toInt(), projek.toInt(), akhir.toInt(), acc.toInt(), pred);
+      }).toList(),
     );
   }
 

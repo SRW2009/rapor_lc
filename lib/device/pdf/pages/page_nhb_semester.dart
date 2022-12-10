@@ -8,7 +8,7 @@ import 'package:rapor_lc/device/pdf/pdf_widget.dart';
 import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 
-Page page_nhb_semester(MemoryImage headerImage, Map<int, NHBSemester> contents, Nilai firstNilai,
+Page page_nhb_semester(MemoryImage headerImage, List<NHBSemester> contents, Nilai firstNilai,
     {bool isObservation=false}) {
   final datasets = ChartDatasetsFactory.buildNHBDatasets(contents);
 
