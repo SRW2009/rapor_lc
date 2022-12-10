@@ -129,6 +129,23 @@ class AdminHomeDashboardUIView extends ViewState<HomeAccountUI, HomeAccountContr
                 ),
               ),
             ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: TextField(
+                  controller: TextEditingController(text: user.divisiBlock?.name ?? ' '),
+                  readOnly: true,
+                  decoration: inputDecoration.copyWith(
+                    prefixText: 'Nama Divisi Block  ',
+                    prefixStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,

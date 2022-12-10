@@ -1,6 +1,8 @@
 
 class Urls {
-  static const _hostUrl = 'https://raporsi2.sekolahimpian.com';
+  static const isLocalHost = true;
+
+  static const _hostUrl = (isLocalHost) ? 'http://localhost:8000' : 'https://raporsi2.sekolahimpian.com';
   static const loginAdminUrl = '$_hostUrl/v1/admin/login/';
   static const loginTeacherUrl = '$_hostUrl/v1/teacher/login/';
 

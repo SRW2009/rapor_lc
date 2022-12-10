@@ -13,6 +13,10 @@ Teacher _$TeacherFromJson(Map<String, dynamic> json) => Teacher(
       email: json['email'] as String?,
       password: json['password'] as String?,
       isLeader: json['is_leader'] as bool?,
+      divisiBlock: json['divisi_block_detail'] == null
+          ? null
+          : Divisi.fromJson(
+              json['divisi_block_detail'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TeacherToJson(Teacher instance) => <String, dynamic>{
@@ -22,4 +26,5 @@ Map<String, dynamic> _$TeacherToJson(Teacher instance) => <String, dynamic>{
       'id': instance.id,
       'is_leader': instance.isLeader,
       'divisi_detail': instance.divisi,
+      'divisi_block_detail': instance.divisiBlock,
     };

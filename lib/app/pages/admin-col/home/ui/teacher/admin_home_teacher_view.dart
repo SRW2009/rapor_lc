@@ -31,19 +31,21 @@ class AdminHomeTeacherUIView extends ViewState<AdminHomeTeacherUI, AdminHomeTeac
               'Email',
               'Name',
               'Divisi',
+              'Divisi Block',
               'Action',
             ],
             tableContentBuilder: (item) => [
               DataCell(Text(item.email ?? '')),
               DataCell(Text(item.name)),
               DataCell(Text(item.divisi.name)),
+              DataCell(Text(item.divisiBlock?.name ?? '')),
               DataCell(IconButton(
                 onPressed: () => controller.tableOnEdit(item),
                 icon: const Icon(Icons.edit),
               )),
             ],
           );
-        }
+        },
       ),
     ),
   );

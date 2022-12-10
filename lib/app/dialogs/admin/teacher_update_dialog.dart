@@ -1,19 +1,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin-col/home/ui/teacher/admin_home_teacher_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_checkbox.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
-import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 
 class TeacherUpdateDialog extends StatefulWidget {
   final Teacher teacher;
   final Function(Teacher) onSave;
-  final AdminHomeTeacherController controller;
+  final Future<List<Divisi>> Function(String?, bool) onFindDivisi;
 
-  const TeacherUpdateDialog({Key? key, required this.teacher, required this.onSave, required this.controller,
+  const TeacherUpdateDialog({Key? key, required this.teacher, required this.onSave, required this.onFindDivisi,
   }) : super(key: key);
 
   @override
@@ -28,6 +27,7 @@ class _TeacherUpdateDialogState extends State<TeacherUpdateDialog> {
   late final TextEditingController _passwordCon;
   bool _isLeaderCon = false;
   Divisi? _divisiCon;
+  Divisi? _divisiBlockCon;
 
   @override
   void initState() {
@@ -37,6 +37,7 @@ class _TeacherUpdateDialogState extends State<TeacherUpdateDialog> {
     _passwordCon = TextEditingController(text: widget.teacher.password);
     _isLeaderCon = widget.teacher.isLeader ?? false;
     _divisiCon = widget.teacher.divisi;
+    _divisiBlockCon = widget.teacher.divisiBlock;
     super.initState();
   }
 
@@ -84,12 +85,25 @@ class _TeacherUpdateDialogState extends State<TeacherUpdateDialog> {
                 FormDropdownSearch<Divisi>(
                   label: 'Divisi',
                   compareFn: (o1, o2) => o1 == o2,
-                  onFind: widget.controller.dialogOnFindDivisi,
+                  onFind: (s) => widget.onFindDivisi(s, false),
                   showItem: (item) => '${item.id} - ${item.name}',
                   selectedItem: () => _divisiCon,
                   onPick: (item) {
                     setState(() {
                       _divisiCon = item;
+                    });
+                  },
+                ),
+                FormDropdownSearch<Divisi>(
+                  label: 'Divisi Block',
+                  compareFn: (o1, o2) => o1 == o2,
+                  onFind: (s) => widget.onFindDivisi(s, true),
+                  showItem: (item) => '${item.id} - ${item.name}',
+                  selectedItem: () => _divisiBlockCon,
+                  validator: (s) => null,
+                  onPick: (item) {
+                    setState(() {
+                      _divisiBlockCon = item;
                     });
                   },
                 ),
@@ -105,6 +119,7 @@ class _TeacherUpdateDialogState extends State<TeacherUpdateDialog> {
               password: _passwordCon.text,
               isLeader: _isLeaderCon,
               divisi: _divisiCon!,
+              divisiBlock: _divisiBlockCon,
             ),
           ),
         ),

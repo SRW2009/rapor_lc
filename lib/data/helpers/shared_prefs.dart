@@ -13,6 +13,8 @@ mixin _SharedPrefsKey {
   final USER_DIVISI_ID = 'user:div-id';
   final USER_DIVISI_NAME = 'user:div-name';
   final USER_DIVISI_ISLEADER = 'user:div-is-leader';
+  final USER_DIVISI_BLOCK_ID = 'user:div-block-id';
+  final USER_DIVISI_BLOCK_NAME = 'user:div-block-name';
 }
 
 abstract class _SharedPrefsMainFunction {
@@ -53,7 +55,17 @@ class SharedPrefs with _SharedPrefsKey implements _SharedPrefsMainFunction {
       final divId = pref.getInt(USER_DIVISI_ID)!;
       final divName = pref.getString(USER_DIVISI_NAME)!;
       final divIsLeader = pref.getBool(USER_DIVISI_ISLEADER)!;
-      user = Teacher(0, name, email: email, divisi: Divisi(divId, divName, false), isLeader: divIsLeader);
+
+      final divBlockId = await pref.getInt(USER_DIVISI_BLOCK_ID);
+      final divBlockName = await pref.getString(USER_DIVISI_BLOCK_NAME);
+      bool divBlockExist = divBlockId != null && divBlockName != null;
+
+      user = Teacher(0, name,
+        email: email,
+        isLeader: divIsLeader,
+        divisi: Divisi(divId, divName, false),
+        divisiBlock: (divBlockExist) ? Divisi(divBlockId, divBlockName, true) : null,
+      );
     } else if (status == 2) {
       user = Admin(0, name, email: email);
     }
@@ -76,6 +88,16 @@ class SharedPrefs with _SharedPrefsKey implements _SharedPrefsMainFunction {
 
       if (!divId || !divName || !divIsLeader) {
         return false;
+      }
+
+      final divBlock = user.divisiBlock;
+      if (divBlock != null) {
+        final divBlockId = await pref.setInt(USER_DIVISI_BLOCK_ID, divBlock.id);
+        final divBlockName = await pref.setString(USER_DIVISI_BLOCK_NAME, divBlock.name);
+
+        if (!divBlockId || !divBlockName) {
+          return false;
+        }
       }
     }
 

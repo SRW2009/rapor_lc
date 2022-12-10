@@ -17,11 +17,12 @@ class AdminHomeTeacherController extends DataTableController<Teacher> {
         super();
 
   List<Divisi>? divisiList;
-  Future<List<Divisi>> dialogOnFindDivisi(String? query) async {
-    divisiList ??= (await _presenter.futureGetDivisiList()).where((element) => !element.isBlock).toList();
-    if (query == null || query == '') return divisiList!;
-
-    return divisiList!.toList();
+  List<Divisi>? divisiBlockList;
+  Future<List<Divisi>> dialogOnFindDivisi(String? query, bool isBlock) async {
+    final list = await _presenter.futureGetDivisiList();
+    divisiList ??= list.where((element) => !element.isBlock).toList();
+    divisiBlockList ??= list.where((element) => element.isBlock).toList();
+    return (isBlock) ? divisiBlockList! : divisiList!;
   }
 
   void _getTeacherList(List<Teacher> list) {
@@ -105,14 +106,14 @@ class AdminHomeTeacherController extends DataTableController<Teacher> {
 
   @override
   Widget? createDialog() => TeacherCreateDialog(
-    controller: this,
+    onFindDivisi: dialogOnFindDivisi,
     onSave: (Teacher item) => doCreateTeacher(item),
   );
 
   @override
   Widget? updateDialog(Teacher? e) => TeacherUpdateDialog(
     teacher: e!,
-    controller: this,
+    onFindDivisi: dialogOnFindDivisi,
     onSave: (Teacher item) => doUpdateTeacher(item),
   );
 
@@ -126,11 +127,10 @@ class AdminHomeTeacherController extends DataTableController<Teacher> {
   String getSelectedKey(Teacher e) => e.id.toString();
 
   @override
-  bool searchWhereClause(Teacher e) {
-    if (e.id.toString().contains(currentQuery)) return true;
-    if (e.name.toLowerCase().contains(currentQuery)) return true;
-    if (e.email?.toLowerCase().contains(currentQuery) ?? false) return true;
-    if (e.divisi.name.toLowerCase().contains(currentQuery)) return true;
-    return false;
-  }
+  bool searchWhereClause(Teacher e) =>
+      (e.id.toString().contains(currentQuery))
+      || (e.name.toLowerCase().contains(currentQuery))
+      || (e.email?.toLowerCase().contains(currentQuery) ?? false)
+      || (e.divisi.name.toLowerCase().contains(currentQuery))
+      || (e.divisiBlock?.name.toLowerCase().contains(currentQuery) ?? false);
 }

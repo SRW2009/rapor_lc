@@ -1,18 +1,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin-col/home/ui/teacher/admin_home_teacher_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
+import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field_checkbox.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
 import 'package:rapor_lc/domain/entities/teacher.dart';
-import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 
 class TeacherCreateDialog extends StatefulWidget {
   final Function(Teacher) onSave;
-  final AdminHomeTeacherController controller;
+  final Future<List<Divisi>> Function(String?, bool) onFindDivisi;
 
-  const TeacherCreateDialog({Key? key, required this.onSave, required this.controller,
+  const TeacherCreateDialog({Key? key, required this.onSave, required this.onFindDivisi,
   }) : super(key: key);
 
   @override
@@ -26,6 +25,7 @@ class _TeacherCreateDialogState extends State<TeacherCreateDialog> {
   late final TextEditingController _passwordCon;
   bool _isLeaderCon = false;
   Divisi? _divisiCon;
+  Divisi? _divisiBlockCon;
 
   @override
   void initState() {
@@ -74,11 +74,23 @@ class _TeacherCreateDialogState extends State<TeacherCreateDialog> {
                 FormDropdownSearch<Divisi>(
                   label: 'Divisi',
                   compareFn: (o1, o2) => o1 == o2,
-                  onFind: widget.controller.dialogOnFindDivisi,
+                  onFind: (s) => widget.onFindDivisi(s, false),
                   showItem: (item) => '${item.id} - ${item.name}',
                   onPick: (item) {
                     setState(() {
                       _divisiCon = item;
+                    });
+                  },
+                ),
+                FormDropdownSearch<Divisi>(
+                  label: 'Divisi Block',
+                  compareFn: (o1, o2) => o1 == o2,
+                  onFind: (s) => widget.onFindDivisi(s, true),
+                  showItem: (item) => '${item.id} - ${item.name}',
+                  validator: (s) => null,
+                  onPick: (item) {
+                    setState(() {
+                      _divisiBlockCon = item;
                     });
                   },
                 ),
@@ -94,6 +106,7 @@ class _TeacherCreateDialogState extends State<TeacherCreateDialog> {
               password: _passwordCon.text,
               isLeader: _isLeaderCon,
               divisi: _divisiCon!,
+              divisiBlock: _divisiBlockCon,
             ),
           ),
         ),

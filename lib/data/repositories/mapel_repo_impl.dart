@@ -36,7 +36,8 @@ class MataPelajaranRepositoryImpl extends MataPelajaranRepository {
 
       final user = repUser;
       if (user is Teacher) return iterable
-          .where((element) => element.divisi.id == user.divisi.id)
+          .where((element) => element.divisi.id == user.divisi.id
+          || element.divisi.id == user.divisiBlock?.id)
           .toList();
       return iterable.toList();
     }

@@ -6,9 +6,12 @@ class TeacherModel {
   static Teacher fromJsonLoginRequest(Map<String, dynamic> json) => Teacher(
     json['id'] as int,
     json['name'] as String,
-    divisi: Divisi.fromJson(json['divisi'] as Map<String, dynamic>),
     email: json['email'] as String?,
     isLeader: json['is_leader'] as bool?,
+    divisi: Divisi.fromJson(json['divisi'] as Map<String, dynamic>),
+    divisiBlock: json['divisi_block'] == null
+        ? null
+        : Divisi.fromJson(json['divisi_block'] as Map<String, dynamic>),
   );
   static Teacher fromJsonRelationRequest(Map<String, dynamic> json) => Teacher(
     json['id'] as int,
@@ -20,6 +23,7 @@ class TeacherModel {
     "email": e.email,
     "password": e.password,
     "is_leader": e.isLeader,
-    "divisi_id": e.divisi.id
+    "divisi_id": e.divisi.id,
+    "divisi_block_id": e.divisiBlock?.id
   };
 }

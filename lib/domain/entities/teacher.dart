@@ -12,8 +12,10 @@ class Teacher extends User {
   final bool? isLeader;
   @JsonKey(name: 'divisi_detail')
   final Divisi divisi;
+  @JsonKey(name: 'divisi_block_detail')
+  final Divisi? divisiBlock;
 
-  Teacher(this.id, String name, {required this.divisi, String? email, String? password, this.isLeader})
+  Teacher(this.id, String name, {String? email, String? password, this.isLeader, required this.divisi, this.divisiBlock})
       : super(name, email: email, password: password);
 
   factory Teacher.fromJson(Map<String, dynamic> json) => _$TeacherFromJson(json);
