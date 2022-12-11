@@ -8,6 +8,7 @@ import 'package:rapor_lc/device/pdf/pages/page_nhb_block.dart';
 import 'package:rapor_lc/device/pdf/pages/root.dart';
 import 'package:rapor_lc/device/pdf/pdf_data_factory.dart';
 import 'package:rapor_lc/device/pdf/pdf_global_setting.dart';
+import 'package:rapor_lc/device/pdf/pdf_object.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/santri.dart';
 import 'package:rapor_lc/domain/entities/timeline.dart';
@@ -43,9 +44,13 @@ class PrintingRepositoryImpl extends PrintingRepository {
         final i = Timeline.fromInt(a);
         final firstSantriNilai = santriNilaiList.firstWhere((e) => e.timeline==i);
 
+        NHBContents? nhbContents;
+        if (printSettings.nhbSemesterPage || printSettings.npbPage) {
+          nhbContents = TableContentsFactory.buildNHBContents(santriNilaiList, i);
+        }
         if (printSettings.nhbSemesterPage) {
           try {
-            final contents = TableContentsFactory.buildNHBContents(santriNilaiList, i);
+            final contents = nhbContents!;
 
             if (contents.moContents.isNotEmpty) {
               final p = page_nhb_semester(headerImage, contents.moContents, firstSantriNilai, isObservation: true);
@@ -62,17 +67,17 @@ class PrintingRepositoryImpl extends PrintingRepository {
         }
         if (printSettings.nhbBlockPage) {
           try {
-            final contents = TableContentsFactory.buildNHBBlockContents(santriNilaiList, i).entries.toList();
+            final contents = TableContentsFactory.buildNHBBlockContents(santriNilaiList, i);
 
             if (contents.isNotEmpty) {
               if (contents.length > 3) {
                 for (var j = 0; j < contents.length; j+=3) {
                   final end = contents.length < (j+3) ? contents.length : j+3;
-                  final p = page_nhb_block(headerImage, Map.fromEntries(contents.getRange(j, end)), firstSantriNilai);
+                  final p = page_nhb_block(headerImage, contents.getRange(j, end).toList(), firstSantriNilai);
                   doc.addPage(p);
                 }
               } else {
-                final p = page_nhb_block(headerImage, Map.fromEntries(contents), firstSantriNilai);
+                final p = page_nhb_block(headerImage, contents, firstSantriNilai);
                 doc.addPage(p);
               }
             }
@@ -83,8 +88,10 @@ class PrintingRepositoryImpl extends PrintingRepository {
         }
         if (printSettings.npbPage) {
           try {
+            final contents = TableContentsFactory.buildNPBContents(nilaiList, i);
+
             //final p1 = page_npb_chart(headerImage, santriNilaiList, semester: i);
-            final p2 = page_npb_table(headerImage, santriNilaiList, i);
+            final p2 = page_npb_table(headerImage, contents, firstSantriNilai, nhbContents: nhbContents);
             //doc.addPage(p1);
             doc.addPage(p2);
           } catch (e) {
@@ -136,24 +143,26 @@ class PrintingRepositoryImpl extends PrintingRepository {
     final timeline2 = Timeline(7, 2, 1, 1);
     final nhbContents1 = TableContentsFactory.buildNHBContents([d.nilai_s_odd, d.nilai_s_even], timeline1);
     final nhbContents2 = TableContentsFactory.buildNHBContents([d.nilai_s_odd, d.nilai_s_even], timeline2);
+    final npbContents1 = TableContentsFactory.buildNPBContents([d.nilai_s_odd], timeline1);
+    final npbContents2 = TableContentsFactory.buildNPBContents([d.nilai_s_even], timeline2);
     final nkDatasets1 = ChartDatasetsFactory.buildNKDatasets([d.nilai_s_odd, ...d.nilai_nks], timeline1);
     final nkDatasets2 = ChartDatasetsFactory.buildNKDatasets([d.nilai_s_even, d.nilai_s_even2, d.nilai_s_even3, ...d.nilai_nks], timeline2);
     final nkContents1 = TableContentsFactory.buildNKContents(nkDatasets1.contents);
     final nkContents2 = TableContentsFactory.buildNKContents(nkDatasets2.contents);
 
     final nhbBlockContents1 = TableContentsFactory.buildNHBBlockContents(
-        [d.nilai_block1,d.nilai_block2,d.nilai_block3,d.nilai_block4,d.nilai_block5], timeline1).entries.toList();
+        [d.nilai_block1,d.nilai_block2,d.nilai_block3,d.nilai_block4,d.nilai_block5], timeline1);
 
     final doc = pw.Document();
     doc.addPage(page_title);
     doc.addPage(page_nhb_semester(headerImage, nhbContents1.moContents, d.nilai_s_odd, isObservation: true));
-    doc.addPage(page_nhb_block(headerImage, Map.fromEntries(nhbBlockContents1.getRange(0, 3)), d.nilai_block1));
-    doc.addPage(page_nhb_block(headerImage, Map.fromEntries(nhbBlockContents1.getRange(3, 5)), d.nilai_block1));
-    doc.addPage(page_npb_table(headerImage, [d.nilai_s_odd, d.nilai_s_even], timeline1));
+    doc.addPage(page_nhb_block(headerImage, nhbBlockContents1.getRange(0, 3).toList(), d.nilai_block1));
+    doc.addPage(page_nhb_block(headerImage, nhbBlockContents1.getRange(3, 5).toList(), d.nilai_block1));
+    doc.addPage(page_npb_table(headerImage, npbContents1, d.nilai_s_odd, nhbContents: nhbContents1));
     doc.addPage(page_nk(headerImage, nkDatasets1, nkContents1, d.nilai_s_odd, timeline1));
     doc.addPage(page_nk_advice(headerImage, nkContents1, d.nilai_s_odd));
     doc.addPage(page_nhb_semester(headerImage, nhbContents2.poContents, d.nilai_s_even));
-    doc.addPage(page_npb_table(headerImage, [d.nilai_s_odd, d.nilai_s_even], timeline2));
+    doc.addPage(page_npb_table(headerImage, npbContents2, d.nilai_s_even, nhbContents: nhbContents2));
     doc.addPage(page_nk(headerImage, nkDatasets2, nkContents2, d.nilai_s_even, timeline2));
     doc.addPage(page_nk_advice(headerImage, nkContents2, d.nilai_s_even));
 

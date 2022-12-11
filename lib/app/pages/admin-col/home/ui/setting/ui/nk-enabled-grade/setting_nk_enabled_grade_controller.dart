@@ -56,7 +56,6 @@ class SettingNKEnabledGradeController extends DataTableController<NKEnabledGrade
 
     Timer.periodic(const Duration(seconds: 1), (timer) {
       if (LoadedSettings.nkVariables != null) {
-        if (LoadedSettings.nkEnabledGrade == null) LoadedSettings.nkEnabledGrade = {};
         refresh();
         timer.cancel();
       }
@@ -82,7 +81,7 @@ class SettingNKEnabledGradeController extends DataTableController<NKEnabledGrade
 
   @override
   void refresh() {
-    final list = LoadedSettings.getNkEnabledGradeEntries()!;
+    final list = LoadedSettings.getNkEnabledGradeEntries();
     normalList = list;
     filteredList = list;
     dataTableState = RequestState.loaded;

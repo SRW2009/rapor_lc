@@ -31,7 +31,7 @@ class SettingNKAdviceUIView
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FormInputField(
-            label: 'NK Advice',
+            label: 'Nasehat Dewan Guru',
             controller: controller.adviceController,
             maxLines: 15,
             inputType: TextInputType.multiline,

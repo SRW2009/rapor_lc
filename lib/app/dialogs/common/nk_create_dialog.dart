@@ -59,11 +59,11 @@ class _NKCreateDialogState extends State<NKCreateDialog> {
                   showItem: (e) => e.name,
                   onPick: (val) => setState(() => _variabelCon.text = val.name),
                 ),
-                if (LoadedSettings.nkEnabledGrade?[_variabelCon.text]?['mesjid'] ?? true)
+                if (LoadedSettings.isNKGradeEnabled(_variabelCon.text, 'mesjid'))
                   FormInputFieldNumberNullable('Nilai Mesjid', _nilaiMesjidCon),
-                if (LoadedSettings.nkEnabledGrade?[_variabelCon.text]?['kelas'] ?? true)
+                if (LoadedSettings.isNKGradeEnabled(_variabelCon.text, 'kelas'))
                   FormInputFieldNumberNullable('Nilai Kelas', _nilaiKelasCon),
-                if (LoadedSettings.nkEnabledGrade?[_variabelCon.text]?['asrama'] ?? true)
+                if (LoadedSettings.isNKGradeEnabled(_variabelCon.text, 'asrama'))
                   FormInputFieldNumberNullable('Nilai Asrama', _nilaiAsramaCon),
                 FormInputField(
                   label: 'Catatan',

@@ -5,6 +5,7 @@ class Resources {
 }
 
 class SettingVariables {
+  static const String nhbMinValToPass = 'nhb_min_val_to_pass';
   static const String nkEnabledGrade = 'nk_enabled_grade';
   static const String nkAdvice = 'nk_advice';
 }

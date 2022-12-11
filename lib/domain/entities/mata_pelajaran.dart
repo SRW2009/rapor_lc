@@ -8,10 +8,11 @@ part 'mata_pelajaran.g.dart';
 class MataPelajaran {
   final int id;
   final String name;
+  final String? abbreviation;
   @JsonKey(name: 'divisi_detail')
   Divisi divisi;
 
-  MataPelajaran(this.id, this.name, {required this.divisi});
+  MataPelajaran(this.id, this.name, {this.abbreviation, required this.divisi});
 
   factory MataPelajaran.fromJson(Map<String, dynamic> json) => _$MataPelajaranFromJson(json);
   Map<String, dynamic> toJson() => _$MataPelajaranToJson(this);

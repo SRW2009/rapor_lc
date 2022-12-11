@@ -1,6 +1,7 @@
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:rapor_lc/app/utils/loaded_settings.dart';
 import 'package:rapor_lc/device/pdf/pdf_chart.dart';
 import 'package:rapor_lc/device/pdf/pdf_data_factory.dart';
 import 'package:rapor_lc/device/pdf/pdf_table.dart';
@@ -40,7 +41,10 @@ Page page_nhb_semester(MemoryImage headerImage, List<NHBSemester> contents, Nila
               MyPDFTable.buildNHBTable(contents, isObservation),
               SizedBox(height: 18.0),
               Text(
-                '* Nilai minimal kelulusan adalah 60.',
+                '* Nilai minimal kelulusan adalah ${LoadedSettings.nhbMinValToPass}.',
+                    /*'* Singkatan: ${contents
+                    .where((value) => value.pelajaran.abbreviation != null)
+                    .fold<String>('', (prev, e) => '$prev${e.pelajaran.abbreviation} adalah ${e.pelajaran.name}. ')}',*/
                 textAlign: TextAlign.left,
                 style: headerTextStyle(size: 11),
               ),

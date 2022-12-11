@@ -61,7 +61,7 @@ class MyPDFChart {
             if (e.name == ':::') return '';
             if (e.name == '::::') return '';
 
-            return e.name;
+            return e.abbreviation ?? e.name;
           }).toList(),
           marginStart: 12,
           marginEnd: 12,

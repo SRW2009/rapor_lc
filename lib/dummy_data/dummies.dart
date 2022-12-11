@@ -38,21 +38,21 @@ final mapelList_observation = <MataPelajaran>[
   MataPelajaran(mapelI++, 'RBQ 1', divisi: divisiList[1]),
   MataPelajaran(mapelI++, 'RBQ 2', divisi: divisiList[1]),
   MataPelajaran(mapelI++, 'RBQ 3', divisi: divisiList[1]),
-  MataPelajaran(mapelI++, 'CFD 1', divisi: divisiList[0]),
-  MataPelajaran(mapelI++, 'CFD 2', divisi: divisiList[0]),
-  MataPelajaran(mapelI++, 'CFD 3', divisi: divisiList[0]),
-  MataPelajaran(mapelI++, 'P. Adab', divisi: divisiList[3]),
-  MataPelajaran(mapelI++, 'P. Ibadah', divisi: divisiList[3]),
-  MataPelajaran(mapelI++, 'Pra QCB', divisi: divisiList[1]),
+  MataPelajaran(mapelI++, 'Computer for Dummy 1', divisi: divisiList[0], abbreviation: 'CFD 1'),
+  MataPelajaran(mapelI++, 'Computer for Dummy 2', divisi: divisiList[0], abbreviation: 'CFD 2'),
+  MataPelajaran(mapelI++, 'Computer for Dummy 3', divisi: divisiList[0], abbreviation: 'CFD 3'),
+  MataPelajaran(mapelI++, 'Penyeragaman Adab', divisi: divisiList[3], abbreviation: 'PA'),
+  MataPelajaran(mapelI++, 'Penyeragaman Ibadah', divisi: divisiList[3], abbreviation: 'PI'),
+  MataPelajaran(mapelI++, 'Pra Quran Character Building', divisi: divisiList[1], abbreviation: 'Pra QCB'),
   MataPelajaran(mapelI++, 'RAQ', divisi: divisiList[1]),
   MataPelajaran(mapelI++, 'RHQ', divisi: divisiList[1]),
   MataPelajaran(mapelI++, 'ITMI', divisi: divisiList[0]),
 ];
 final mapelList = <MataPelajaran>[
   MataPelajaran(mapelI++, 'Tahfizh', divisi: divisiList[1]),
-  MataPelajaran(mapelI++, 'QCB', divisi: divisiList[1]),
-  MataPelajaran(mapelI++, 'B. Arab', divisi: divisiList[2]),
-  MataPelajaran(mapelI++, 'B. Inggris', divisi: divisiList[2]),
+  MataPelajaran(mapelI++, 'Quran Character Building', divisi: divisiList[1], abbreviation: 'QCB'),
+  MataPelajaran(mapelI++, 'Bahasa Arab', divisi: divisiList[2], abbreviation: 'BA'),
+  MataPelajaran(mapelI++, 'Bahasa Inggris', divisi: divisiList[2], abbreviation: 'BI'),
   MataPelajaran(mapelI++, 'IT (DKV)', divisi: divisiList[0]),
   MataPelajaran(mapelI++, 'Fiqih', divisi: divisiList[3]),
   MataPelajaran(mapelI++, 'Aqidah', divisi: divisiList[3]),
@@ -80,7 +80,7 @@ final mapelBlockList = <MataPelajaran>[
   MataPelajaran(mapelI++, 'Uji Publik', divisi: divisiList[6]),
   MataPelajaran(mapelI++, 'Muhadharah', divisi: divisiList[8]),
   MataPelajaran(mapelI++, 'Fast Respon', divisi: divisiList[8]),
-  MataPelajaran(mapelI++, 'Analytic Retrieval', divisi: divisiList[8]),
+  MataPelajaran(mapelI++, 'Analytic Retrieval Redrawal Kingdom', divisi: divisiList[8]),
 ];
 
 final relationList = List<Relation>.generate(6, (i) => Relation(i, teacherList[i], santriList[i]));
@@ -97,7 +97,8 @@ final nhbList_observation = mapelList_observation
 final nhbBlockList = mapelBlockList
     .map<NHBBlock>((e) {
       final lorems = loremIpsum.split('.');
-      final desc = lorems.getRange(0, (nhbNo%3)+1).join('.');
+      final desc =
+      (e.divisi.name=='Bahasa Arab') ? '' : lorems.getRange(0, (nhbNo%3)+1).join('.');
       return NHBBlock(nhbNo++, e, _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), _rand.nextInt(100), 'B', desc);
     }).toList();
 

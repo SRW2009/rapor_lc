@@ -6,28 +6,27 @@ import 'package:rapor_lc/app/utils/constants.dart';
 import 'package:rapor_lc/app/utils/loaded_settings.dart';
 import 'package:rapor_lc/domain/entities/setting.dart';
 
-class SettingNKAdviceController extends Controller {
-  SettingNKAdviceController();
-  final adviceController = TextEditingController(text: LoadedSettings.nkAdvice);
+class SettingNHBMinValToPassController extends Controller {
+  final minValController = TextEditingController(text: LoadedSettings.nhbMinValToPass.toString());
 
   void onSave(AdminHomeSettingController parentController) {
-    if (LoadedSettings.nkAdviceId == -1) {
+    if (LoadedSettings.nhbMinValToPassId == -1) {
       parentController.createSetting(Setting(
         0,
-        SettingVariables.nkAdvice,
-        adviceController.text,
+        SettingVariables.nhbMinValToPass,
+        int.tryParse(minValController.text),
       ));
     } else {
       parentController.updateSetting(Setting(
-        LoadedSettings.nkAdviceId,
-        SettingVariables.nkAdvice,
-        adviceController.text,
+        LoadedSettings.nhbMinValToPassId,
+        SettingVariables.nhbMinValToPass,
+        int.tryParse(minValController.text),
       ));
     }
   }
 
   void onDiscard() {
-    adviceController.text = LoadedSettings.nkAdvice;
+    minValController.text = LoadedSettings.nhbMinValToPass.toString();
     refreshUI();
   }
 

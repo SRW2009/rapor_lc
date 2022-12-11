@@ -16,12 +16,10 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
       : _presenter = AdminHomeMataPelajaranPresenter(mapelRepo, divisiRepo),
         super();
 
-  Future<List<Divisi>>? divisiList;
+  List<Divisi>? divisiList;
   Future<List<Divisi>> dialogOnFindDivisi(String? query) async {
-    divisiList ??= _presenter.futureGetDivisiList();
-    if (query == null || query == '') return divisiList!;
-
-    return (await divisiList!).toList();
+    divisiList ??= await _presenter.futureGetDivisiList();
+    return divisiList!;
   }
 
   void _getMataPelajaranList(List<MataPelajaran> list) {
@@ -105,14 +103,14 @@ class AdminHomeMataPelajaranController extends DataTableController<MataPelajaran
 
   @override
   Widget? createDialog() => MataPelajaranCreateDialog(
-    controller: this,
+    onFindDivisi: dialogOnFindDivisi,
     onSave: (MataPelajaran item) => doCreateMataPelajaran(item),
   );
 
   @override
   Widget? updateDialog(MataPelajaran? e) => MataPelajaranUpdateDialog(
     mataPelajaran: e!,
-    controller: this,
+    onFindDivisi: dialogOnFindDivisi,
     onSave: (MataPelajaran item) => doUpdateMataPelajaran(item),
   );
 

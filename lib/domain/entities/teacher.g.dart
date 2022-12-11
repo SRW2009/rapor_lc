@@ -9,10 +9,10 @@ part of 'teacher.dart';
 Teacher _$TeacherFromJson(Map<String, dynamic> json) => Teacher(
       json['id'] as int,
       json['name'] as String,
-      divisi: Divisi.fromJson(json['divisi_detail'] as Map<String, dynamic>),
       email: json['email'] as String?,
       password: json['password'] as String?,
       isLeader: json['is_leader'] as bool?,
+      divisi: Divisi.fromJson(json['divisi_detail'] as Map<String, dynamic>),
       divisiBlock: json['divisi_block_detail'] == null
           ? null
           : Divisi.fromJson(

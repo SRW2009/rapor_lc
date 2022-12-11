@@ -9,6 +9,7 @@ import 'package:rapor_lc/app/widgets/style.dart';
 import 'package:rapor_lc/common/enum/request_state.dart';
 import 'package:rapor_lc/data/repositories/setting_repo_impl.dart';
 
+import 'ui/nhb-min-val-to-pass/setting_nhb_min_val_to_pass_view.dart';
 import 'ui/nk-advice/setting_nk_advice_view.dart';
 
 class AdminHomeSettingUI extends View {
@@ -34,16 +35,37 @@ class AdminHomeSettingUIView
     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
     controller: mainScrollController,
     children: [
+      _NHBSegment(),
       _NKSegment(),
     ],
   );
+
+  Widget _NHBSegment() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _header('NHB'),
+
+        // NHB Minimal value to pass
+        _title('Pengaturan nilai minimal kelulusan.'),
+        _desc('Atur nilai minimal kelulusan NHB. pengaturan ini juga akan mempengaruhi keterangan lulus/tidak di rapor halaman NPB.'),
+        SizedBox(
+          height: MediaQuery.of(context).size.height*.3,
+          child: ControlledWidgetBuilder<AdminHomeSettingController>(
+            builder: (context, controller) => SettingNHBMinValToPassUI(parentController: controller),
+          ),
+        ),
+        Divider(),
+      ],
+    );
+  }
 
   Widget _NKSegment() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // HEADER NK ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         _header('NK'),
 
         // NK Variables

@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:rapor_lc/app/dialogs/base_dialog.dart';
-import 'package:rapor_lc/app/pages/admin-col/home/ui/mapel/admin_home_mapel_controller.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_dropdown_search.dart';
 import 'package:rapor_lc/app/widgets/form_field/form_input_field.dart';
 import 'package:rapor_lc/domain/entities/divisi.dart';
@@ -10,9 +9,9 @@ import 'package:rapor_lc/domain/entities/mata_pelajaran.dart';
 class MataPelajaranUpdateDialog extends StatefulWidget {
   final MataPelajaran mataPelajaran;
   final Function(MataPelajaran) onSave;
-  final AdminHomeMataPelajaranController controller;
+  final Future<List<Divisi>> Function(String?) onFindDivisi;
 
-  const MataPelajaranUpdateDialog({Key? key, required this.mataPelajaran, required this.onSave, required this.controller,
+  const MataPelajaranUpdateDialog({Key? key, required this.mataPelajaran, required this.onSave, required this.onFindDivisi,
   }) : super(key: key);
 
   @override
@@ -23,12 +22,14 @@ class _MataPelajaranUpdateDialogState extends State<MataPelajaranUpdateDialog> {
   final _key = GlobalKey<FormState>();
   late final TextEditingController _idCon;
   late final TextEditingController _nameCon;
+  late final TextEditingController _abbrCon;
   Divisi? _divisiCon;
 
   @override
   void initState() {
     _idCon = TextEditingController(text: widget.mataPelajaran.id.toString());
     _nameCon = TextEditingController(text: widget.mataPelajaran.name);
+    _abbrCon = TextEditingController(text: widget.mataPelajaran.abbreviation);
     _divisiCon = widget.mataPelajaran.divisi;
     super.initState();
   }
@@ -54,10 +55,15 @@ class _MataPelajaranUpdateDialogState extends State<MataPelajaranUpdateDialog> {
                   label: 'Nama Mapel',
                   controller: _nameCon,
                 ),
+                FormInputField(
+                  label: 'Singkatan Mapel',
+                  controller: _abbrCon,
+                  validator: (s) => null,
+                ),
                 FormDropdownSearch<Divisi>(
                   label: 'Divisi',
                   compareFn: (o1, o2) => o1 == o2,
-                  onFind: widget.controller.dialogOnFindDivisi,
+                  onFind: widget.onFindDivisi,
                   showItem: (e) => '${e.id} - ${e.name} ${e.isBlock?'(Block System)':''}',
                   onPick: (val) {
                     setState(() {
@@ -73,8 +79,10 @@ class _MataPelajaranUpdateDialogState extends State<MataPelajaranUpdateDialog> {
         BaseDialogActions(
           formKey: _key,
           onSave: () => widget.onSave(
-            MataPelajaran(widget.mataPelajaran.id, _nameCon.text,
+            MataPelajaran(widget.mataPelajaran.id,
+              _nameCon.text,
               divisi: _divisiCon!,
+              abbreviation: _abbrCon.text.isEmpty ? null : _abbrCon.text,
             ),
           ),
         ),

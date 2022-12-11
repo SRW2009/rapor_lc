@@ -8,7 +8,7 @@ class NKAdviceFactory {
   NKAdviceFactory(this.contents);
 
   String generate() {
-    var s = LoadedSettings.nkAdvice ?? '';
+    var s = LoadedSettings.nkAdvice;
     if (s.isEmpty) return s;
 
     for (var nk in contents.values) {

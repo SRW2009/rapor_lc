@@ -1,8 +1,10 @@
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
+import 'package:rapor_lc/app/utils/loaded_settings.dart';
 import 'package:rapor_lc/device/pdf/pdf_object.dart';
 import 'package:rapor_lc/device/pdf/pdf_widget.dart';
+import 'package:rapor_lc/domain/entities/nhb_block.dart';
 import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
@@ -49,6 +51,66 @@ class MyPDFTable {
       );
     }
     return TableRow(children: children);
+  }
+
+  static TableRow _buildNHBBlockContentRow(List<NHBBlock> contents) {
+    rowContents(NHBBlock v) => [
+      v.pelajaran.name,
+      '${v.nilai_harian}',
+      '${v.nilai_projek!=-1 ? v.nilai_projek : '-'}',
+      '${v.nilai_akhir!=-1 ? v.nilai_akhir : '-'}',
+      '${v.akumulasi}', v.predikat
+    ];
+    rowContainer(List<Widget> columnChildren, bool isDescription) => Container(
+      constraints: BoxConstraints(
+        minHeight: 20,
+        maxHeight: double.infinity,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: PdfColors.black, width: 1.0),
+        color: PdfColors.white,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: isDescription ? MainAxisAlignment.center : MainAxisAlignment.start,
+        children: columnChildren,
+      ),
+    );
+    columnContainer(Text text) => Container(
+      constraints: BoxConstraints(
+        minHeight: 20,
+        maxHeight: 20,
+        minWidth: double.infinity,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: PdfColors.black, width: 1.0),
+        color: PdfColors.white,
+      ),
+      padding: const EdgeInsets.all(3.0),
+      child: FittedBox(fit: BoxFit.scaleDown, child: text),
+    );
+
+    final List<Widget> rows = [];
+    for (var i = 0; i < 6; ++i) {
+      final List<Widget> columns = [];
+      for (var o in contents) columns.add(
+        columnContainer(
+          Text(rowContents(o)[i], textAlign: TextAlign.center, style: bodyTextStyle(size: 10)),
+        ),
+      );
+      rows.add(rowContainer(columns, false));
+    }
+    rows.add(rowContainer([
+      Padding(
+        padding: const EdgeInsets.all(3),
+        child: Text(
+          contents.where((e) => e.description.isNotEmpty).fold<String>('', (prev, e) => '$prev${e.description}.\n\n'),
+          textAlign: TextAlign.center,
+          style: bodyTextStyle(size: 8),
+        ),
+      ),
+    ], true));
+    return TableRow(children: rows);
   }
 
   static Widget buildIdentityTable(Nilai nilai) {
@@ -151,7 +213,7 @@ class MyPDFTable {
       }
 
       contentRows.add(_buildContentRow([
-        '${(++i) + startFrom}', o.pelajaran.name,
+        '${(++i) + startFrom}', o.pelajaran.abbreviation ?? o.pelajaran.name,
         '${o.nilai_harian}', '${o.nilai_bulanan}',
         '${o.nilai_projek!=-1 ? o.nilai_projek : '-'}',
         '${o.nilai_akhir!=-1 ? o.nilai_akhir : '-'}',
@@ -193,25 +255,13 @@ class MyPDFTable {
 
   static Table buildNHBBlockTable(NHBBlockContents contents, {int startFrom=0}) {
     List<TableRow> contentRows = [];
-    for (var o in contents.entries) {
+    for (var o in contents) {
       contentRows.add(_buildContentRow(
         ['','','',o.key,'','',''],
         backgroundColor: PdfColors.yellow200,
         border: Border(),
       ));
-      for (var v in o.value) {
-        contentRows.add(_buildContentRow(
-          [
-            v.pelajaran.name,
-            '${v.nilai_harian}',
-            '${v.nilai_projek!=-1 ? v.nilai_projek : '-'}',
-            '${v.nilai_akhir!=-1 ? v.nilai_akhir : '-'}',
-            '${v.akumulasi}', v.predikat, v.description
-          ],
-          looseHeight: true,
-          textSizes: [10,10,10,10,10,10,8],
-        ));
-      }
+      contentRows.add(_buildNHBBlockContentRow(o.value));
     }
 
     // build table
@@ -219,28 +269,23 @@ class MyPDFTable {
       _buildHeaderRow([
         'Mata Pelajaran\n(Block System)',
         'Nilai \nHarian', 'Nilai \nProject', 'Nilai \nAkhir',
-        'NHB', 'Predikat', 'Deskripsi (Progress)',
+        'NHB', 'Predikat', 'Kualitas NJS',
       ]),
       ...contentRows,
     ];
     return Table(
       tableWidth: TableWidth.max,
       border: TableBorder.symmetric(
-        /*color: PdfColors.black, width: 1.0,
-        top: BorderSide(color: PdfColors.black, width: 1.0),
-        left: BorderSide(color: PdfColors.black, width: 1.0),
-        bottom: BorderSide(color: PdfColors.black, width: 1.0),
-        right: BorderSide(color: PdfColors.black, width: 1.0),*/
         outside: BorderSide(color: PdfColors.black, width: 1.0),
       ),
       defaultVerticalAlignment: TableCellVerticalAlignment.full,
       columnWidths: const {
-        0: IntrinsicColumnWidth(flex: 2),
-        1: IntrinsicColumnWidth(flex: 1),
-        2: IntrinsicColumnWidth(flex: 1),
-        3: IntrinsicColumnWidth(flex: 1),
-        4: IntrinsicColumnWidth(flex: 1),
-        5: IntrinsicColumnWidth(flex: 1),
+        0: IntrinsicColumnWidth(flex: 3),
+        1: IntrinsicColumnWidth(flex: 1.2),
+        2: IntrinsicColumnWidth(flex: 1.2),
+        3: IntrinsicColumnWidth(flex: 1.2),
+        4: IntrinsicColumnWidth(flex: 1.2),
+        5: IntrinsicColumnWidth(flex: 1.2),
         6: IntrinsicColumnWidth(flex: 3),
       },
       children: children,
@@ -280,19 +325,25 @@ class MyPDFTable {
     );
   }
 
-  static Table buildNPBTable(List<NPB> contents, {int startFrom=0}) {
+  static Table buildNPBTable(List<NPB> contents, List<NHBSemester> nhbs, {int startFrom=0}) {
     // build table
     var i = 0;
     List<TableRow> children = [
       // header
       _buildHeaderRow([
-        'No', 'Stepping Stone', '/N'
+        'No', 'Stepping Stone', '/N', 'Keterangan'
       ]),
       //contents
-      ...contents.map((o) => _buildContentRow([
-        '${(++i) + startFrom}', o.pelajaran.name,
-        '${o.n}',
-      ]))
+      ...contents.map((o) {
+        String ket = 'N/A';
+        int nhbI = nhbs.indexWhere((element) => o.pelajaran==element.pelajaran);
+        if (nhbI!=-1 && o.n>0) {
+          ket = (nhbs[nhbI].akumulasi >= LoadedSettings.nhbMinValToPass) ? 'Lulus' : 'Tidak Lulus';
+        }
+        return _buildContentRow([
+          '${(++i) + startFrom}', o.pelajaran.name, '${o.n}', ket
+        ]);
+      })
     ];
     return Table(
       tableWidth: TableWidth.max,
@@ -300,9 +351,7 @@ class MyPDFTable {
         0: IntrinsicColumnWidth(),
         1: IntrinsicColumnWidth(flex: 2),
         2: IntrinsicColumnWidth(flex: 1),
-        3: IntrinsicColumnWidth(flex: 1),
-        4: IntrinsicColumnWidth(flex: 1),
-        5: IntrinsicColumnWidth(flex: 1),
+        3: IntrinsicColumnWidth(flex: 2),
       },
       children: children,
     );

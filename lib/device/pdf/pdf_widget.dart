@@ -3,7 +3,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/device/pdf/pdf_global_setting.dart';
 
-const pagePadding = const EdgeInsets.symmetric(vertical: 72, horizontal: 56);
+const pagePadding = const EdgeInsets.symmetric(vertical: 50, horizontal: 50);
 
 TextStyle headerTextStyle({double size=14.0}) => TextStyle(
   fontBold: Font.ttf(PDFSetting.headerFontData),

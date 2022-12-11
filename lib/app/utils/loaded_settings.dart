@@ -15,38 +15,50 @@ class LoadedSettings {
   static Divisi? divisiKesantrian;
   static List<MataPelajaran>? nkVariables;
 
-  static int nkEnabledGradeId = -1;
-  static NKEnabledGradeType? nkEnabledGrade;
+  static int _nhbMinValToPassId = -1;
+  static int get nhbMinValToPassId => _nhbMinValToPassId;
+  static int? _nhbMinValToPass;
+  static int get nhbMinValToPass => _nhbMinValToPass ?? 60;
 
-  static int nkAdviceId = -1;
-  static String? nkAdvice;
+  static int _nkEnabledGradeId = -1;
+  static int get nkEnabledGradeId => _nkEnabledGradeId;
+  static NKEnabledGradeType? _nkEnabledGrade;
+
+  static int _nkAdviceId = -1;
+  static int get nkAdviceId => _nkAdviceId;
+  static String? _nkAdvice;
+  static String get nkAdvice => _nkAdvice ?? '';
 
   LoadedSettings.load(List<Setting> settings) {
     for (var s in settings) {
       switch (s.variable) {
+        case SettingVariables.nhbMinValToPass:
+          _nhbMinValToPassId = s.id;
+          _nhbMinValToPass = s.value;
+          break;
         case SettingVariables.nkEnabledGrade:
-          nkEnabledGradeId = s.id;
-          nkEnabledGrade = (s.value as Map<String, dynamic>)
+          _nkEnabledGradeId = s.id;
+          _nkEnabledGrade = (s.value as Map<String, dynamic>)
               .map<_VariableName, Map<_GradeType, _IsEnabled>>((key, value) =>
               MapEntry(key, (value as Map<String, dynamic>).map<_GradeType, _IsEnabled>((key, value) =>
                   MapEntry(key, value)),
           ));
           break;
         case SettingVariables.nkAdvice:
-          nkAdviceId = s.id;
-          nkAdvice = s.value;
+          _nkAdviceId = s.id;
+          _nkAdvice = s.value;
           break;
       }
     }
   }
 
   static bool isNKGradeEnabled(String variableName, String gradeType) =>
-      (nkEnabledGrade?[variableName]?[gradeType] ?? true);
+      (_nkEnabledGrade?[variableName]?[gradeType] ?? true);
 
-  static List<NKEnabledGradeTypeEntry>? getNkEnabledGradeEntries() {
-    if (nkEnabledGrade == null) return null;
+  static List<NKEnabledGradeTypeEntry> getNkEnabledGradeEntries() {
+    if (_nkEnabledGrade?.isEmpty ?? true) return [];
 
-    final list = List.of(nkEnabledGradeConvertToEntries(nkEnabledGrade!));
+    final list = List.of(nkEnabledGradeConvertToEntries(_nkEnabledGrade!));
     final allVariables = list.map<String>((e) => e.key).toList();
 
     final unattendedVariables = <String>[];

@@ -20,7 +20,7 @@ class NHBContents {
   NHBContents(this.moContents, this.poContents);
 }
 
-typedef NHBBlockContents = Map<String, List<NHBBlock>>;
+typedef NHBBlockContents = List<MapEntry<String, List<NHBBlock>>>;
 
 class NPBDatasets {
   final List<MataPelajaran> mapels;

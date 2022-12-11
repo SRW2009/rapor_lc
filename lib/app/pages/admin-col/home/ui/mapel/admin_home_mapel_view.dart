@@ -31,6 +31,7 @@ class AdminHomeMataPelajaranUIView extends ViewState<AdminHomeMataPelajaranUI, A
             tableHeaders: const [
               'ID',
               'Nama Mapel',
+              'Singkatan',
               'Nama Divisi',
               'Is Block System',
               'Action',
@@ -38,6 +39,7 @@ class AdminHomeMataPelajaranUIView extends ViewState<AdminHomeMataPelajaranUI, A
             tableContentBuilder: (item) => [
               DataCell(Text(item.id.toString())),
               DataCell(Text(item.name)),
+              DataCell(Text(item.abbreviation ?? '')),
               DataCell(Text(item.divisi.name)),
               DataCell(FormInputFieldCheckBox(null, item.divisi.isBlock, null)),
               DataCell(IconButton(

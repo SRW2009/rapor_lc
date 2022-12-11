@@ -413,7 +413,7 @@ class TableContentsFactory {
 
         return NHBSemester(++i, entry.key, harian.toInt(), bulanan.toInt(), projek.toInt(), akhir.toInt(), acc.toInt(), pred);
       }).toList(),
-      nhbMOValueMap.entries.map<NHBSemester>((entry) {
+      nhbPOValueMap.entries.map<NHBSemester>((entry) {
         var harian = entry.value['harian']!.item/entry.value['harian']!.n;
         var bulanan = entry.value['bulanan']!.item/entry.value['bulanan']!.n;
         var projek = entry.value['projek']!.item/entry.value['projek']!.n;
@@ -515,7 +515,7 @@ class TableContentsFactory {
         ifAbsent: () => [element.value],
       );
     });
-    return finalValue;
+    return finalValue.entries.toList();
   }
 
   static NKContents buildNKContents(Map<String, Map<String, List<double>>> contents) {
