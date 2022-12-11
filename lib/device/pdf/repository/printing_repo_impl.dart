@@ -31,7 +31,7 @@ class PrintingRepositoryImpl extends PrintingRepository {
     final doc = pw.Document();
     for (var santri in selectedSantriList) {
       var santriNilaiList = nilaiList.where((element) => element.santri == santri).toList();
-      if (santriNilaiList.length == 0) {
+      if (santriNilaiList.isEmpty) {
         yield '${santri.name} : Tidak ada record nilai.';
         if (printSettings.nhbSemesterPage) errorCount++;
         if (printSettings.nhbBlockPage) errorCount++;
@@ -40,17 +40,25 @@ class PrintingRepositoryImpl extends PrintingRepository {
         if (printSettings.nkAdvicePage) errorCount++;
         continue;
       }
-      for (var a = printSettings.fromTimelineInt; a <= printSettings.toTimelineInt; a+=6) {
-        final i = Timeline.fromInt(a);
-        final firstSantriNilai = santriNilaiList.firstWhere((e) => e.timeline==i);
+      for (var i = printSettings.fromTimelineInt; i <= printSettings.toTimelineInt; i+=6) {
+        final timeline = Timeline.fromInt(i);
+        Nilai firstSantriNilai;
+        try {
+          firstSantriNilai = santriNilaiList.firstWhere((e) => e.timeline==timeline);
+        } on StateError {
+          yield '${santri.name} - Timeline $timeline : Tidak ada record nilai.';
+          continue;
+        }
 
+        final docInitialLength = doc.document.pdfPageList.pages.length.toInt();
         NHBContents? nhbContents;
         if (printSettings.nhbSemesterPage || printSettings.npbPage) {
-          nhbContents = TableContentsFactory.buildNHBContents(santriNilaiList, i);
+          nhbContents = TableContentsFactory.buildNHBContents(santriNilaiList, timeline);
         }
         if (printSettings.nhbSemesterPage) {
           try {
             final contents = nhbContents!;
+            if (contents.moContents.isEmpty && contents.poContents.isEmpty) throw Exception();
 
             if (contents.moContents.isNotEmpty) {
               final p = page_nhb_semester(headerImage, contents.moContents, firstSantriNilai, isObservation: true);
@@ -61,64 +69,74 @@ class PrintingRepositoryImpl extends PrintingRepository {
               doc.addPage(p);
             }
           } catch (e) {
-            yield '${santri.name} - Timeline $i : Nilai NHB Semester tidak lengkap.';
+            yield '${santri.name} - Timeline $timeline : Nilai NHB Semester tidak lengkap.';
             errorCount++;
           }
         }
         if (printSettings.nhbBlockPage) {
           try {
-            final contents = TableContentsFactory.buildNHBBlockContents(santriNilaiList, i);
+            final contents = TableContentsFactory.buildNHBBlockContents(santriNilaiList, timeline);
+            if (contents.isEmpty) throw Exception();
 
-            if (contents.isNotEmpty) {
-              if (contents.length > 3) {
-                for (var j = 0; j < contents.length; j+=3) {
-                  final end = contents.length < (j+3) ? contents.length : j+3;
-                  final p = page_nhb_block(headerImage, contents.getRange(j, end).toList(), firstSantriNilai);
-                  doc.addPage(p);
-                }
-              } else {
-                final p = page_nhb_block(headerImage, contents, firstSantriNilai);
+            if (contents.length > 3) {
+              for (var j = 0; j < contents.length; j+=3) {
+                final end = contents.length < (j+3) ? contents.length : j+3;
+                final p = page_nhb_block(headerImage, contents.getRange(j, end).toList(), firstSantriNilai);
                 doc.addPage(p);
               }
+            } else {
+              final p = page_nhb_block(headerImage, contents, firstSantriNilai);
+              doc.addPage(p);
             }
           } catch (e) {
-            yield '${santri.name} - Timeline $i : Nilai NHB Block tidak lengkap.';
+            yield '${santri.name} - Timeline $timeline : Nilai NHB Block tidak lengkap.';
             errorCount++;
           }
         }
         if (printSettings.npbPage) {
           try {
-            final contents = TableContentsFactory.buildNPBContents(nilaiList, i);
+            final contents = TableContentsFactory.buildNPBContents(nilaiList, timeline);
+            if (contents.isEmpty) throw Exception();
 
             //final p1 = page_npb_chart(headerImage, santriNilaiList, semester: i);
             final p2 = page_npb_table(headerImage, contents, firstSantriNilai, nhbContents: nhbContents);
             //doc.addPage(p1);
             doc.addPage(p2);
           } catch (e) {
-            yield '${santri.name} - Timeline $i : Nilai NPB tidak lengkap.';
+            yield '${santri.name} - Timeline $timeline : Nilai NPB tidak lengkap.';
             errorCount++;
           }
         }
         if (printSettings.nkPage || printSettings.nkAdvicePage) {
           try {
-            final datasets = ChartDatasetsFactory.buildNKDatasets(santriNilaiList, i);
-            final contents = TableContentsFactory.buildNKContents(datasets.contents);
+            final datasets = ChartDatasetsFactory.buildNKDatasets(santriNilaiList, timeline);
+            if (datasets.datasets.isEmpty || datasets.contents.isEmpty) throw Exception();
 
-            final p1 = page_nk(headerImage, datasets, contents, firstSantriNilai, i);
-            final p2 = page_nk_advice(headerImage, contents, firstSantriNilai);
-            if (printSettings.nkPage) doc.addPage(p1);
-            if (printSettings.nkAdvicePage) doc.addPage(p2);
+            final contents = TableContentsFactory.buildNKContents(datasets.contents);
+            if (printSettings.nkPage) {
+              final p1 = page_nk(headerImage, datasets, contents, firstSantriNilai, timeline);
+              doc.addPage(p1);
+            }
+            if (printSettings.nkAdvicePage) {
+              final p2 = page_nk_advice(headerImage, contents, firstSantriNilai);
+              doc.addPage(p2);
+            }
           } catch (e) {
-            yield '${santri.name} - Semester $i : Nilai NK tidak lengkap.';
+            yield '${santri.name} - Timeline $timeline : Nilai NK tidak lengkap.';
             if (printSettings.nkPage) errorCount++;
             if (printSettings.nkAdvicePage) errorCount++;
           }
         }
+
+        if (docInitialLength < doc.document.pdfPageList.pages.length.toInt())
+          yield '${santri.name} - Timeline $timeline : Rapor berhasil dibuat.';
+        else
+          yield '${santri.name} - Timeline $timeline : Rapor gagal dibuat.';
       }
     }
 
     if (errorCount!=0) yield 'Terjadi masalah saat memproses data. $errorCount halaman tidak akan dicetak.';
-    if (doc.document.pdfPageList.pages.length == 0) {
+    if (doc.document.pdfPageList.pages.isEmpty) {
       yield 'Tidak ada halaman yang bisa dicetak.';
     } else {
       await Printing.layoutPdf(
