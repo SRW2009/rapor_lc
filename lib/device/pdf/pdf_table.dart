@@ -2,6 +2,7 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:rapor_lc/app/utils/loaded_settings.dart';
+import 'package:rapor_lc/device/pdf/pdf_global_setting.dart';
 import 'package:rapor_lc/device/pdf/pdf_object.dart';
 import 'package:rapor_lc/device/pdf/pdf_widget.dart';
 import 'package:rapor_lc/domain/entities/nhb_block.dart';
@@ -9,6 +10,7 @@ import 'package:rapor_lc/domain/entities/nhb_semester.dart';
 import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/nk.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
+import 'package:rapor_lc/domain/entities/timeline.dart';
 
 class MyPDFTable {
   static TableRow _buildHeaderRow(List<String> titles) {
@@ -196,7 +198,7 @@ class MyPDFTable {
     );
   }
   
-  static Table buildNHBTable(List<NHBSemester> contents, bool isObservation, {int startFrom=0}) {
+  static Table buildNHBTable(List<NHBSemester> contents, bool isObservation, Timeline timeline, {int startFrom=0}) {
     List<TableRow> contentRows = [];
     TableRow? normalSituationRow;
     var i = 0;
@@ -220,10 +222,12 @@ class MyPDFTable {
         '${o.akumulasi}', o.predikat,
       ]));
     }
-    normalSituationRow ??= _buildContentRow([
-      '${(++i) + startFrom}', 'Normal Situation',
-      '-', '-', '-', '-', '-', '-',
-    ]);
+    if (PDFSetting.nhbNormalSituationExistAt.any((element) => element.isTimelineMatch(timeline))) {
+      normalSituationRow ??= _buildContentRow([
+        '${(++i) + startFrom}', 'Normal Situation',
+        '-', '-', '-', '-', '-', '-',
+      ]);
+    }
 
     // build table
     List<TableRow> children = [
@@ -234,7 +238,7 @@ class MyPDFTable {
         'NHB', 'Predikat',
       ]),
       ...contentRows,
-      normalSituationRow,
+      if (normalSituationRow!=null) normalSituationRow,
     ];
     return Table(
       tableWidth: TableWidth.max,

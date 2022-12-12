@@ -38,7 +38,7 @@ Page page_nhb_semester(MemoryImage headerImage, List<NHBSemester> contents, Nila
                 ),
               ),
               SizedBox(height: 12.0),
-              MyPDFTable.buildNHBTable(contents, isObservation),
+              MyPDFTable.buildNHBTable(contents, isObservation, firstNilai.timeline),
               SizedBox(height: 18.0),
               Text(
                 '* Nilai minimal kelulusan adalah ${LoadedSettings.nhbMinValToPass}.',
