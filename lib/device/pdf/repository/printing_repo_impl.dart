@@ -44,7 +44,7 @@ class PrintingRepositoryImpl extends PrintingRepository {
         final timeline = Timeline.fromInt(i);
         Nilai firstSantriNilai;
         try {
-          firstSantriNilai = santriNilaiList.firstWhere((e) => e.timeline==timeline);
+          firstSantriNilai = santriNilaiList.firstWhere((e) => e.timeline.isTimelineMatch(timeline));
         } on StateError {
           yield '${santri.name} - Timeline $timeline : Tidak ada record nilai.';
           continue;

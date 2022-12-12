@@ -97,8 +97,8 @@ class Timeline implements Comparable {
   @override
   int compareTo(other) {
     if (other is! Timeline) throw TypeError();
-    final thisVal = double.tryParse('$level.$kelas$semester${bulanFormatted()}') ?? 0;
-    final otherVal = double.tryParse('${other.level}.${other.kelas}${other.semester}${other.bulanFormatted()}') ?? 0;
+    final thisVal = toInt();
+    final otherVal = other.toInt();
     return thisVal.compareTo(otherVal);
   }
 
