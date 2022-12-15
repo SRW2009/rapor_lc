@@ -54,7 +54,7 @@ class HomeRecordController extends Controller {
   }
 
   bool _searchWhereClause(Relation item, String query) {
-    return item.name?.toLowerCase().contains(query) ?? false
+    return (item.name?.toLowerCase().contains(query) ?? false)
         || item.santri.name.toLowerCase().contains(query)
         || (item.santri.nis?.contains(query) ?? false);
   }
