@@ -232,7 +232,7 @@ class MyPDFTable {
     // build table
     List<TableRow> children = [
       _buildHeaderRow([
-        'No', 'Mata Pelajaran\n${isObservation ? 'Masa Observasi' : 'Paska Observasi'}',
+        'No', 'Mata Pelajaran\n${isObservation ? 'Masa Observasi' : 'Masa Pasca Observasi'}',
         'Nilai \nHarian', 'Nilai \nBulanan',
         'Nilai \nProject', 'Nilai \nAkhir',
         'NHB', 'Predikat',
