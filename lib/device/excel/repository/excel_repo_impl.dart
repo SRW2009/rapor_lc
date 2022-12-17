@@ -137,9 +137,10 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
       excel.merge(sheetName, CellIndex.indexByString('B1'), CellIndex.indexByString("P1"), customValue: 'Nilai');
       excel.merge(sheetName, CellIndex.indexByString('B2'), CellIndex.indexByString("B3"), customValue: 'Timeline');
       excel.merge(sheetName, CellIndex.indexByString('C2'), CellIndex.indexByString("C3"), customValue: 'Tahun Ajaran');
-      excel.merge(sheetName, CellIndex.indexByString('D2'), CellIndex.indexByString("I2"), customValue: 'NHB Semester');
-      excel.merge(sheetName, CellIndex.indexByString('J2'), CellIndex.indexByString("O2"), customValue: 'NHB Block');
-      sheet.cell(CellIndex.indexByString('P2'))..value = 'NPB'..cellStyle = headerCellStyle;
+      excel.merge(sheetName, CellIndex.indexByString('D2'), CellIndex.indexByString("D3"), customValue: 'Is Observation');
+      excel.merge(sheetName, CellIndex.indexByString('E2'), CellIndex.indexByString("J2"), customValue: 'NHB Semester');
+      excel.merge(sheetName, CellIndex.indexByString('K2'), CellIndex.indexByString("P2"), customValue: 'NHB Block');
+      sheet.cell(CellIndex.indexByString('Q2'))..value = 'NPB'..cellStyle = headerCellStyle;
 
       sheet.cell(CellIndex.indexByString('A1'))
         ..cellStyle = headerCellStyle;
@@ -151,49 +152,51 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
         ..cellStyle = headerCellStyle;
       sheet.cell(CellIndex.indexByString('D2'))
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString('J2'))
+      sheet.cell(CellIndex.indexByString('E2'))
+        ..cellStyle = headerCellStyle;
+      sheet.cell(CellIndex.indexByString('K2'))
         ..cellStyle = headerCellStyle;
 
       // NHB Semester
-      sheet.cell(CellIndex.indexByString("D3"))
+      sheet.cell(CellIndex.indexByString("E3"))
         ..value = 'Nilai Harian'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("E3"))
+      sheet.cell(CellIndex.indexByString("F3"))
         ..value = 'Nilai Bulanan'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("F3"))
+      sheet.cell(CellIndex.indexByString("G3"))
         ..value = 'Nilai Projek'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("G3"))
+      sheet.cell(CellIndex.indexByString("H3"))
         ..value = 'Nilai Akhir'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("H3"))
+      sheet.cell(CellIndex.indexByString("I3"))
         ..value = 'Akumulasi'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("I3"))
+      sheet.cell(CellIndex.indexByString("J3"))
         ..value = 'Predikat'
         ..cellStyle = headerCellStyle;
       // NHB Block
-      sheet.cell(CellIndex.indexByString("J3"))
+      sheet.cell(CellIndex.indexByString("K3"))
         ..value = 'Nilai Harian'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("K3"))
+      sheet.cell(CellIndex.indexByString("L3"))
         ..value = 'Nilai Projek'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("L3"))
+      sheet.cell(CellIndex.indexByString("M3"))
         ..value = 'Nilai Akhir'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("M3"))
+      sheet.cell(CellIndex.indexByString("N3"))
         ..value = 'Deskripsi'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("N3"))
+      sheet.cell(CellIndex.indexByString("O3"))
         ..value = 'Akumulasi'
         ..cellStyle = headerCellStyle;
-      sheet.cell(CellIndex.indexByString("O3"))
+      sheet.cell(CellIndex.indexByString("P3"))
         ..value = 'Predikat'
         ..cellStyle = headerCellStyle;
       // NPB
-      sheet.cell(CellIndex.indexByString("P3"))
+      sheet.cell(CellIndex.indexByString("Q3"))
         ..value = 'N'
         ..cellStyle = headerCellStyle;
 
@@ -223,51 +226,56 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
                 ..value = nilai.tahunAjaran
                 ..cellStyle = contentCellStyle;
 
+              // is observation
+              sheet.cell(CellIndex.indexByString('D$currentRow'))
+                ..value = nilai.isObservation ? 'yes' : 'no'
+                ..cellStyle = contentCellStyle;
+
               // nhb semester
               if (i < nilai.nhbSemester.length) {
-                sheet.cell(CellIndex.indexByString('D$currentRow'))
+                sheet.cell(CellIndex.indexByString('E$currentRow'))
                   ..value = nilai.nhbSemester[i].nilai_harian
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('E$currentRow'))
+                sheet.cell(CellIndex.indexByString('F$currentRow'))
                   ..value = nilai.nhbSemester[i].nilai_bulanan
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('F$currentRow'))
+                sheet.cell(CellIndex.indexByString('G$currentRow'))
                   ..value = nilai.nhbSemester[i].nilai_projek
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('G$currentRow'))
+                sheet.cell(CellIndex.indexByString('H$currentRow'))
                   ..value = nilai.nhbSemester[i].nilai_akhir
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('H$currentRow'))
+                sheet.cell(CellIndex.indexByString('I$currentRow'))
                   ..value = nilai.nhbSemester[i].akumulasi
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('I$currentRow'))
+                sheet.cell(CellIndex.indexByString('J$currentRow'))
                   ..value = nilai.nhbSemester[i].predikat
                   ..cellStyle = contentCellStyle;
               }
               // nhb block
               if (i < nilai.nhbBlock.length) {
-                sheet.cell(CellIndex.indexByString('J$currentRow'))
+                sheet.cell(CellIndex.indexByString('K$currentRow'))
                   ..value = nilai.nhbBlock[i].nilai_harian
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('K$currentRow'))
+                sheet.cell(CellIndex.indexByString('L$currentRow'))
                   ..value = nilai.nhbBlock[i].nilai_projek
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('L$currentRow'))
+                sheet.cell(CellIndex.indexByString('M$currentRow'))
                   ..value = nilai.nhbBlock[i].nilai_akhir
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('M$currentRow'))
+                sheet.cell(CellIndex.indexByString('N$currentRow'))
                   ..value = nilai.nhbBlock[i].description
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('N$currentRow'))
+                sheet.cell(CellIndex.indexByString('O$currentRow'))
                   ..value = nilai.nhbBlock[i].akumulasi
                   ..cellStyle = contentCellStyle;
-                sheet.cell(CellIndex.indexByString('O$currentRow'))
+                sheet.cell(CellIndex.indexByString('P$currentRow'))
                   ..value = nilai.nhbBlock[i].predikat
                   ..cellStyle = contentCellStyle;
               }
               // npb
               if (i < nilai.npb.length) {
-                sheet.cell(CellIndex.indexByString('P$currentRow'))
+                sheet.cell(CellIndex.indexByString('Q$currentRow'))
                   ..value = nilai.npb[i].n
                   ..cellStyle = contentCellStyle;
               }
@@ -507,24 +515,26 @@ class ExcelRepositoryImpl extends ExcelRepository with _ExcelRepositoryMixin {
               case 1: currentNilai.timeline = Timeline.fromString(value); break;
               // identify tahun ajaran
               case 2: currentNilai.tahunAjaran = value; break;
+              // identify is observation
+              case 3: currentNilai.isObservation = (value.toString() == 'yes'); break;
               // NHB Semester : nilai harian
-              case 3: sHarian = numParse(value); break;
+              case 4: sHarian = numParse(value); break;
               // NHB Semester : nilai bulanan
-              case 4: sBulanan = numParse(value); break;
+              case 5: sBulanan = numParse(value); break;
               // NHB Semester : nilai projek
-              case 5: sProjek = numParse(value); break;
+              case 6: sProjek = numParse(value); break;
               // NHB Semester : nilai akhir
-              case 6: sAkhir = numParse(value); break;
+              case 7: sAkhir = numParse(value); break;
               // NHB Block : nilai harian
-              case 7: bHarian = numParse(value); break;
+              case 8: bHarian = numParse(value); break;
               // NHB Block : nilai projek
-              case 8: bProjek = numParse(value); break;
+              case 9: bProjek = numParse(value); break;
               // NHB Block : nilai akhir
-              case 9: bAkhir = numParse(value); break;
+              case 10: bAkhir = numParse(value); break;
               // NHB Semester : deskripsi nilai
-              case 10: bDesk = '$value'; break;
+              case 11: bDesk = '$value'; break;
               // NPB : n
-              case 11: n = value; break;
+              case 12: n = value; break;
             }
           }
 

@@ -59,11 +59,12 @@ class Nilai implements Comparable {
           id == other.id &&
           timeline == other.timeline &&
           tahunAjaran == other.tahunAjaran &&
-          santri == other.santri;
+          santri == other.santri &&
+          isObservation == other.isObservation;
 
   @override
   int get hashCode =>
-      id.hashCode ^ timeline.hashCode ^ tahunAjaran.hashCode ^ santri.hashCode;
+      id.hashCode ^ timeline.hashCode ^ tahunAjaran.hashCode ^ santri.hashCode ^ isObservation.hashCode;
 
   Nilai cloneWithoutData() => Nilai(
     this.id.toInt(),
@@ -80,8 +81,8 @@ class Nilai implements Comparable {
   @override
   int compareTo(other) {
     if (other is! Nilai) throw TypeError();
-    final thisVal = double.tryParse('${tahunAjaran.split('/')[0]}.${timeline.semester}${timeline.bulanFormatted()}') ?? 0;
-    final otherVal = double.tryParse('${tahunAjaran.split('/')[0]}.${other.timeline.semester}${other.timeline.bulanFormatted()}') ?? 0;
+    final thisVal = double.tryParse('${tahunAjaran.split('/')[0]}.${timeline.level}${timeline.kelas}${timeline.bulanFormatted()}') ?? 0;
+    final otherVal = double.tryParse('${other.tahunAjaran.split('/')[0]}.${other.timeline.level}${other.timeline.kelas}${other.timeline.bulanFormatted()}') ?? 0;
     return thisVal.compareTo(otherVal);
   }
 }
