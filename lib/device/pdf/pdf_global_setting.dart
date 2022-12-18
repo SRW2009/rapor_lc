@@ -23,7 +23,10 @@ class PDFSetting {
     //Timeline(7, 2, 1, 1),
   ];
 
-  static int npbMaxRow = 24;
+  static const nhbSemesterMaxRowInFirstPage = 9;
+  static const nhbSemesterMaxRowInNextPage = 20;
+  static const nhbBlockMaxDivPerPage = 3;
+  static const npbMaxRowPerPage = 20;
 
   static late ByteData headerFontData;
   static late ByteData bodyFontData;

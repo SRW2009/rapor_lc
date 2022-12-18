@@ -20,7 +20,7 @@ class MyPDFTable {
       ),*/
       children: titles.map<Widget>((e) => Container(
         //height: 34.0,
-        padding: const EdgeInsets.all(7.0),
+        padding: const EdgeInsets.all(6.0),
         decoration: BoxDecoration(
           border: Border.all(color: PdfColors.black, width: 1.0),
           color: PdfColor.fromInt(0xF2F2F2),
@@ -194,7 +194,8 @@ class MyPDFTable {
     );
   }
   
-  static Table buildNHBTable(List<NHBSemester> contents, bool isObservation, Timeline timeline, {int startFrom=0}) {
+  static Table buildNHBTable(List<NHBSemester> contents, bool isObservation, Timeline timeline, 
+  {int startFrom=0, bool createNormalSituation=false, NHBSemester? normalSituation}) {
     final textAligns = [
       TextAlign.center, TextAlign.left,
       TextAlign.center, TextAlign.center, 
@@ -206,17 +207,6 @@ class MyPDFTable {
     TableRow? normalSituationRow;
     var i = 0;
     for (var o in contents) {
-      if (o.pelajaran.name=='Normal Situation') {
-        normalSituationRow = _buildContentRow([
-          '${(++i) + startFrom}', o.pelajaran.name,
-          '${o.nilai_harian}', '${o.nilai_bulanan}',
-          '${o.nilai_projek!=-1 ? o.nilai_projek : '-'}',
-          '${o.nilai_akhir!=-1 ? o.nilai_akhir : '-'}',
-          '${o.akumulasi}', o.predikat,
-        ], textAligns: textAligns);
-        continue;
-      }
-
       contentRows.add(_buildContentRow([
         '${(++i) + startFrom}', o.pelajaran.abbreviation ?? o.pelajaran.name,
         '${o.nilai_harian}', '${o.nilai_bulanan}',
@@ -225,11 +215,21 @@ class MyPDFTable {
         '${o.akumulasi}', o.predikat,
       ], textAligns: textAligns));
     }
-    if (PDFSetting.nhbNormalSituationExistAt.any((element) => element.isTimelineMatch(timeline))) {
-      normalSituationRow ??= _buildContentRow([
-        '${(++i) + startFrom}', 'Normal Situation',
-        '-', '-', '-', '-', '-', '-',
-      ], textAligns: textAligns);
+    if (createNormalSituation) {
+      if (normalSituation != null) {
+        normalSituationRow = _buildContentRow([
+          '-', normalSituation.pelajaran.name,
+          '${normalSituation.nilai_harian}', '${normalSituation.nilai_bulanan}',
+          '${normalSituation.nilai_projek!=-1 ? normalSituation.nilai_projek : '-'}',
+          '${normalSituation.nilai_akhir!=-1 ? normalSituation.nilai_akhir : '-'}',
+          '${normalSituation.akumulasi}', normalSituation.predikat,
+        ], textAligns: textAligns);
+      } else {
+        normalSituationRow = _buildContentRow([
+          '-', 'Normal Situation',
+          '-', '-', '-', '-', '-', '-',
+        ], textAligns: textAligns);
+      }
     }
 
     // build table
@@ -289,11 +289,11 @@ class MyPDFTable {
       defaultVerticalAlignment: TableCellVerticalAlignment.full,
       columnWidths: const {
         0: IntrinsicColumnWidth(flex: 1),
-        1: FixedColumnWidth(46),
-        2: FixedColumnWidth(46),
-        3: FixedColumnWidth(46),
-        4: FixedColumnWidth(40),
-        5: FixedColumnWidth(60),
+        1: FixedColumnWidth(44),
+        2: FixedColumnWidth(44),
+        3: FixedColumnWidth(44),
+        4: FixedColumnWidth(36),
+        5: FixedColumnWidth(54),
         6: IntrinsicColumnWidth(flex: 1),
       },
       children: children,

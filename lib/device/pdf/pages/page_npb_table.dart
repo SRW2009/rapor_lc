@@ -9,7 +9,8 @@ import 'package:rapor_lc/domain/entities/nilai.dart';
 import 'package:rapor_lc/domain/entities/npb.dart';
 
 // TODO: make footer note customizable by teacher
-Page page_npb_table(MemoryImage headerImage, List<NPB> contents, Nilai firstSantriNilai, {NHBContents? nhbContents}) {
+Page page_npb_table(MemoryImage headerImage, List<NPB> contents, Nilai firstSantriNilai, 
+  {NHBContents? nhbContents, int startFrom=0}) {
   final nhbs = [...?nhbContents?.moContents, ...?nhbContents?.poContents];
   return Page(
     margin: const EdgeInsets.all(0),
@@ -30,25 +31,8 @@ Page page_npb_table(MemoryImage headerImage, List<NPB> contents, Nilai firstSant
               SizedBox(height: 12.0),
               MyPDFTable.buildIdentityTable(firstSantriNilai),
               SizedBox(height: 12.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // SINGLE LANE
-                  if (contents.length <= PDFSetting.npbMaxRow) Expanded(
-                    child: MyPDFTable.buildNPBTable(contents, nhbs),
-                  ),
-                  // DOUBLE LANE
-                  if (contents.length > PDFSetting.npbMaxRow) Expanded(
-                    child: MyPDFTable.buildNPBTable(contents.sublist(0, PDFSetting.npbMaxRow), nhbs),
-                  ),
-                  if (contents.length > PDFSetting.npbMaxRow) SizedBox(width: 18),
-                  if (contents.length > PDFSetting.npbMaxRow) Expanded(
-                    child: MyPDFTable.buildNPBTable(contents.sublist(
-                        PDFSetting.npbMaxRow,
-                        contents.length<(PDFSetting.npbMaxRow*2)?contents.length:(PDFSetting.npbMaxRow*2),
-                    ), nhbs),
-                  ),
-                ],
+              Expanded(
+                child: MyPDFTable.buildNPBTable(contents, nhbs, startFrom: startFrom),
               ),
               SizedBox(height: 18.0),
               Text(
