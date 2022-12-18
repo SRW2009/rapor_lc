@@ -29,8 +29,12 @@ Page page_nk(MemoryImage headerImage, NKDatasets datasets, NKContents contents, 
               MyPDFTable.buildIdentityTable(firstNilai),
               SizedBox(height: 12.0),
               Expanded(
-                child: Center(
-                  child: MyPDFChart.buildNKLineChart(datasets, timeline),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    height: 300,
+                    child: MyPDFChart.buildNKLineChart(datasets, timeline),
+                  ),
                 ),
               ),
               SizedBox(height: 12.0),

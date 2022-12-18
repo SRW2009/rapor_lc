@@ -46,7 +46,7 @@ Page page_nhb_semester(MemoryImage headerImage, List<NHBSemester> contents, Nila
                     .where((value) => value.pelajaran.abbreviation != null)
                     .fold<String>('', (prev, e) => '$prev${e.pelajaran.abbreviation} adalah ${e.pelajaran.name}. ')}',*/
                 textAlign: TextAlign.left,
-                style: headerTextStyle(size: 11),
+                style: bodyTextStyle(size: font10pt),
               ),
             ],
           ),

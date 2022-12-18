@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:pdf/pdf.dart';
@@ -6,8 +5,16 @@ import 'package:rapor_lc/domain/entities/timeline.dart';
 
 class PDFSetting {
   static const defaultColorsGroup = [
-    PdfColors.blue, PdfColors.orange, /*green*/ PdfColor.fromInt(0x0CA39B), PdfColors.yellow, PdfColors.green,
-    PdfColors.red, PdfColors.black, PdfColors.teal, PdfColors.brown, PdfColors.purple,
+    PdfColors.blue,
+    PdfColors.orange,
+    /*green*/ PdfColor.fromInt(0x0CA39B),
+    PdfColors.yellow,
+    PdfColors.green,
+    PdfColors.red,
+    PdfColors.black,
+    PdfColors.teal,
+    PdfColors.brown,
+    PdfColors.purple,
   ];
   static final nhbNormalSituationExistAt = [
     // semester 1, kelas 1, level 1
@@ -20,4 +27,6 @@ class PDFSetting {
 
   static late ByteData headerFontData;
   static late ByteData bodyFontData;
+  static const boldFontPath = 'fonts/calibri/CALIBRIB.TTF';
+  static const normalFontPath = 'fonts/calibri/CALIBRI.TTF';
 }

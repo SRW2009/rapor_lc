@@ -19,36 +19,36 @@ class MyPDFTable {
         border: Border.all(color: PdfColors.black, width: 1.0),
       ),*/
       children: titles.map<Widget>((e) => Container(
-        height: 30.0,
-        padding: const EdgeInsets.all(6.0),
+        //height: 34.0,
+        padding: const EdgeInsets.all(7.0),
         decoration: BoxDecoration(
           border: Border.all(color: PdfColors.black, width: 1.0),
           color: PdfColor.fromInt(0xF2F2F2),
         ),
-        child: FittedBox(fit: BoxFit.scaleDown, child: Text(e, textAlign: TextAlign.center, style: headerTextStyle(size: 10))),
+        child: FittedBox(fit: BoxFit.scaleDown, child: Text(e, textAlign: TextAlign.center, style: headerTextStyle(size: font12pt))),
       )).toList(),
     );
   }
 
   static TableRow _buildContentRow(List<String> contents, {
-    PdfColor backgroundColor=PdfColors.white, Border? border, bool looseHeight=false, List<double>? textSizes}) {
+    PdfColor backgroundColor=PdfColors.white, Border? border, List<TextAlign>? textAligns}) {
     final List<Widget> children = [];
     for (var i = 0; i < contents.length; ++i) {
       var e = contents[i];
-      final Widget child = Text(e, textAlign: TextAlign.center, style: bodyTextStyle(size: textSizes?[i] ?? 10));
+      final Widget child = Text(e, textAlign: textAligns?[i], style: bodyTextStyle());
       children.add(
         Container(
           constraints: BoxConstraints(
             minHeight: 20,
-            maxHeight: looseHeight ? double.infinity : 20.0,
+            maxHeight: double.infinity,
           ),
           decoration: BoxDecoration(
             border: border ?? Border.all(color: PdfColors.black, width: 1.0),
             color: backgroundColor,
           ),
           //alignment: Alignment.center,
-          padding: const EdgeInsets.all(3.0),
-          child: looseHeight ? Center(child: child) : FittedBox(fit: BoxFit.scaleDown, child: child),
+          padding: const EdgeInsets.all(6.0),
+          child: child,
         ),
       );
     }
@@ -62,6 +62,14 @@ class MyPDFTable {
       '${v.nilai_projek!=-1 ? v.nilai_projek : '-'}',
       '${v.nilai_akhir!=-1 ? v.nilai_akhir : '-'}',
       '${v.akumulasi}', v.predikat
+    ];
+    final rowContentsAlign = [
+      TextAlign.left,
+      TextAlign.center,
+      TextAlign.center,
+      TextAlign.center,
+      TextAlign.center,
+      TextAlign.center,
     ];
     rowContainer(List<Widget> columnChildren, bool isDescription) => Container(
       constraints: BoxConstraints(
@@ -88,8 +96,8 @@ class MyPDFTable {
         border: Border.all(color: PdfColors.black, width: 1.0),
         color: PdfColors.white,
       ),
-      padding: const EdgeInsets.all(3.0),
-      child: FittedBox(fit: BoxFit.scaleDown, child: text),
+      padding: const EdgeInsets.all(6.0),
+      child: text,
     );
 
     final List<Widget> rows = [];
@@ -97,18 +105,22 @@ class MyPDFTable {
       final List<Widget> columns = [];
       for (var o in contents) columns.add(
         columnContainer(
-          Text(rowContents(o)[i], textAlign: TextAlign.center, style: bodyTextStyle(size: 10)),
+          Text(
+            rowContents(o)[i], 
+            textAlign: rowContentsAlign[i],
+            style: bodyTextStyle(),
+          ),
         ),
       );
       rows.add(rowContainer(columns, false));
     }
     rows.add(rowContainer([
       Padding(
-        padding: const EdgeInsets.all(3),
+        padding: const EdgeInsets.all(6),
         child: Text(
           contents.where((e) => e.description.isNotEmpty).fold<String>('', (prev, e) => '$prev${e.description}.\n\n'),
-          textAlign: TextAlign.center,
-          style: bodyTextStyle(size: 8),
+          textAlign: TextAlign.left,
+          style: bodyTextStyle(),
         ),
       ),
     ], true));
@@ -116,13 +128,13 @@ class MyPDFTable {
   }
 
   static Widget buildIdentityTable(Nilai nilai) {
-    const verticalSpacing = 6.0;
+    const verticalSpacing = 12.0;
 
     final santri = nilai.santri,
         timeline = nilai.timeline,
         tahunAjaran = nilai.tahunAjaran;
     return Container(
-      padding: const EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,26 +148,17 @@ class MyPDFTable {
             children: [
               TableRow(
                 children: [
-                  Text('Nama', style: headerTextStyle(size: 12)),
-                  Text(': ${santri.name}', style: headerTextStyle(size: 12)),
+                  Text('Nama', style: headerTextStyle(size: font12pt)),
+                  Text(': ${santri.name}', style: headerTextStyle(size: font12pt)),
                 ],
               ),
               TableRow(
-                children: [ SizedBox(height: verticalSpacing), Container() ],
+                children: [SizedBox(height: verticalSpacing), Container()],
               ),
               TableRow(
                 children: [
-                  Text('NIS', style: headerTextStyle(size: 12)),
-                  Text(': ${santri.nis}', style: headerTextStyle(size: 12)),
-                ],
-              ),
-              TableRow(
-                children: [ SizedBox(height: verticalSpacing), Container() ],
-              ),
-              TableRow(
-                children: [
-                  Text('Tahun Pelajaran   ', style: headerTextStyle(size: 12)),
-                  Text(': $tahunAjaran', style: headerTextStyle(size: 12)),
+                  Text('NIS', style: headerTextStyle(size: font12pt)),
+                  Text(': ${santri.nis}', style: headerTextStyle(size: font12pt)),
                 ],
               ),
             ],
@@ -169,26 +172,19 @@ class MyPDFTable {
             children: [
               TableRow(
                 children: [
-                  Text('Level', style: headerTextStyle(size: 12)),
-                  Text(': ${timeline.levelReadable}', style: headerTextStyle(size: 12)),
+                  Text('Level/Kelas/Smt',
+                      style: headerTextStyle(size: font12pt)),
+                  Text(': ${NumberInRoman.values[timeline.level-1].name}/${NumberInRoman.values[timeline.kelas-1].name}/${NumberInRoman.values[timeline.semester-1].name}',
+                      style: headerTextStyle(size: font12pt)),
                 ],
               ),
               TableRow(
-                children: [ SizedBox(height: verticalSpacing), Container() ],
+                children: [SizedBox(height: verticalSpacing), Container()],
               ),
               TableRow(
                 children: [
-                  Text('Kelas', style: headerTextStyle(size: 12)),
-                  Text(': ${timeline.kelasReadable}', style: headerTextStyle(size: 12)),
-                ],
-              ),
-              TableRow(
-                children: [ SizedBox(height: verticalSpacing), Container() ],
-              ),
-              TableRow(
-                children: [
-                  Text('Semester   ', style: headerTextStyle(size: 12)),
-                  Text(': ${timeline.semesterReadable}', style: headerTextStyle(size: 12)),
+                  Text('Tahun Pelajaran   ', style: headerTextStyle(size: font12pt)),
+                  Text(': $tahunAjaran', style: headerTextStyle(size: font12pt)),
                 ],
               ),
             ],
@@ -199,6 +195,13 @@ class MyPDFTable {
   }
   
   static Table buildNHBTable(List<NHBSemester> contents, bool isObservation, Timeline timeline, {int startFrom=0}) {
+    final textAligns = [
+      TextAlign.center, TextAlign.left,
+      TextAlign.center, TextAlign.center, 
+      TextAlign.center, 
+      TextAlign.center, 
+      TextAlign.center, TextAlign.center,
+    ];
     List<TableRow> contentRows = [];
     TableRow? normalSituationRow;
     var i = 0;
@@ -210,7 +213,7 @@ class MyPDFTable {
           '${o.nilai_projek!=-1 ? o.nilai_projek : '-'}',
           '${o.nilai_akhir!=-1 ? o.nilai_akhir : '-'}',
           '${o.akumulasi}', o.predikat,
-        ]);
+        ], textAligns: textAligns);
         continue;
       }
 
@@ -220,13 +223,13 @@ class MyPDFTable {
         '${o.nilai_projek!=-1 ? o.nilai_projek : '-'}',
         '${o.nilai_akhir!=-1 ? o.nilai_akhir : '-'}',
         '${o.akumulasi}', o.predikat,
-      ]));
+      ], textAligns: textAligns));
     }
     if (PDFSetting.nhbNormalSituationExistAt.any((element) => element.isTimelineMatch(timeline))) {
       normalSituationRow ??= _buildContentRow([
         '${(++i) + startFrom}', 'Normal Situation',
         '-', '-', '-', '-', '-', '-',
-      ]);
+      ], textAligns: textAligns);
     }
 
     // build table
@@ -242,16 +245,16 @@ class MyPDFTable {
     ];
     return Table(
       tableWidth: TableWidth.max,
+      defaultVerticalAlignment: TableCellVerticalAlignment.full,
       columnWidths: const {
         0: IntrinsicColumnWidth(),
-        1: IntrinsicColumnWidth(flex: 2),
-        2: IntrinsicColumnWidth(flex: 1),
-        3: IntrinsicColumnWidth(flex: 1),
-        4: IntrinsicColumnWidth(flex: 1),
-        5: IntrinsicColumnWidth(flex: 1),
-        6: IntrinsicColumnWidth(flex: 1),
-        7: IntrinsicColumnWidth(flex: 1),
-        8: IntrinsicColumnWidth(flex: 1),
+        1: IntrinsicColumnWidth(flex: 1),
+        2: IntrinsicColumnWidth(),
+        3: IntrinsicColumnWidth(),
+        4: IntrinsicColumnWidth(),
+        5: IntrinsicColumnWidth(),
+        6: IntrinsicColumnWidth(),
+        7: IntrinsicColumnWidth(),
       },
       children: children,
     );
@@ -261,9 +264,10 @@ class MyPDFTable {
     List<TableRow> contentRows = [];
     for (var o in contents) {
       contentRows.add(_buildContentRow(
-        ['','','',o.key,'','',''],
+        [o.key,'','','','','',''],
         backgroundColor: PdfColors.yellow200,
         border: Border(),
+        textAligns: [TextAlign.left, TextAlign.center, TextAlign.center, TextAlign.center, TextAlign.center, TextAlign.center, TextAlign.center]
       ));
       contentRows.add(_buildNHBBlockContentRow(o.value));
     }
@@ -284,13 +288,13 @@ class MyPDFTable {
       ),
       defaultVerticalAlignment: TableCellVerticalAlignment.full,
       columnWidths: const {
-        0: IntrinsicColumnWidth(flex: 3),
-        1: IntrinsicColumnWidth(flex: 1.2),
-        2: IntrinsicColumnWidth(flex: 1.2),
-        3: IntrinsicColumnWidth(flex: 1.2),
-        4: IntrinsicColumnWidth(flex: 1.2),
-        5: IntrinsicColumnWidth(flex: 1.2),
-        6: IntrinsicColumnWidth(flex: 3),
+        0: IntrinsicColumnWidth(flex: 1),
+        1: FixedColumnWidth(46),
+        2: FixedColumnWidth(46),
+        3: FixedColumnWidth(46),
+        4: FixedColumnWidth(40),
+        5: FixedColumnWidth(60),
+        6: IntrinsicColumnWidth(flex: 1),
       },
       children: children,
     );
@@ -300,30 +304,39 @@ class MyPDFTable {
     var i = 0;
     List<TableRow> children = [
       _buildHeaderRow([
-        'No', 'Variable', 'Nilai Mesjid', 'Nilai Kelas', 'Nilai Asrama', 'Akumulatif', 'Predikat',
+        'No', 'Variable', 'Nilai\nMesjid', 'Nilai\nKelas', 'Nilai\nAsrama', 'Akumulatif', 'Predikat',
       ]),
       ...contents.values.map<TableRow>((o) {
         bool isMesjid = o.nilai_mesjid!=-1,
             isKelas = o.nilai_kelas!=-1,
             isAsrama = o.nilai_asrama!=-1;
-        return _buildContentRow([
-          '${(++i) + startFrom}', o.nama_variabel,
-          (isMesjid)?'${o.nilai_mesjid}':'-', (isKelas)?'${o.nilai_kelas}':'-',
-          (isAsrama)?'${o.nilai_asrama}':'-', '${o.akumulatif}',
-          o.predikat,
-        ]);
+        return _buildContentRow(
+          [
+            '${(++i) + startFrom}', o.nama_variabel,
+            (isMesjid)?'${o.nilai_mesjid}':'-', (isKelas)?'${o.nilai_kelas}':'-',
+            (isAsrama)?'${o.nilai_asrama}':'-', '${o.akumulatif}',
+            o.predikat,
+          ],
+          textAligns: [
+            TextAlign.center, TextAlign.left,
+            TextAlign.center, TextAlign.center, 
+            TextAlign.center, TextAlign.center, 
+            TextAlign.center, 
+          ],
+        );
       }),
     ];
     return Table(
       tableWidth: TableWidth.max,
+      defaultVerticalAlignment: TableCellVerticalAlignment.full,
       columnWidths: const {
         0: IntrinsicColumnWidth(),
-        1: IntrinsicColumnWidth(flex: 2),
-        2: IntrinsicColumnWidth(flex: 1),
-        3: IntrinsicColumnWidth(flex: 1),
-        4: IntrinsicColumnWidth(flex: 1),
-        5: IntrinsicColumnWidth(flex: 1),
-        6: IntrinsicColumnWidth(flex: 1),
+        1: IntrinsicColumnWidth(flex: 1),
+        2: IntrinsicColumnWidth(),
+        3: IntrinsicColumnWidth(),
+        4: IntrinsicColumnWidth(),
+        5: IntrinsicColumnWidth(),
+        6: IntrinsicColumnWidth(),
       },
       children: children,
     );
@@ -344,17 +357,19 @@ class MyPDFTable {
         if (nhbI!=-1 && o.n>0) {
           ket = (nhbs[nhbI].akumulasi >= LoadedSettings.nhbMinValToPass) ? 'Lulus' : 'Tidak Lulus';
         }
-        return _buildContentRow([
-          '${(++i) + startFrom}', o.pelajaran.name, '${o.n}', ket
-        ]);
+        return _buildContentRow(
+          ['${(++i) + startFrom}', o.pelajaran.name, '${o.n}', ket],
+          textAligns: [TextAlign.center, TextAlign.left, TextAlign.center, TextAlign.center]
+        );
       })
     ];
     return Table(
       tableWidth: TableWidth.max,
+      defaultVerticalAlignment: TableCellVerticalAlignment.full,
       columnWidths: const {
         0: IntrinsicColumnWidth(),
-        1: IntrinsicColumnWidth(flex: 2),
-        2: IntrinsicColumnWidth(flex: 1),
+        1: IntrinsicColumnWidth(flex: 3),
+        2: IntrinsicColumnWidth(),
         3: IntrinsicColumnWidth(flex: 2),
       },
       children: children,

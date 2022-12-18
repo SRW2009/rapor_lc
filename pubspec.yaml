@@ -100,9 +100,14 @@ flutter:
           weight: 700
     - family: Carlito
       fonts:
-          - asset: fonts/carlito/Carlito-Regular.ttf
-          - asset: fonts/carlito/Carlito-Bold.ttf
-            weight: 700
+        - asset: fonts/carlito/Carlito-Regular.ttf
+        - asset: fonts/carlito/Carlito-Bold.ttf
+          weight: 700
+    - family: Calibri
+      fonts:
+        - asset: fonts/calibri/CALIBRI.TTF
+        - asset: fonts/calibri/CALIBRIB.TTF
+          weight: 700
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

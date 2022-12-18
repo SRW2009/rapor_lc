@@ -56,7 +56,7 @@ Page page_npb_table(MemoryImage headerImage, List<NPB> contents, Nilai firstSant
                 '${contents.fold<int>(0, (previousValue, element) => previousValue+element.n)} stepping stone.\n\n'
                 '* Prediksi stepping stone yang akan ananda jalankan hingga selesai sebanyak ${contents.length} stepping stone.',
                 textAlign: TextAlign.left,
-                style: headerTextStyle(size: 11),
+                style: bodyTextStyle(size: font10pt),
               ),
             ],
           ),

@@ -23,8 +23,8 @@ class PrintingRepositoryImpl extends PrintingRepository {
       PDFSetting.headerFontData.toString();
       PDFSetting.bodyFontData.toString();
     } on Error {
-      PDFSetting.headerFontData = (await rootBundle.load('fonts/carlito/Carlito-Bold.ttf')).buffer.asByteData();
-      PDFSetting.bodyFontData = (await rootBundle.load('fonts/carlito/Carlito-Regular.ttf')).buffer.asByteData();
+      PDFSetting.headerFontData = (await rootBundle.load(PDFSetting.boldFontPath)).buffer.asByteData();
+      PDFSetting.bodyFontData = (await rootBundle.load(PDFSetting.normalFontPath)).buffer.asByteData();
     }
 
     int errorCount = 0;
@@ -153,8 +153,8 @@ class PrintingRepositoryImpl extends PrintingRepository {
       PDFSetting.headerFontData.toString();
       PDFSetting.bodyFontData.toString();
     } on Error {
-      PDFSetting.headerFontData = (await rootBundle.load('fonts/carlito/Carlito-Bold.ttf')).buffer.asByteData();
-      PDFSetting.bodyFontData = (await rootBundle.load('fonts/carlito/Carlito-Regular.ttf')).buffer.asByteData();
+      PDFSetting.headerFontData = (await rootBundle.load(PDFSetting.boldFontPath)).buffer.asByteData();
+      PDFSetting.bodyFontData = (await rootBundle.load(PDFSetting.normalFontPath)).buffer.asByteData();
     }
 
     final timeline1 = Timeline(1, 1, 1, 1);
