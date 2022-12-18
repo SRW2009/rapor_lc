@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -23,8 +25,8 @@ class PrintingRepositoryImpl extends PrintingRepository {
       PDFSetting.headerFontData.toString();
       PDFSetting.bodyFontData.toString();
     } on Error {
-      PDFSetting.headerFontData = (await rootBundle.load('fonts/carlito/Carlito-Bold.ttf')).buffer.asByteData();
-      PDFSetting.bodyFontData = (await rootBundle.load('fonts/carlito/Carlito-Regular.ttf')).buffer.asByteData();
+      PDFSetting.headerFontData = (await rootBundle.load(PDFSetting.boldFontPath)).buffer.asByteData();
+      PDFSetting.bodyFontData = (await rootBundle.load(PDFSetting.normalFontPath)).buffer.asByteData();
     }
 
     int errorCount = 0;
@@ -57,16 +59,55 @@ class PrintingRepositoryImpl extends PrintingRepository {
         }
         if (printSettings.nhbSemesterPage) {
           try {
-            final contents = nhbContents!;
-            if (contents.moContents.isEmpty && contents.poContents.isEmpty) throw Exception();
+            final allContents = [nhbContents!.moContents, nhbContents.poContents];
+            if (allContents.every((element) => element.isEmpty)) throw Exception();
 
-            if (contents.moContents.isNotEmpty) {
-              final p = page_nhb_semester(headerImage, contents.moContents, firstSantriNilai, isObservation: true);
-              doc.addPage(p);
-            }
-            if (contents.poContents.isNotEmpty) {
-              final p = page_nhb_semester(headerImage, contents.poContents, firstSantriNilai);
-              doc.addPage(p);
+            for (var contents in allContents) {
+              if (contents.isNotEmpty) {
+                final datasets = ChartDatasetsFactory.buildNHBDatasets(contents);
+                final createNormalSituation = PDFSetting.nhbNormalSituationExistAt.any((element) => element.isTimelineMatch(timeline));
+                final normalSituationIndex = contents.indexWhere((element) => element.pelajaran.name=='Normal Situation');
+                final normalSituation = (normalSituationIndex == -1) ? null : contents[normalSituationIndex];
+                final contentsWithoutNormalSituation = contents
+                  .where((element) => element.pelajaran.name!='Normal Situation')
+                  .toList();
+
+                if (contentsWithoutNormalSituation.length > PDFSetting.nhbSemesterMaxRowInFirstPage) {
+                  final p = page_nhb_semester(
+                    headerImage, 
+                    contentsWithoutNormalSituation.getRange(0, PDFSetting.nhbSemesterMaxRowInFirstPage).toList(), 
+                    firstSantriNilai, 
+                    isObservation: true,
+                    datasets: datasets,
+                    createNormalSituation: createNormalSituation,
+                    normalSituation: normalSituation,
+                  );
+                  doc.addPage(p);
+
+                  for (var j = PDFSetting.nhbSemesterMaxRowInFirstPage; j < contentsWithoutNormalSituation.length; j+=PDFSetting.nhbSemesterMaxRowInNextPage) {
+                    final end = min(contentsWithoutNormalSituation.length, j+PDFSetting.nhbSemesterMaxRowInNextPage);
+                    final pp = page_nhb_semester(
+                      headerImage, 
+                      contentsWithoutNormalSituation.getRange(j, end).toList(), 
+                      firstSantriNilai, 
+                      isObservation: true, 
+                      startFrom: j,
+                    );
+                    doc.addPage(pp);
+                  }
+                } else {
+                  final p = page_nhb_semester(
+                    headerImage, 
+                    contentsWithoutNormalSituation, 
+                    firstSantriNilai, 
+                    isObservation: true,
+                    datasets: datasets,
+                    createNormalSituation: createNormalSituation,
+                    normalSituation: normalSituation,
+                  );
+                  doc.addPage(p);
+                }
+              }
             }
           } catch (e) {
             yield '${santri.name} - Timeline $timeline : Nilai NHB Semester tidak lengkap.';
@@ -78,14 +119,9 @@ class PrintingRepositoryImpl extends PrintingRepository {
             final contents = TableContentsFactory.buildNHBBlockContents(santriNilaiList, timeline);
             if (contents.isEmpty) throw Exception();
 
-            if (contents.length > 3) {
-              for (var j = 0; j < contents.length; j+=3) {
-                final end = contents.length < (j+3) ? contents.length : j+3;
-                final p = page_nhb_block(headerImage, contents.getRange(j, end).toList(), firstSantriNilai);
-                doc.addPage(p);
-              }
-            } else {
-              final p = page_nhb_block(headerImage, contents, firstSantriNilai);
+            for (var j = 0; j < contents.length; j+=PDFSetting.nhbBlockMaxDivPerPage) {
+              final end = min(contents.length, (j+PDFSetting.nhbBlockMaxDivPerPage));// ? contents.length : j+PDFSetting.nhbBlockMaxDivPerPage;
+              final p = page_nhb_block(headerImage, contents.getRange(j, end).toList(), firstSantriNilai);
               doc.addPage(p);
             }
           } catch (e) {
@@ -98,10 +134,17 @@ class PrintingRepositoryImpl extends PrintingRepository {
             final contents = TableContentsFactory.buildNPBContents(nilaiList, timeline);
             if (contents.isEmpty) throw Exception();
 
-            //final p1 = page_npb_chart(headerImage, santriNilaiList, semester: i);
-            final p2 = page_npb_table(headerImage, contents, firstSantriNilai, nhbContents: nhbContents);
-            //doc.addPage(p1);
-            doc.addPage(p2);
+            for (var j = 0; j < contents.length; j+=PDFSetting.npbMaxRowPerPage) {
+              final end = min(contents.length, j+PDFSetting.npbMaxRowPerPage);
+              final p = page_npb_table(
+                headerImage, 
+                contents.getRange(j, end).toList(), 
+                firstSantriNilai, 
+                nhbContents: nhbContents,
+                startFrom: j,
+              );
+              doc.addPage(p);
+            }
           } catch (e) {
             yield '${santri.name} - Timeline $timeline : Nilai NPB tidak lengkap.';
             errorCount++;
@@ -153,8 +196,8 @@ class PrintingRepositoryImpl extends PrintingRepository {
       PDFSetting.headerFontData.toString();
       PDFSetting.bodyFontData.toString();
     } on Error {
-      PDFSetting.headerFontData = (await rootBundle.load('fonts/carlito/Carlito-Bold.ttf')).buffer.asByteData();
-      PDFSetting.bodyFontData = (await rootBundle.load('fonts/carlito/Carlito-Regular.ttf')).buffer.asByteData();
+      PDFSetting.headerFontData = (await rootBundle.load(PDFSetting.boldFontPath)).buffer.asByteData();
+      PDFSetting.bodyFontData = (await rootBundle.load(PDFSetting.normalFontPath)).buffer.asByteData();
     }
 
     final timeline1 = Timeline(1, 1, 1, 1);
